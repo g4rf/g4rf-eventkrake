@@ -1,0 +1,11 @@
+.eventkrake_latlng {
+    background: none;
+    border: none;
+}
+
+#eventkrake_rec {
+    cursor: pointer;
+}
+#eventkrake_rec:hover {
+    text-decoration: underline;
+}
