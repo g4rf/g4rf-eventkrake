@@ -7,10 +7,7 @@ Author: Jan Kossick
 Version: 2.01alpha
 License: CC-BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: http://jankossick.de
-Update Server: 
 Min WP Version: 3.7
-Plugin Name: My Plugin
-Author: Plugin Author
 Text Domain: g4rf_eventkrake2
 */ 
 
