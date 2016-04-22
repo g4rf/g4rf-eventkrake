@@ -69,7 +69,7 @@ class Eventkrake {
      * @param bool $error true, falls Fehler, sonst false.
      */
     public static function savePostMessage($postId, $msg, $error = false) {
-        $key = $error ? "save_post_errors_$postId" : "save_post_messages_$postId";
+        $key = $error ? "eventkrake_save_post_errors_$postId" : "eventkrake_save_post_messages_$postId";
         self::setSinglePostMeta($postId, $key,
                 self::getSinglePostMeta($postId, $key) . "$msg<br />");
     }
@@ -79,11 +79,11 @@ class Eventkrake {
      * @param int $postId Die Id des Posts.
      */
     public static function printPostMessages($postId) {
-        $errors = self::getSinglePostMeta($postId, "save_post_errors_$postId");
-        self::setSinglePostMeta($postId, "save_post_errors_$postId", '');
+        $errors = self::getSinglePostMeta($postId, "eventkrake_save_post_errors_$postId");
+        self::setSinglePostMeta($postId, "eventkrake_save_post_errors_$postId", '');
         
-        $messages = self::getSinglePostMeta($postId, "save_post_messages_$postId");
-        self::setSinglePostMeta($postId, "save_post_messages_$postId", '');
+        $messages = self::getSinglePostMeta($postId, "eventkrake_save_post_messages_$postId");
+        self::setSinglePostMeta($postId, "eventkrake_save_post_messages_$postId", '');
         
         if(!empty($errors)) self::printMessage($errors, true);
         if(!empty($messages)) self::printMessage($messages);        
