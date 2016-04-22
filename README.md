@@ -17,6 +17,7 @@ ist keine Authentifizierung per E-Mail und Schlüssel notwendig**.
 
 ## Struktur
 Die Struktur folgt dem eines [Wordpress Plugins](https://codex.wordpress.org/Writing_a_Plugin).
+Die Dateien müssen im Ordner **/wp-content/plugins/g4rf_eventkrake2** abgelegt werden.
 
 ### g4rf_eventkrake2.php
 Der Startpunkt für Wordpress mit Metainfos. Hier werden die benötigten Scripte geladen,
