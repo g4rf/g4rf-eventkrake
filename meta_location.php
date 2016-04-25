@@ -15,6 +15,10 @@ if(! Eventkrake::verifyApiKey()) {
 Eventkrake::printPostMessages($post->ID);
 ?>
 
+<?php // damit WP nur Änderungen vom Edit-Screen durchführt ?>
+<input type="hidden" name="eventkrake_on_edit_screen" />
+
+<?php // Adresse ?>
 <div class="eventkrake_right">
     <span class="description">Lat:&nbsp;</span>
     <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'lat')?>"

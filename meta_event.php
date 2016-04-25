@@ -15,6 +15,9 @@ if(! Eventkrake::verifyApiKey()) {
 Eventkrake::printPostMessages($post->ID);
 ?>
 
+<?php // damit WP nur Änderungen vom Edit-Screen durchführt ?>
+<input type="hidden" name="eventkrake_on_edit_screen" />
+
 <?php // EventID für die API ?>
 <input type="hidden" name="eventkrake_id" 
     value="<?=Eventkrake::getSinglePostMeta($post->ID, 'id')?>" />

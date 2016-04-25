@@ -71,6 +71,131 @@ add_action('wp_enqueue_scripts', function() {
 /***** Custom Post Types *****/
 add_theme_support('post-thumbnails'); // Bilder anlegen
 
+// make Event or Location invisible if deleted
+add_action('wp_trash_post', function($post_id) {
+    //die('<pre>' . print_r(get_post($post_id), true) . '</pre>');
+    //
+    // Is the user allowed to edit the post or page?
+    if (!current_user_can('edit_post', $post_id)) return;
+    
+    // haben wir credentials?
+    if(! Eventkrake::getEmailAndKey($email, $key)) return;
+    
+    // build request
+    $request = array('email' => $email, 'key' => $key, 'visible' => 0);
+    
+    // save if post was published before
+    Eventkrake::setSinglePostMeta($post_id, 
+            'was_published_before', get_post_status($post_id) == 'publish');
+
+    switch (get_post_type($post_id)) {
+        case 'eventkrake_location':
+            $locationId = Eventkrake::getSinglePostMeta($post_id, 'id');
+            if(! $locationId) return;
+            $request['id'] = $locationId;
+            Eventkrake::callApi('alterlocation', $request, $code);
+            if($code == 401) { // Unauthorized
+                Eventkrake::printAdminMessage(__('Der Ort konnte mangels'
+                    . ' Berechtigung nicht in der Eventkrake gelöscht'
+                    . ' werden.', 'g4rf_eventkrake2'), true);
+            } elseif($code == 400) { // Bad Request
+                Eventkrake::printAdminMessage(__('Der Ort konnte nicht'
+                    . ' in der Eventkrake gelöscht werden. Die Anfrage wurde'
+                    . ' nicht verstanden.', "g4rf_eventkrake2"), true);
+            } elseif($code == 404) { // Not Found
+                Eventkrake::printAdminMessage(__("Der Ort konnte nicht (mehr)"
+                    . " in der Eventkrake gefunden werden.", 'g4rf_eventkrake2'), true);
+            } else {
+                Eventkrake::printAdminMessage(__('Der Ort wurde erfolgreich in'
+                    . ' der Eventkrake gelöscht.', 'g4rf_eventkrake2'));
+            }
+            break;
+        case 'eventkrake_event':
+            $eventId = Eventkrake::getSinglePostMeta($post_id, 'id');
+            //die($eventId);
+            if(! $eventId) return;
+            $request['id'] = $eventId;
+            Eventkrake::callApi('alterevent', $request, $code);
+            if($code == 401) { // Unauthorized
+                Eventkrake::printAdminMessage(__('Die Veranstaltung konnte mangels'
+                    . ' Berechtigung nicht in der Eventkrake gelöscht'
+                    . ' werden.', 'g4rf_eventkrake2'), true);
+            } elseif($code == 400) { // Bad Request
+                Eventkrake::printAdminMessage(__('Die Veranstaltung konnte nicht'
+                    . ' in der Eventkrake gelöscht werden. Die Anfrage wurde'
+                    . ' nicht verstanden.', "g4rf_eventkrake2"), true);
+            } elseif($code == 404) { // Not Found
+                Eventkrake::printAdminMessage(__("Die Veranstaltung konnte nicht (mehr)"
+                    . " in der Eventkrake gefunden werden.", 'g4rf_eventkrake2'), true);
+            } else {
+                Eventkrake::printAdminMessage(__('Die Veranstaltung wurde erfolgreich in'
+                    . ' der Eventkrake gelöscht.', 'g4rf_eventkrake2'));
+            }
+            break;
+    }
+});
+
+// make Event or Location visible if undeleted and published
+add_action('untrash_post', function($post_id) {
+    // Is the user allowed to edit the post or page?
+    if (!current_user_can('edit_post', $post_id)) return;
+    
+    // wenn der Post nicht öffentlich war, brauchen wir ihn nicht sichtbar schalten
+    if(! Eventkrake::getSinglePostMeta($post_id, 'was_published_before')) return;
+    
+    // haben wir credentials?
+    if(! Eventkrake::getEmailAndKey($email, $key)) return;
+    
+    // build request
+    $request = array('email' => $email, 'key' => $key, 'visible' => 1);    
+    
+    switch (get_post_type($post_id)) {
+        case 'eventkrake_location':
+            $locationId = Eventkrake::getSinglePostMeta($post_id, 'id');
+            if(! $locationId) return;
+            $request['id'] = $locationId;
+            Eventkrake::callApi('alterlocation', $request, $code);
+            if($code == 401) { // Unauthorized
+                Eventkrake::printAdminMessage(__('Der Ort konnte mangels'
+                    . ' Berechtigung in der Eventkrake nicht wiederhergestellt'
+                    . ' werden.', 'g4rf_eventkrake2'), true);
+            } elseif($code == 400) { // Bad Request
+                Eventkrake::printAdminMessage(__('Der Ort konnte'
+                    . ' in der Eventkrake nicht wiederhergestellt werden. Die Anfrage wurde'
+                    . ' nicht verstanden.', "g4rf_eventkrake2"), true);
+            } elseif($code == 404) { // Not Found
+                Eventkrake::printAdminMessage(__("Der Ort konnte nicht"
+                    . " in der Eventkrake gefunden werden.", 'g4rf_eventkrake2'), true);
+            } else {
+                Eventkrake::printAdminMessage(__('Der Ort wurde erfolgreich in'
+                    . ' der Eventkrake wiederhergestellt.', 'g4rf_eventkrake2'));
+            }
+            break;
+        case 'eventkrake_event':
+            $eventId = Eventkrake::getSinglePostMeta($post_id, 'id');
+            //die($eventId);
+            if(! $eventId) return;
+            $request['id'] = $eventId;
+            Eventkrake::callApi('alterevent', $request, $code);
+            if($code == 401) { // Unauthorized
+                Eventkrake::printAdminMessage(__('Die Veranstaltung konnte mangels'
+                    . ' Berechtigung in der Eventkrake nicht wiederhergestellt'
+                    . ' werden.', 'g4rf_eventkrake2'), true);
+            } elseif($code == 400) { // Bad Request
+                Eventkrake::printAdminMessage(__('Die Veranstaltung konnte'
+                    . ' in der Eventkrake nicht wiederhergestellt werden. Die Anfrage wurde'
+                    . ' nicht verstanden.', "g4rf_eventkrake2"), true);
+            } elseif($code == 404) { // Not Found
+                Eventkrake::printAdminMessage(__("Die Veranstaltung konnte nicht"
+                    . " in der Eventkrake gefunden werden.", 'g4rf_eventkrake2'), true);
+            } else {
+                Eventkrake::printAdminMessage(__('Die Veranstaltung wurde erfolgreich in'
+                    . ' der Eventkrake wiederhergestellt.', 'g4rf_eventkrake2'));
+            }
+            break;
+    }
+});
+
 /* Locations anlegen */
 add_action('init', function () {
     register_post_type('eventkrake_location', array(
@@ -110,6 +235,9 @@ add_action('init', function () {
 // Inhalt der Metabox speichern
 add_action('save_post_eventkrake_location', function($post_id, $post) {
     //die("$post_id<pre>" . print_r($post, true) . "</pre>");
+
+    // checken, ob wir vom edit screen kommen
+    if(! isset($_POST['eventkrake_on_edit_screen'])) return;
 
     // automatische Speicherungen synchronisieren wir nicht
     if($post->post_status == 'auto-draft') return;
@@ -251,6 +379,9 @@ add_action('init', function () {
 add_action('save_post_eventkrake_event', function($post_id, $post) {
     //die("$post_id<pre>" . print_r($_POST, true) . "</pre>");
 
+    // checken, ob wir vom edit screen kommen
+    if(! isset($_POST['eventkrake_on_edit_screen'])) return;
+    
     // automatische Speicherungen synchronisieren wir nicht
     if($post->post_status == 'auto-draft') return;
     
