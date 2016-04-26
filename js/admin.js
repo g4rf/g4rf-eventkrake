@@ -111,9 +111,7 @@ Eventkrake.Admin = {
     imageId: 0,
 
     /** Ändere Karte, Adresstext und LatLng. */
-    loadNewAddressForLocation: function(gLatLng, address) {
-        console.log(address);
-        
+    loadNewAddressForLocation: function(gLatLng, address) {        
         if(gLatLng === false) {
             jQuery("#" + Eventkrake.Admin.recId).empty().append(address);
             return;

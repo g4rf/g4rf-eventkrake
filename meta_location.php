@@ -56,7 +56,7 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
 <input type="hidden" name="eventkrake_id" 
     value="<?=Eventkrake::getSinglePostMeta($post->ID, 'id')?>" />
 
-<table class="form-table"><tr><td colspan="2">
+<table class="form-table">
 <tr>
     <th><?=__('Eine Webseite zum Ort', 'g4rf_eventkrake2')?></th>
     <td>

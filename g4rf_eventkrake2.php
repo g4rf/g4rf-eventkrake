@@ -14,6 +14,14 @@ Text Domain: g4rf_eventkrake2
 setlocale(LC_TIME, get_locale()); 
 require_once 'Eventkrake.php';
 
+/***** Session-Funktionalität (CAPTCHA etc.) *****/
+add_action('init', function() {
+    if(!session_id()) session_start();
+}, 1);
+add_action('wp_logout', 'session_destroy');
+add_action('wp_login', 'session_destroy');
+
+
 /***** Scripte & CSS hinzufügen *****/
 // Backend JS und CSS
 add_action('admin_enqueue_scripts', function() {
@@ -59,10 +67,16 @@ add_action('wp_enqueue_scripts', function() {
     // allgemeines JS
     wp_register_script('eventkrake',  "$path/js/plugin.js", array('eventkrake_leaflet'));
     wp_enqueue_script('eventkrake');
+    // Input JS
+    wp_register_script('eventkrake_input',  "$path/js/input.js", array('eventkrake'));
+    wp_enqueue_script('eventkrake_input');
 
     // allgemeines CSS
     wp_register_style('eventkrake_all', "$path/css/all.css");
     wp_enqueue_style('eventkrake_all');
+    // Input CSS
+    wp_register_style('eventkrake_input', "$path/css/input.css");
+    wp_enqueue_style('eventkrake_input');
     // Leaflet-CSS
     wp_register_style('eventkrake_leaflet', 'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css');
     wp_enqueue_style('eventkrake_leaflet');
@@ -500,7 +514,7 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     }
 }, 1, 2);
 
-/***** Shortcode *****/
+/***** Shortcode für Ausgabe *****/
 add_shortcode('eventkrake', function($atts, $content = null) {
     // put shortcode attributes into DOM as data element
     $dataAtts = '';
@@ -510,6 +524,16 @@ add_shortcode('eventkrake', function($atts, $content = null) {
     }
     ?><div class="Eventkrake"<?=$dataAtts?>></div><?php
 });
+
+/***** Shortcode für Frontend-Eingabemaske *****/
+add_shortcode('eventkrake_input', function($atts) {
+    ob_start();
+    ?><div id="eventkrake-input"><?php
+    include('input_frontend.php');
+    ?></div><?php
+    return ob_get_clean();
+});
+
 
 /***** Editor anpassen *****/
 /*function eventkrake_add_editor_buttons() {
@@ -556,5 +580,3 @@ add_filter("plugin_action_links_" . plugin_basename(__FILE__), function ($links)
     }
     return $links; 
 });
-
-?>

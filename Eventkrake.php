@@ -197,6 +197,33 @@ class Eventkrake {
         ));
     }
 
+    /**
+     * Gibt Fragen für ein CAPTCHA zurück bzw. prüft ein Captcha.
+     * @param string $challenge Die Frage.
+     * @param string $response Die Antwort.
+     * @return mixed Wenn die beiden Parameter weggelassen werden, gibt die
+     *      Funktion eine Frage zurück. Zum Überprüfen muss diese Frage und die
+     *      Antwort als Parameter übergeben werden. Falls die Antwort stimmt, 
+     *      wird true zurückgegeben, sonst false.
+     */
+    public static function humanChallenge($challenge = null, $response = null) {
+        if($challenge == null && $response == null) { // liefere eine Frage zurück
+            return self::callApi('humanchallenge');
+        } else { // prüfe die Antwort
+            return self::callApi('humanchallenge', array(
+                'challenge' => $challenge,
+                'repsonse' => $response
+            ));
+        }
+    }
+    
+    /**
+     * Erzeugt einen Timepicker.
+     * @param string $nameHour Der Formular-Name der Stundenauswahl.
+     * @param string $nameMin Der Formular-Name der Minutenauswahl.
+     * @param int $selHour Die selektierte Stunde.
+     * @param int $selMin Die selektierte Minute.
+     */
     public static function printTimePicker($nameHour, $nameMin, $selHour = 0, $selMin = 0) { ?>
         <select name="<?=$nameHour?>"><?php
             for($i = 0; $i < 24; $i++) {

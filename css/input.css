@@ -1,0 +1,56 @@
+#eventkrake-input th,
+#eventkrake-input td {
+    vertical-align: top;
+}
+
+#eventkrake-input .description {
+    font-style: italic;
+}
+
+#eventkrake-input fieldset {
+    max-width: 960px;
+}
+
+#eventkrake-input input[type='text'],
+#eventkrake-input input.submit,
+#eventkrake-input select,
+#eventkrake-input textarea {
+    min-width: 350px;
+}
+
+#eventkrake-input .eventkrake-tabs {
+    margin-left: 20px;
+}
+
+#eventkrake-input input[type='button'] {
+    cursor: pointer;
+    border: outset 1px #333;
+    background-color: #ccc;    
+}
+
+#eventkrake-input input.submit {
+    cursor: pointer;
+    border: outset 1px #333;
+    background-color: #f88;
+    line-height: 200%;
+}
+
+#eventkrake-input input.eventkrake-selected {
+    border: inset 1px #333;
+    background-color: #eee;
+}
+
+#eventkrake-input-add-location {
+    display: none;
+}
+
+#eventkrake-input select[name='eventkrake-input-locationlist'] {
+    width: 90%;
+}
+
+#eventkrake-rec {
+    cursor: pointer;
+}
+#eventkrake-rec:hover {
+    text-decoration: underline;
+}
