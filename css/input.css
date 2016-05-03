@@ -1,10 +1,31 @@
+#eventkrake-input label {
+    cursor: pointer;
+    margin: 5px 10px 5px 2px;
+    border: solid 1px #ccc;
+    display: inline-block;
+    padding: 2px;   
+}
+
 #eventkrake-input th,
 #eventkrake-input td {
     vertical-align: top;
 }
 
+#eventkrake-input .notice {
+    font-weight: bold;
+    color: #060;
+}
+
+#eventkrake-input .notice-error {
+    color: #c00;
+}
+
 #eventkrake-input .description {
     font-style: italic;
+}
+
+#eventkrake-input .highlight {
+    border: solid 3px #c00;
 }
 
 #eventkrake-input fieldset {
@@ -40,7 +61,11 @@
     background-color: #eee;
 }
 
-#eventkrake-input-add-location {
+#eventkrake-input .eventkrake-input-data {
+    display: none;
+}
+
+#eventkrake-input .invisible {
     display: none;
 }
 
@@ -53,4 +78,9 @@
 }
 #eventkrake-rec:hover {
     text-decoration: underline;
+}
+
+#eventkrake-input .datepicker {
+    background-color: #aaa;
+    border: solid 1px #333;
 }

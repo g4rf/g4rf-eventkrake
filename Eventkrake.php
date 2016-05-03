@@ -212,7 +212,7 @@ class Eventkrake {
         } else { // prüfe die Antwort
             return self::callApi('humanchallenge', array(
                 'challenge' => $challenge,
-                'repsonse' => $response
+                'response' => $response
             ));
         }
     }
@@ -225,14 +225,14 @@ class Eventkrake {
      * @param int $selMin Die selektierte Minute.
      */
     public static function printTimePicker($nameHour, $nameMin, $selHour = 0, $selMin = 0) { ?>
-        <select name="<?=$nameHour?>"><?php
+        <select style="min-width:auto" name="<?=$nameHour?>"><?php
             for($i = 0; $i < 24; $i++) {
                 $h = substr("0$i", -2); ?>
                 <option value="<?=$h?>"<?=$selHour == $i ? ' selected' : ''?>>
                     <?=$h?>
                 </option>
             <?php } ?>
-        </select>:<select name="<?=$nameMin?>"><?php
+        </select>:<select style="min-width:auto" name="<?=$nameMin?>"><?php
             for($i = 0; $i < 60; $i+=5) { 
                 $m = substr("0$i", -2); ?>
                 <option value="<?=$m?>"<?=$selMin == $i ? ' selected' : ''?>>

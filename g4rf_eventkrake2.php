@@ -68,7 +68,7 @@ add_action('wp_enqueue_scripts', function() {
     wp_register_script('eventkrake',  "$path/js/plugin.js", array('eventkrake_leaflet'));
     wp_enqueue_script('eventkrake');
     // Input JS
-    wp_register_script('eventkrake_input',  "$path/js/input.js", array('eventkrake'));
+    wp_register_script('eventkrake_input',  "$path/js/input.js", array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'eventkrake'));
     wp_enqueue_script('eventkrake_input');
 
     // allgemeines CSS
@@ -77,6 +77,9 @@ add_action('wp_enqueue_scripts', function() {
     // Input CSS
     wp_register_style('eventkrake_input', "$path/css/input.css");
     wp_enqueue_style('eventkrake_input');
+    // jQuery-UI
+    wp_register_style('eventkrake_jquery-ui', 'http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
+    wp_enqueue_style('eventkrake_jquery-ui');
     // Leaflet-CSS
     wp_register_style('eventkrake_leaflet', 'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css');
     wp_enqueue_style('eventkrake_leaflet');
