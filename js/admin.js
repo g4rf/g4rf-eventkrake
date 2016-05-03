@@ -92,8 +92,18 @@ jQuery(document).ready(function() {
             jQuery(this).text()
         );
     });
+    
+    // Link bei Events zu "Ort bearbeiten"
+    jQuery("#eventkrake_locationid_wordpress_edit_location").click(function() {
+        var locationId = jQuery("select[name='eventkrake_locationid_wordpress']").val();
+        if(locationId > 0) {
+            window.location.href = jQuery(this).data("url") + locationId;
+        }
+        return false;
+    });
 });
 
+var Eventkrake = Eventkrake || {};
 Eventkrake.Admin = {
     mapId: "eventkrake_map",
     addressId: "eventkrake_address",

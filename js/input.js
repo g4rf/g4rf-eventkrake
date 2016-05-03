@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
     /*** Eventbindings ***/
-    // Ort auswählen
+    // Ortliste auswählen
     jQuery("#eventkrake-input-select-location-button").click(function() {
         jQuery(this).addClass('eventkrake-selected');
         jQuery("#eventkrake-input-add-location-button")
@@ -22,6 +22,10 @@ jQuery(document).ready(function() {
             Eventkrake.Input.mapLoaded = true;
             Eventkrake.Input.loadMap();
         }
+    });
+    // wenn Ort in Liste angeklickt, Formular abschicken
+    jQuery("select[name='eventkrake-input-locationlist']").change(function() {
+        jQuery("#eventkrake-input form").submit();
     });
     // Karte laden, falls Karte sichtbar
     if(! Eventkrake.Input.mapLoaded 

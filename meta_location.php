@@ -130,3 +130,27 @@ _e('Wenn an diesem Ort Festivals stattfinden, kannst Du hier die ensprechenden
         </span>
     </td>
 </tr></table>
+<hr />
+<table class="form-table">
+    <tr>
+        <th colspan="5"><?=__('Veranstaltungen am Ort', 'g4rf_eventkrake2')?></th>
+    </tr><?php
+    $events = Eventkrake::getEvents($post->ID, false);
+    foreach($events as $e) {
+        $start = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'start'));
+        $end = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'end'));
+        ?><tr>
+            <td><b><?=$e->post_title?></b></td>
+            <td class="eventkrake-nowrap">
+                <?=$start->format('D, j. M y, G:i ') . __('Uhr', 'g4rf_eventkrake2')?>
+            </td>
+            <td class="eventkrake-nowrap">
+                <?=$end->format('D, j. M y, G:i ') . __('Uhr', 'g4rf_eventkrake2')?>
+            </td>
+            <td><?=substr($e->post_content, 0, 50)?>&hellip;</td>
+            <td><a href="<?=site_url("wp-admin/post.php?action=edit&post=" . $e->ID)?>">
+                <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
+            </a></td>
+        </tr><?php
+    }
+?></table>

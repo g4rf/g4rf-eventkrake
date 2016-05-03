@@ -196,7 +196,43 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                         ?>><?=$l->post_title?> (<?=Eventkrake::getSinglePostMeta($l->ID, 'address')?>)<?php
                     ?></option><?php
                 } ?>
-        </select>        
+        </select>
+        <?php
+        $locationId = 0;
+        if(isset($newLocationId)) {
+            $locationId = $newLocationId;
+        } elseif(isset($_POST['eventkrake-input-locationlist'])) {
+            $locationId = $_POST['eventkrake-input-locationlist'];
+        }
+        if($locationId != 0) { ?>
+            <div id="eventkrake-input-location-info">
+                <?php
+                    $href = "mailto:post@eventkrake.de?subject=Meldung zum Ort '"
+                        . rawurlencode(get_the_title($locationId))
+                        . "'&body=Name des Ortes: " . rawurlencode(get_the_title($locationId))
+                        . "%0ALink zur Bearbeitung: " . rawurlencode(site_url())
+                            . "/wp-admin/post.php?post=$locationId%26action=edit"
+                        . "%0A%0AMeine Nachricht:%0A";
+                ?>
+                <a href="<?=$href?>">
+                    <?=__('Änderungen zum Ort melden', 'g4rf_eventkrake2')?>
+                </a><br />
+                <br />
+                <b>Veranstaltungen am Ort:</b><br />
+                <table><?php
+                    $events = Eventkrake::getEvents($locationId, false);
+                    foreach($events as $e) {
+                        $start = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'start'));
+                        $end = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'end'));
+                        ?><tr>
+                            <td><?=$e->post_title?></td>
+                            <td><?=$start->format('d.m.Y H:i') ?> - </td>
+                            <td><?=$end->format('d.m.Y H:i') ?></td>
+                        </tr><?php
+                    }
+                ?></table>
+            </div>
+        <?php } ?>
     </fieldset>
     
     <fieldset id="eventkrake-input-add-location" 

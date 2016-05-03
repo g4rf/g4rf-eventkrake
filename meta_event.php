@@ -37,7 +37,11 @@ Eventkrake::printPostMessages($post->ID);
                         ?>><?=$l->post_title?> (<?=Eventkrake::getSinglePostMeta($l->ID, 'address')?>)<?php
                     ?></option><?php
                 } ?>
-        </select><br />
+        </select>
+        <a id="eventkrake_locationid_wordpress_edit_location" href="#" 
+           data-url="<?=site_url("wp-admin/post.php?action=edit&post=")?>">
+            <?=__('Ort bearbeiten', 'g4rf_eventkrake2')?>
+        </a><br />
         <span class="description"><?php
 _e('Wähle einen Ort für die Veranstaltung aus. Unter'
 . ' <a href="edit.php?post_type=eventkrake_location">Orte</a> kannst Du'
