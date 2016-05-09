@@ -65,3 +65,5 @@ Der Shortcode versteht folgende Attribute:
 * **startdate** *ISO8601-Datum* Eine Zeitangabe, die den Defaultwert für den Start von Events angibt. Als Standard wird das aktuelle Datum und Uhrzeit verwendet.
 * **enddate** *ISO8601-Datum* Eine Zeitangabe, die den Defaultwert für das Ende von Events angibt. Als Standard wird das aktuelle Datum und Uhrzeit verwendet.
 * **festival** *string* ID eines Eventkrake-Festivals, auf die die Events und Locations gesetzt werden sollen. Default ist kein Festival.
+
+**Beispiel** [eventkrake_input author="2" startdate="2016-06-17T15:00:00" enddate="2016-06-17T15:00:00" festival="brn2016" email="spam@eventkrake.de"]
