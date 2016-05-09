@@ -142,15 +142,15 @@ _e('Wenn an diesem Ort Festivals stattfinden, kannst Du hier die ensprechenden
         ?><tr>
             <td><b><?=$e->post_title?></b></td>
             <td>
-                <?=$start->format('d.m.y<\b\r />G:i') . '&nbsp;' .  
+                <?=$start->format('d.m.Y<\b\r />G:i') . '&nbsp;' .  
                     __('Uhr', 'g4rf_eventkrake2')?>
             </td>
             <td>&ndash;</td>
             <td>
-                <?=$end->format('d.m.y,<\b\r />G:i') . '&nbsp;' .  
+                <?=$end->format('d.m.Y,<\b\r />G:i') . '&nbsp;' .  
                     __('Uhr', 'g4rf_eventkrake2')?>
             </td>
-            <td><?=substr($e->post_content, 0, 50)?>&hellip;</td>
+            <td><?=wp_trim_excerpt($e->post_content)?></td>
             <td><a href="<?=site_url("wp-admin/post.php?action=edit&post=" . $e->ID)?>">
                 <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
             </a></td>

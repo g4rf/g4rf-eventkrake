@@ -11,8 +11,19 @@ Min WP Version: 3.7
 Text Domain: g4rf_eventkrake2
 */ 
 
+/***** Needs & needles *****/
 setlocale(LC_TIME, get_locale()); 
 require_once 'Eventkrake.php';
+
+// own excerpt function that works also outside the loop
+add_filter('wp_trim_excerpt', function($text='') {
+    $excerpt_length = apply_filters('excerpt_length', 55);
+    $excerpt_more = apply_filters('excerpt_more', ' ' . '[&hellip;]');
+    return wp_trim_words(
+        str_replace(']]>', ']]&gt;',
+            apply_filters('the_content', 
+                strip_shortcodes($text))), $excerpt_length, $excerpt_more);
+});
 
 /***** Session-Funktionalität (CAPTCHA etc.) *****/
 add_action('init', function() {
