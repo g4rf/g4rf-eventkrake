@@ -1,11 +1,4 @@
 <?php
-/**
- * @author Jan Kossick, jankossick@online.de
- * @copyright 2016 Jan Kossick
- * @license CC-BY-NC-SA 4.0
- * @version 2.01alpha
- * @package g4rf_eventkrake2
- */
 class Eventkrake {
     const COLOR_ERROR = '#F6CECE';
     const COLOR_NOERROR = '#D0F5A9';
@@ -168,8 +161,8 @@ class Eventkrake {
             'post_status' => $status,
             'meta_query' => array(
                 array(
-                    'meta_key' => 'eventkrake_locationid_wordpress',
-                    'meta_value' => $locationId
+                    'key' => 'eventkrake_locationid_wordpress',
+                    'value' => $locationId
                 )
             )
         ));

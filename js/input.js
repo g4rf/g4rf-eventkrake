@@ -25,6 +25,7 @@ jQuery(document).ready(function() {
     });
     // wenn Ort in Liste angeklickt, Formular abschicken
     jQuery("select[name='eventkrake-input-locationlist']").change(function() {
+        Eventkrake.Input.showAnimation();
         jQuery("#eventkrake-input form").submit();
     });
     // Karte laden, falls Karte sichtbar
@@ -42,9 +43,9 @@ jQuery(document).ready(function() {
         monthNames: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
             "August", "September", "Oktober", "November", "Dezember"],
         monthNamesShort: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul",
-            "Aug", "Sep", "Okt", "Nov", "Dez"],
-        
+            "Aug", "Sep", "Okt", "Nov", "Dez"],        
         dateFormat: "DD, d. M yy",
+        firstDay: 1,
         
         onSelect: function(dateText, inst)  {
             var date = jQuery.datepicker.parseDate(
@@ -65,6 +66,7 @@ jQuery(document).ready(function() {
     
     /*** Submits (form validation) ***/
     jQuery("#eventkrake-input .submit").click(function() {
+        Eventkrake.Input.showAnimation();
         var valid = true;
         
         // alte Nachrichten löschen
@@ -109,6 +111,8 @@ jQuery(document).ready(function() {
                     jQuery("#eventkrake-input form").append(
                         "<input type='hidden' name='eventkrake-input-action'" +
                             " value='addlocation' />").submit();
+                } else {
+                    Eventkrake.Input.hideAnimation();
                 }
                 break;
             case "addevent":
@@ -136,6 +140,8 @@ jQuery(document).ready(function() {
                     jQuery("#eventkrake-input form").append(
                         "<input type='hidden' name='eventkrake-input-action'" +
                             " value='addevent' />").submit();
+                } else {
+                    Eventkrake.Input.hideAnimation();
                 }
                 break;
         }
@@ -146,6 +152,14 @@ var Eventkrake = Eventkrake || {};
 Eventkrake.Input = {
     mapLoaded: false,
     map: {},
+    
+    showAnimation: function() {
+        jQuery("#eventkrake-input-loader").show();
+    },
+    
+    hideAnimation: function() {
+        jQuery("#eventkrake-input-loader").hide();
+    },
     
     printMessage: function(message, error) {
         if(typeof error == 'undefined') error = false;
@@ -221,7 +235,7 @@ Eventkrake.Input = {
         Eventkrake.Input.map.markers[0].setLatLng([lat,lng]);
 
         jQuery("#eventkrake-rec").empty().append(address);
-        if(jQuery("input[name='eventkrake-address']").val().length == 0) {
+        if(! jQuery("input[name='eventkrake-address']").val().length) {
             jQuery("input[name='eventkrake-address']").val(address);
         }
 

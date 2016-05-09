@@ -38,9 +38,9 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                 if($valid) { // Eintragen
                     $newLocationId = wp_insert_post(array(
                         'post_title' => wp_strip_all_tags($_POST['eventkrake-location-name']),
-                        'post_content' => $_POST['eventkrake-location-text'],
+                        'post_content' => nl2br($_POST['eventkrake-location-text']),
                         'post_type' => 'eventkrake_location',
-                        'post_author' => 1
+                        'post_author' => $atts['author']
                     ));
                     unset($_POST['eventkrake-location-name']);
                     unset($_POST['eventkrake-location-text']);
@@ -62,6 +62,10 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                             isset($_POST['eventkrake_location_categories']) ?
                             $_POST['eventkrake_location_categories'] : array());
                         unset($_POST['eventkrake_location_categories']);
+                        if(! empty($atts['festival'])) {
+                            Eventkrake::setPostMeta($newLocationId,
+                                'festivals', array($atts['festival']));
+                        }
                         
                         Eventkrake::setSinglePostMeta($newLocationId, 
                                 'tags', $_POST['eventkrake-input-email']);
@@ -97,9 +101,9 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                 if($valid) { // Eintragen
                     $newEventId = wp_insert_post(array(
                         'post_title' => wp_strip_all_tags($_POST['eventkrake-event-title']),
-                        'post_content' => $_POST['eventkrake-event-text'],
+                        'post_content' => nl2br($_POST['eventkrake-event-text']),
                         'post_type' => 'eventkrake_event',
-                        'post_author' => 1
+                        'post_author' => $atts['author']
                     ));
                     unset($_POST['eventkrake-event-title']);
                     unset($_POST['eventkrake-event-text']);
@@ -129,6 +133,10 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                                 isset($_POST['eventkrake_event_categories']) ?
                                 $_POST['eventkrake_event_categories'] : array());
                         unset($_POST['eventkrake_event_categories']);
+                        if(! empty($atts['festival'])) {
+                            Eventkrake::setSinglePostMeta($newEventId,
+                                'festival', $atts['festival']);
+                        }
                         
                         Eventkrake::setSinglePostMeta($newEventId, 
                                 'tags', $_POST['eventkrake-input-email']);
@@ -207,12 +215,12 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
         if($locationId != 0) { ?>
             <div id="eventkrake-input-location-info">
                 <?php
-                    $href = "mailto:post@eventkrake.de?subject=Meldung zum Ort '"
+                    $href = "mailto:{$atts['email']}?subject=Meldung zum Ort '"
                         . rawurlencode(get_the_title($locationId))
                         . "'&body=Name des Ortes: " . rawurlencode(get_the_title($locationId))
                         . "%0ALink zur Bearbeitung: " . rawurlencode(site_url())
                             . "/wp-admin/post.php?post=$locationId%26action=edit"
-                        . "%0A%0AMeine Nachricht:%0A";
+                        . "%0A%0AMeine Nachricht:%0A%0A%0A";
                 ?>
                 <a href="<?=$href?>">
                     <?=__('Änderungen zum Ort melden', 'g4rf_eventkrake2')?>
@@ -226,8 +234,8 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                         $end = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'end'));
                         ?><tr>
                             <td><?=$e->post_title?></td>
-                            <td><?=$start->format('d.m.Y H:i') ?> - </td>
-                            <td><?=$end->format('d.m.Y H:i') ?></td>
+                            <td><?=$start->format($atts['dateformat']) ?> - </td>
+                            <td><?=$end->format($atts['dateformat']) ?></td>
                         </tr><?php
                     }
                 ?></table>
@@ -341,11 +349,11 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
             </tr><tr>
                 <th><?=__('Start der Veranstaltung', 'g4rf_eventkrake2')?></th>
                 <td><?php
-                    $startdate = @$_POST['eventkrake-startdate'];
-                    if(!$startdate) {
-                        $startdate = new DateTime();
-                        $startdate->setTime($startdate->format('H'), 0);
-                    } else $startdate = new DateTime($startdate);
+                    $startdate = new DateTime(
+                        isset($_POST['eventkrake-startdate']) ?
+                            $_POST['eventkrake-startdate'] : 
+                            $atts['startdate']
+                    );
                     ?>
                     <input id="eventkrake-startdate" name="eventkrake-startdate"
                            value="<?=$startdate->format('Y-m-d')?>" type="hidden" />
@@ -365,11 +373,11 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
             </tr><tr>
                 <th><?=__('Ende der Veranstaltung', 'g4rf_eventkrake2')?></th>
                 <td><?php
-                    $enddate = @$_POST['eventkrake-enddate'];
-                    if(!$enddate) {
-                        $enddate = new DateTime();
-                        $enddate->setTime($enddate->format('H') + 2, 0);
-                    } else $enddate = new DateTime($enddate);
+                    $enddate = new DateTime(
+                        isset($_POST['eventkrake-enddate']) ? 
+                            $_POST['eventkrake-enddate'] :
+                            $atts['enddate']
+                    );
                     ?>
                     <input id="eventkrake-enddate" name="eventkrake-enddate"
                            value="<?=$enddate->format('Y-m-d')?>" type="hidden" />
@@ -446,3 +454,5 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
         </fieldset>
     </div>
 </form>
+
+<div id="eventkrake-input-loader"><div id="eventkrake-input-animation"></div></div>
