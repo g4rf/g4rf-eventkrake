@@ -203,7 +203,11 @@ Eventkrake.Input = {
     loadMap: function() {
         /* Map für die Auswahl des Ortes */
         var lat = Eventkrake.Geo.StandardLat;
+        if(jQuery("#eventkrake-map").data("lat"))
+            lat = jQuery("#eventkrake-map").data("lat");
         var lng = Eventkrake.Geo.StandardLng;
+        if(jQuery("#eventkrake-map").data("lng"))
+            lng = jQuery("#eventkrake-map").data("lng");
 
         Eventkrake.Input.map = Leaflet.map('eventkrake-map');
         var layer = new Leaflet.tileLayer(Eventkrake.Map.tileUrl, {

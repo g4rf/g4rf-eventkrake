@@ -256,10 +256,16 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
     
     <fieldset id="eventkrake-input-add-location" 
             class="<?=$showAddLocation ? '' : 'invisible' ?>">
-        <?php // Adresse ?>
-        <input type="hidden" name="eventkrake-lat" value="<?=@$_POST['eventkrake-lat']?>" />
-        <input type="hidden" name="eventkrake-lng" value="<?=@$_POST['eventkrake-lng']?>" />
-        <div id="eventkrake-map" class="eventkrake_map eventkrake_h250">
+        <?php // Adresse
+        $lat = isset($_POST['eventkrake-lat']) ? $_POST['eventkrake-lat']
+                : $atts["lat"];
+        $lng = isset($_POST['eventkrake-lng']) ? $_POST['eventkrake-lng']
+                : $atts["lng"];
+        ?>
+        <input type="hidden" name="eventkrake-lat" value="<?=$lat?>" />
+        <input type="hidden" name="eventkrake-lng" value="<?=$lng?>" />
+        <div id="eventkrake-map" class="eventkrake_map eventkrake_h250"
+             data-lat="<?=$lat?>" data-lng="<?=$lng?>">
             <?=__('Bitte aktiviere JavaScript um die Karte zu benutzen.', 'g4rf_eventkrake2')?>
         </div>
         <br />
