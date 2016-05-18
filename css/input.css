@@ -45,8 +45,12 @@
 
 #eventkrake-input input[type='button'] {
     cursor: pointer;
+    margin: 10px;
+    padding: 10px 20px;   
     border: outset 1px #333;
-    background-color: #ccc;    
+    background-color: #99f;
+    color: #333;
+    font-weight: bold;    
 }
 
 #eventkrake-input input.submit {
@@ -70,10 +74,8 @@
 }
 
 #eventkrake-input select[name='eventkrake-input-locationlist'] {
-    width: 50%;
+    width: 99%;
     display: block;
-    float: left;
-    margin-right: 5px;
 }
 
 #eventkrake-rec {

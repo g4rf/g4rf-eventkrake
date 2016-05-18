@@ -163,6 +163,7 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
      data-event-title-missing="<?=__('Gib bitte einen Titel für die Veranstaltung an.', 'g4rf_eventkrake2')?>"
      data-event-text-missing="<?=__('Gib bitte eine Beschreibung für die Veranstaltung an.', 'g4rf_eventkrake2')?>"
      data-event-location-missing="<?=__('Wähle bitte einen Ort aus.', 'g4rf_eventkrake2')?>"
+     data-event-date-error="<?=__('Der Beginn sollte vor dem Ende der Veranstaltung liegen.', 'g4rf_eventkrake2')?>"
 ></div>
 
 <form action="?<?=SID?>" method="post">
@@ -184,10 +185,11 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
     <h2><?=__('Orte', 'g4rf_eventkrake2') ?></h2>
     <div class="eventkrake-tabs">
         <input id="eventkrake-input-select-location-button" type="button" 
-               value="<?=__('Orte auflisten', 'g4rf_eventkrake2')?>" 
+               value="<?=__('Vorhandenen Ort auswählen', 'g4rf_eventkrake2')?>" 
                class="<?=$showAddLocation ? '' : 'eventkrake-selected'?>" />
+        <?=__('oder', 'g4rf_eventkrake2')?>
         <input id="eventkrake-input-add-location-button" type="button" 
-               value="<?=__('Ort erstellen', 'g4rf_eventkrake2')?>"
+               value="<?=__('Neuen Ort der Liste hinzufügen', 'g4rf_eventkrake2')?>"
                class="<?=$showAddLocation ? 'eventkrake-selected' : ''?>" />
     </div>
     
@@ -222,8 +224,9 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                             . "/wp-admin/post.php?post=$locationId%26action=edit"
                         . "%0A%0AMeine Nachricht:%0A%0A%0A";
                 ?>
+                <br />
                 <a href="<?=$href?>">
-                    <?=__('Änderungen zum Ort melden', 'g4rf_eventkrake2')?>
+                    <b><?=__('Änderungen zum Ort melden', 'g4rf_eventkrake2')?></b>
                 </a><br />
                 <br />
                 <b>Veranstaltungen am Ort:</b><br />
@@ -233,9 +236,17 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                         $start = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'start'));
                         $end = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'end'));
                         ?><tr>
-                            <td><?=$e->post_title?></td>
-                            <td><?=$start->format($atts['dateformat']) ?> - </td>
-                            <td><?=$end->format($atts['dateformat']) ?></td>
+                            <td><b><?=$e->post_title?></b></td>
+                            <td>
+                                <?=$start->format('d.m.Y<\b\r />G:i') . '&nbsp;' .  
+                                    __('Uhr', 'g4rf_eventkrake2')?>
+                            </td>
+                            <td>&ndash;</td>
+                            <td>
+                                <?=$end->format('d.m.Y<\b\r />G:i') . '&nbsp;' .  
+                                    __('Uhr', 'g4rf_eventkrake2')?>
+                            </td>
+                            <td><?=wp_trim_excerpt($e->post_content)?></td>
                         </tr><?php
                     }
                 ?></table>
@@ -348,7 +359,7 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                 </td>
             </tr><tr>
                 <th><?=__('Start der Veranstaltung', 'g4rf_eventkrake2')?></th>
-                <td><?php
+                <td class="eventkrake-dateselect"><?php
                     $startdate = new DateTime(
                         isset($_POST['eventkrake-startdate']) ?
                             $_POST['eventkrake-startdate'] : 
@@ -356,9 +367,9 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                     );
                     ?>
                     <input id="eventkrake-startdate" name="eventkrake-startdate"
-                           value="<?=$startdate->format('Y-m-d')?>" type="hidden" />
+                           value="<?=$startdate->format('Y-m-d')?>" type="hidden"
+                           data-default-date="<?=$startdate->format('c')?>" />
                     <input data-id="eventkrake-startdate" type="text"
-                           value="<?=strftime('%A, %d. %B %Y', $startdate->format('U'))?>"
                            class="datepicker" readonly="readonly" /><?php
                     Eventkrake::printTimePicker(
                             'eventkrake-starthour', 'eventkrake-startminute',
@@ -372,7 +383,7 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                 </td>
             </tr><tr>
                 <th><?=__('Ende der Veranstaltung', 'g4rf_eventkrake2')?></th>
-                <td><?php
+                <td class="eventkrake-dateselect"><?php
                     $enddate = new DateTime(
                         isset($_POST['eventkrake-enddate']) ? 
                             $_POST['eventkrake-enddate'] :
@@ -380,9 +391,9 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                     );
                     ?>
                     <input id="eventkrake-enddate" name="eventkrake-enddate"
-                           value="<?=$enddate->format('Y-m-d')?>" type="hidden" />
+                           value="<?=$enddate->format('Y-m-d')?>" type="hidden"
+                           data-default-date="<?=$enddate->format('c')?>" />
                     <input data-id="eventkrake-enddate" type="text"
-                           value="<?=strftime('%A, %d. %B %Y', $enddate->format('U'))?>"
                            class="datepicker" readonly="readonly" /><?php
                     Eventkrake::printTimePicker(
                             'eventkrake-endhour', 'eventkrake-endminute',

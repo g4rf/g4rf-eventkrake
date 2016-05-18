@@ -63,6 +63,12 @@ jQuery(document).ready(function() {
             jQuery("#"+id).val(jQuery.datepicker.formatDate("yy-mm-dd", date));
         }
     });    
+    jQuery(".datepicker[data-id='eventkrake-startdate']").datepicker(
+        "setDate", new Date(jQuery("#eventkrake-startdate").data("default-date"))
+    );
+    jQuery(".datepicker[data-id='eventkrake-enddate']").datepicker(
+        "setDate", new Date(jQuery("#eventkrake-enddate").data("default-date"))
+    );
     
     /*** Submits (form validation) ***/
     jQuery("#eventkrake-input .submit").click(function() {
@@ -134,6 +140,19 @@ jQuery(document).ready(function() {
                     Eventkrake.Input.printMessage(
                         Eventkrake.Input.getTranslation("event-text-missing"), true);
                 } else jQuery("textarea[name='eventkrake-event-text']").removeClass("highlight");
+                // Begin > Ende?
+                var selStart = jQuery("#eventkrake-startdate").val() + "T" + 
+                        jQuery("[name='eventkrake-starthour']").val() + ":" +
+                        jQuery("[name='eventkrake-startminute']").val() + ":00";
+                var selEnd = jQuery("#eventkrake-enddate").val() + "T" + 
+                        jQuery("[name='eventkrake-endhour']").val() + ":" +
+                        jQuery("[name='eventkrake-endminute']").val() + ":00";
+                if(selStart > selEnd) {
+                    jQuery("td.eventkrake-dateselect").addClass("highlight");
+                    valid = false;
+                    Eventkrake.Input.printMessage(
+                        Eventkrake.Input.getTranslation("event-date-error"), true);
+                } else jQuery("td.eventkrake-dateselect").removeClass("highlight");
                 
                 // Form übermitteln
                 if(valid) {

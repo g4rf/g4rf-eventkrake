@@ -147,7 +147,7 @@ _e('Wenn an diesem Ort Festivals stattfinden, kannst Du hier die ensprechenden
             </td>
             <td>&ndash;</td>
             <td>
-                <?=$end->format('d.m.Y,<\b\r />G:i') . '&nbsp;' .  
+                <?=$end->format('d.m.Y<\b\r />G:i') . '&nbsp;' .  
                     __('Uhr', 'g4rf_eventkrake2')?>
             </td>
             <td><?=wp_trim_excerpt($e->post_content)?></td>
