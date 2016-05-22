@@ -34,7 +34,7 @@ Eventkrake::printPostMessages($post->ID);
                 foreach($locations as $l) {
                     ?><option value='<?=$l->ID?>'<?php
                         ?><?=$l->ID == $postLocationIdWordpress ? ' selected' : '' ?><?php
-                        ?>><?=$l->post_title?> (<?=Eventkrake::getSinglePostMeta($l->ID, 'address')?>)<?php
+                        ?>><?=get_the_title($l->ID)?> (<?=Eventkrake::getSinglePostMeta($l->ID, 'address')?>)<?php
                     ?></option><?php
                 } ?>
         </select>

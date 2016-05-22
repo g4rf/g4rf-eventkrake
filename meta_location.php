@@ -140,7 +140,7 @@ _e('Wenn an diesem Ort Festivals stattfinden, kannst Du hier die ensprechenden
         $start = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'start'));
         $end = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'end'));
         ?><tr>
-            <td><b><?=$e->post_title?></b></td>
+            <td><b><?=get_the_title($e->ID)?></b></td>
             <td>
                 <?=$start->format('d.m.Y<\b\r />G:i') . '&nbsp;' .  
                     __('Uhr', 'g4rf_eventkrake2')?>
