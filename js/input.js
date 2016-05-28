@@ -201,6 +201,9 @@ Eventkrake.Input = {
     },
     
     loadMap: function() {
+        // kein Map COntainer
+        if(! jQuery("#eventkrake-map").length) return;
+        
         /* Map für die Auswahl des Ortes */
         var lat = Eventkrake.Geo.StandardLat;
         if(jQuery("#eventkrake-map").data("lat"))
