@@ -215,7 +215,7 @@ Eventkrake.Input = {
         Eventkrake.Input.map = Leaflet.map('eventkrake-map');
         var layer = new Leaflet.tileLayer(Eventkrake.Map.tileUrl, {
             attribution: Eventkrake.Map.attribution,
-            maxZoom: 18
+            maxZoom: 20
         });
         Eventkrake.Input.map.setView([lat, lng], 17);
         Eventkrake.Input.map.addLayer(layer);
