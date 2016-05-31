@@ -168,6 +168,26 @@ class Eventkrake {
         ));
     }
     
+    /**
+     * Gibt verfügbare Posts vom Typ Event aus.
+     * @param bool $onlyPublic wenn true, nur veröffentlichte Posts, andernfalls
+     *  auch Entwürfe und private Posts.
+     * @return array Array von Posts des Typs eventkrake_event
+     */
+    public static function getAllEvents($onlyPublic = true) {
+        $status = 'publish';
+        if(! $onlyPublic) $status .= ',private,draft';
+        return get_posts(array(
+            'numberposts' => -1,
+            'offset' => 0,
+            'order' => 'ASC',
+            'orderby' => 'meta_value',
+            'meta_key' => 'eventkrake_start',
+            'post_type' => 'eventkrake_event',
+            'post_status' => $status
+        ));
+    }
+    
     /** 
      * Gibt verfügbare Event-Kategorien zurück.
      * @return array Ein Array von Event-Kategorien.
