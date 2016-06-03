@@ -82,6 +82,15 @@ class Eventkrake {
         if(!empty($messages)) self::printMessage($messages);        
     }
     
+    /**
+     * Stellt eine REST-Anfrage an die API.
+     * @param string $action Die auszuführende Aktion,
+     * @param array $queryData Die Abfrage-Parameter.
+     * @param int $httpCode ein HTTP-Statuscode.
+     * @return boolean Falls cURL einen Fehler erzeugt, wird false zurückgegeben,
+     *      andernfalls true.
+     * @see Bereich "API" unter http://eventkrake.de
+     */
     public static function callApi($action, $queryData = array(), &$httpCode = null) {
         // Wordpress POST fields should be slashstripped, see
         // https://codex.wordpress.org/Function_Reference/stripslashes_deep
