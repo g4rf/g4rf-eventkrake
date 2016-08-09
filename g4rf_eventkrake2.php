@@ -39,7 +39,7 @@ add_action('admin_enqueue_scripts', function() {
     $path = plugin_dir_url(__FILE__);
     
     // Geolokalisation
-    wp_register_script('eventkrake_googlemaps',  'http://maps.google.com/maps/api/js?region=DE');
+    wp_register_script('eventkrake_googlemaps',  'http://maps.google.com/maps/api/js?region=DE&key=AIzaSyClvezOaz9z-nZKjMmYRe0cvvWEiCnWjmE');
     wp_enqueue_script('eventkrake_googlemaps');
     // Leaflet
     wp_register_script('eventkrake_leaflet',  'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js', array('jquery'));

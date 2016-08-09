@@ -84,7 +84,7 @@ class Eventkrake {
     
     /**
      * Stellt eine REST-Anfrage an die API.
-     * @param string $action Die auszuführende Aktion,
+     * @param string $action Die auszuführende Aktion.
      * @param array $queryData Die Abfrage-Parameter.
      * @param int $httpCode ein HTTP-Statuscode.
      * @return boolean Falls cURL einen Fehler erzeugt, wird false zurückgegeben,
