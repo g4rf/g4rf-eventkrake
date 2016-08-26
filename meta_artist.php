@@ -50,15 +50,13 @@ Eventkrake::printPostMessages($post->ID);
     <tr>
         <th colspan="3"><?=__('Veranstaltungen', 'g4rf_eventkrake2')?></th>
     </tr><?php
-    foreach(Eventkrake::getAllEvents(false) as $e) {
-        if(in_array($post->ID, Eventkrake::getPostMeta($e->ID, 'artists'))) {
-            ?><tr>
-                <td><b><?=get_the_title($e->ID)?></b></td>
-                <td><?=wp_trim_excerpt($e->post_content)?></td>
-                <td><a href="<?=site_url("wp-admin/post.php?action=edit&post=" . $e->ID)?>">
-                    <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
-                </a></td>
-            </tr><?php
-        }
+    foreach(Eventkrake::getEventsForArtist($post->ID, false) as $e) {
+        ?><tr>
+            <td><b><?=get_the_title($e->ID)?></b></td>
+            <td><?=wp_trim_excerpt($e->post_content)?></td>
+            <td><a href="<?=site_url("wp-admin/post.php?action=edit&post=" . $e->ID)?>">
+                <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
+            </a></td>
+        </tr><?php
     }
 ?></table>
