@@ -197,6 +197,25 @@ class Eventkrake {
         ));
     }
     
+    /**
+     * Gibt verfügbare Posts vom Typ Artist aus.
+     * @param bool $onlyPublic wenn true, nur veröffentlichte Posts, andernfalls
+     *  auch Entwürfe und private Posts.
+     * @return array Array von Posts des Typs Artist
+     */
+    public static function getArtists($onlyPublic = true) {
+        $status = 'publish';
+        if(! $onlyPublic) $status .= ',private,draft';
+        return get_posts(array(
+            'numberposts' => -1,
+            'offset' => 0,
+            'orderby' => 'title',
+            'order' => 'ASC',
+            'post_type' => 'eventkrake_artist',
+            'post_status' => $status
+        ));
+    }
+    
     /** 
      * Gibt verfügbare Event-Kategorien zurück.
      * @return array Ein Array von Event-Kategorien.

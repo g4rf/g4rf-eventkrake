@@ -4,7 +4,7 @@ Plugin Name: Eventkrake 2 WP Plugin
 Plugin URI: http://eventkrake.de/code/
 Description: Eine Veranstaltungsverwaltung, die Veranstaltungen mit Orten samt Geokoordinaten verknüpft. Die Darstellung ist über Templates flexibel anpassbar.
 Author: Jan Kossick
-Version: 2.24beta
+Version: 2.3beta
 License: CC-BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: http://jankossick.de
 Min WP Version: 3.7
@@ -446,6 +446,9 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
                     $locationIdWordpress, 'id');
         }
     }
+    // Künstler*innen
+    $artists = is_array($_POST['eventkrake_artists']) ? 
+            $_POST['eventkrake_artists'] : array();
     
     // save fields
     Eventkrake::setSinglePostMeta($post_id, 
@@ -458,6 +461,7 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     Eventkrake::setSinglePostMeta($post_id, 'website', $website);
     Eventkrake::setPostMeta($post_id, 'categories', $categories);
     Eventkrake::setSinglePostMeta($post_id, 'festival', $festival);
+    Eventkrake::setPostMeta($post_id, 'artists', $artists);
 
     /* Daten an Eventkrake übertragen. */
     if(Eventkrake::getEmailAndKey($email, $key)) { // gibt's credentials?
@@ -526,6 +530,82 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
             }
         }
     }
+}, 1, 2);
+
+/* Künstlerinnen und Künstler */
+add_action('init', function () {
+    register_post_type('eventkrake_artist', array(
+        'public' => true,
+        'has_archive' => true,
+        'labels' => array(
+            'name' => __('KünstlerInnen', 'g4rf_eventkrake2'),
+            'singular_name' => __('KünstlerIn', 'g4rf_eventkrake2'),
+            'add_new' => __('KünstlerIn hinzufügen', 'g4rf_eventkrake2'),
+            'add_new_item' => __('Neue KünstlerIn hinzufügen', 'g4rf_eventkrake2'),
+            'edit' => __('KünstlerIn bearbeiten', 'g4rf_eventkrake2'),
+            'edit_item' => __('KünstlerIn bearbeiten', 'g4rf_eventkrake2'),
+            'new_item' => __('KünstlerIn hinzufügen', 'g4rf_eventkrake2'),
+            'view' => __('KünstlerIn ansehen', 'g4rf_eventkrake2'),
+            'search_items' => __('KünstlerIn suchen', 'g4rf_eventkrake2'),
+            'not_found' => __('Keine KünstlerIn gefunden', 'g4rf_eventkrake2'),
+            'not_found_in_trash' => __('Keine gelöschten KünstlerInnen', 'g4rf_eventkrake2')
+        ),            
+        'rewrite' => array('slug' => 'artist'),
+        'menu_position' => Eventkrake::getNextMenuPosition(),
+        'menu_icon' => plugin_dir_url(__FILE__) . '/img/artist.png',
+        'description' => __('Künstlerinnen und Künstler sind Einzelpersonen oder'
+                . ' Gruppen.', 'g4rf_eventkrake2'),
+        'supports' => array('title', 'excerpt', 'revisions', 'editor', 'thumbnail'),
+        'register_meta_box_cb' => function() {
+            // Metaboxen laden
+            add_meta_box(
+                'eventkrake_artist',
+                __('Weitere Angaben', 'g4rf_eventkrake2'),
+                function($args = null) {
+                    // Inhalt der Metabox
+                    include 'meta_artist.php';                
+                }, null, 'normal', 'high', null
+            );
+        }
+    ));
+});
+// Inhalt der Metabox speichern
+add_action('save_post_eventkrake_artist', function($post_id, $post) {
+    //die("$post_id<pre>" . print_r($post, true) . "</pre>");
+
+    // Is the user allowed to edit the post or page?
+    if (!current_user_can('edit_post', $post->ID)) return;
+    
+    // checken, ob wir vom edit screen kommen
+    if(! isset($_POST['eventkrake_on_edit_screen'])) return;
+    
+    // automatische Speicherungen machen wir nicht
+    if($post->post_status == 'auto-draft') return;
+    
+    // If this is just a revision, do nothing.
+    if (wp_is_post_revision($post_id)) return;
+
+    // check POST-fields
+    $origin = $_POST['eventkrake_origin'];
+    $linkNames = array(
+        $_POST['eventkrake_linknames0'],
+        $_POST['eventkrake_linknames1'],
+        $_POST['eventkrake_linknames2'],
+        $_POST['eventkrake_linknames3'],
+        $_POST['eventkrake_linknames4']
+    );
+    $linkUrls = array(
+        $_POST['eventkrake_linkurls0'],
+        $_POST['eventkrake_linkurls1'],
+        $_POST['eventkrake_linkurls2'],
+        $_POST['eventkrake_linkurls3'],
+        $_POST['eventkrake_linkurls4']
+    );
+    
+    // save fields
+    Eventkrake::setSinglePostMeta($post_id, 'origin', $origin);
+    Eventkrake::setPostMeta($post_id, 'linknames', $linkNames);
+    Eventkrake::setPostMeta($post_id, 'linkurls', $linkUrls);
 }, 1, 2);
 
 /***** Shortcode für Ausgabe *****/

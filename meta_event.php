@@ -94,6 +94,29 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter'
 </tr>
 
 <tr>
+    <th><?=__('Teilnehmende KünstlerInnen', 'g4rf_eventkrake2')?></th>
+    <td>
+        <select class="eventkrake_formselect" name="eventkrake_artists[]" size="5" multiple>
+            <option value="0">-- <?=__('keine', 'g4rf_eventkrake2')?> --</option>
+            <?php
+                $artists = Eventkrake::getArtists(false);
+                $artistIds = Eventkrake::getPostMeta($post->ID, 'artists');
+                foreach($artists as $a) {
+                    ?><option value="<?=$a->ID?>"<?php
+                    if(in_array($a->ID, $artistIds)) print ' selected';
+                    ?>><?=get_the_title($a->ID)?></option><?php
+                } 
+            ?>
+        </select><br />
+        <span class="description"><?php
+_e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung 
+    teilnehmen. Du kannst mit [STRG] mehrere Einträge auswählen.',
+    'g4rf_eventkrake2');
+       ?></span>
+    </td>
+</tr>
+
+<tr>
     <th><?=__('Eine Webseite zur Veranstaltung', 'g4rf_eventkrake2')?></th>
     <td>
         <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'website')?>" 
