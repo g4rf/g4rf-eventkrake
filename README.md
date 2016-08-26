@@ -5,11 +5,11 @@ zu synchronisieren.
 * Autor: Jan Kossick <jankossick@online.de>
 * Webseite: http://www.eventkrake.de
 
-In der vorliegenden Form erweitert das Plugin nur den Adminbereich und ergänzt zwei 
+In der vorliegenden Form erweitert das Plugin nur den Adminbereich und ergänzt drei 
 [Custom Post Types](https://codex.wordpress.org/Post_Types). Beim Speichern der Posts
 werden die Daten über die [Eventkrake 2 API](http://www.eventkrake.de/api/) mit der 
 Eventkrake synchronisiert, **vorrausgesetzt es liegt eine gültige E-Mail-Adresse samt
-Schlüssel vor**.
+Schlüssel vor**. Der Post Type **Artist** wird nicht mit der Eventkrake synchronisiert.
 
 Für die Darstellung im Frontend ist das Theme zuständig, das ebenfalls über die 
 [Eventkrake 2 API](http://www.eventkrake.de/api/) die Daten abrufen kann. **Dafür
