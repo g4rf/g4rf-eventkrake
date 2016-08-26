@@ -51,7 +51,6 @@ Eventkrake::printPostMessages($post->ID);
         <th colspan="3"><?=__('Veranstaltungen', 'g4rf_eventkrake2')?></th>
     </tr><?php
     foreach(Eventkrake::getAllEvents(false) as $e) {
-        print_r(Eventkrake::getPostMeta($e->ID, 'artists'));
         if(in_array($post->ID, Eventkrake::getPostMeta($e->ID, 'artists'))) {
             ?><tr>
                 <td><b><?=get_the_title($e->ID)?></b></td>

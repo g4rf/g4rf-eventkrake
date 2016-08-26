@@ -4,7 +4,7 @@ Plugin Name: Eventkrake 2 WP Plugin
 Plugin URI: http://eventkrake.de/code/
 Description: Eine Veranstaltungsverwaltung, die Veranstaltungen mit Orten samt Geokoordinaten verknüpft. Die Darstellung ist über Templates flexibel anpassbar.
 Author: Jan Kossick
-Version: 2.3beta
+Version: 2.31beta
 License: CC-BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: http://jankossick.de
 Min WP Version: 3.7
