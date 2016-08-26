@@ -217,10 +217,11 @@ class Eventkrake {
     }
     
     /**
-     * Gibt verfügbare Posts vom Typ Artist aus.
+     * Gibt verfügbare Posts vom Typ Event aus, an denen der Artist teilnimmt.
+     * @param int $artistId Die post id des Artist.
      * @param bool $onlyPublic wenn true, nur veröffentlichte Posts, andernfalls
      *  auch Entwürfe und private Posts.
-     * @return array Array von Posts des Typs Artist
+     * @return array Array von Posts des Typs Event
      */
     public static function getEventsForArtist($artistId, $onlyPublic = true) {
         $events = array();
@@ -231,6 +232,25 @@ class Eventkrake {
             }
         }
         return $events;
+    }
+    
+    /**
+     * Gibt die Links zum Artist als assoziatives Array zurück.
+     * @return array [ 0 => [ name => 'Name', url => 'http://...' ], ... ]
+     */
+    public static function getLinksForArtist($artistId) {
+        $linknames = Eventkrake::getPostMeta($artistId, 'linknames');
+        $linkurls = Eventkrake::getPostMeta($artistId, 'linkurls');
+        $links = array();
+        for($i = 0; $i < 5; $i++) {
+            if(! empty($linknames[$i])) {
+                $links[] = array(
+                    'name' => $linknames[$i],
+                    'url' => $linkurls[$i]
+                );
+            }
+        }
+        return $links;
     }
     
     /** 
