@@ -1,4 +1,4 @@
-if(typeof L !== "undefined") var Leaflet = L.noConflict();
+var Leaflet = L.noConflict();
 
 var Eventkrake = {
     load: function(o) {
