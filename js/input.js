@@ -1,5 +1,22 @@
 jQuery(document).ready(function() {
     /*** Eventbindings ***/
+    // start form
+    jQuery("#eventkrake-input-start").click(function() {
+        jQuery("#eventkrake-input-background").appendTo("body").show();
+        jQuery("#eventkrake-input-form").appendTo("body").show();
+        jQuery("#eventkrake-input-loader").appendTo("body").hide();
+    });
+    
+    // move between screens
+    jQuery("#eventkrake-input-back").click(function() {
+        if(jQuery(this).hasClass("disabled")) return false;
+    });
+    jQuery("#eventkrake-input-next").click(function() {
+        if(jQuery(this).hasClass("disabled")) return false;
+        
+        return false;
+    });
+    
     // Ortliste auswählen
     jQuery("#eventkrake-input-select-location-button").click(function() {
         jQuery(this).addClass('eventkrake-selected');
@@ -71,7 +88,9 @@ jQuery(document).ready(function() {
     );
     
     /*** Submits (form validation) ***/
-    jQuery("#eventkrake-input .submit").click(function() {
+    jQuery("#eventkrake-input-save").click(function() {
+        if(jQuery(this).hasClass("disabled")) return false;
+        
         Eventkrake.Input.showAnimation();
         var valid = true;
         
