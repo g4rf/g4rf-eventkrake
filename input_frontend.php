@@ -173,64 +173,56 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
 <div id="eventkrake-input-background"></div>
 
 <form id="eventkrake-input-form" action="?<?=SID?>" method="post">
+    <a id="eventkrake-input-logo" href="http://eventkrake.de" 
+       title="powered by eventkrake" target="_blank">
+        <img src="http://eventkrake.de/wp-content/themes/eventkrake/img/eventkrake-logo.png"
+            alt="powered by eventkrake" />
+    </a>
+    
     <div id="eventkrake-input-form-elements">
         
         <?php /*** Captcha ***/ ?>
         <div class="eventkrake-input-tab visible" 
-             data-previous="close" data-me="captcha" data-next="locationquestion">
+             data-previous="close" data-me="captcha" data-next="location">
             <h2><?=__('Bist Du ein Mensch?', 'g4rf_eventkrake2')?></h2>
 
             <?php
                 $_SESSION['challenge'] = Eventkrake::humanChallenge();
             ?>
             <label>
-                <div><?=$_SESSION['challenge'] ?></div>
+                <span><?=$_SESSION['challenge'] ?></span>
                 <input name="eventkrake-input-response" type="text" />
             </label>
             <label>
-                <div><?=__('Deine E-Mail-Adresse:', 'g4rf_eventkrake2')?></div>
+                <span><?=__('Deine E-Mail-Adresse:', 'g4rf_eventkrake2')?></span>
                 <input name="eventkrake-input-email" type="text"
-                    value="<?=@$_POST['eventkrake-input-email']?>" />
+                    value="<?=filter_input(INPUT_POST, 'eventkrake-input-email')?>" />
             </label>
         </div>
         
-        <?php /*** select location ***/ ?>
+        <?php /*** ORTE ***/ ?>
         <div class="eventkrake-input-tab" 
-             data-previous="captcha" data-me="locationquestion" data-next="locationselect">
-            <h2><?=__('Bist Du ein Mensch?', 'g4rf_eventkrake2')?></h2>
-
-            <div id="eventkrake-input-check-human">
-                <?php
-                    $_SESSION['challenge'] = Eventkrake::humanChallenge();
-                ?>
-                <div><?=$_SESSION['challenge'] ?></div>
-                <input name="eventkrake-input-response" type="text" />
-                <div><?=__('Deine E-Mail-Adresse:', 'g4rf_eventkrake2')?></div>
-                <input name="eventkrake-input-email" type="text"
-                    value="<?=@$_POST['eventkrake-input-email']?>" />
-            </div>
-        </div>
-
-        <?php /*** Vorhandene ORTE ***/ ?>
-        <div class="eventkrake-input-tab" 
-             data-previous="locationquestion" data-me="locationselect" data-next="events">
+             data-previous="captcha" data-me="location" data-next="events">
             <h2><?=__('Orte', 'g4rf_eventkrake2') ?></h2>
-            <div class="eventkrake-tabs">
-                <input id="eventkrake-input-select-location-button" type="button" 
-                       value="<?=__('Vorhandenen Ort auswählen', 'g4rf_eventkrake2')?>" 
-                       class="<?=$showAddLocation ? '' : 'eventkrake-selected'?>" />
-                <?=__('oder', 'g4rf_eventkrake2')?>
-                <input id="eventkrake-input-add-location-button" type="button" 
-                       value="<?=__('Neuen Ort der Liste hinzufügen', 'g4rf_eventkrake2')?>"
-                       class="<?=$showAddLocation ? 'eventkrake-selected' : ''?>" />
-            </div>
 
-            <fieldset id="eventkrake-input-select-location"
-                    class="<?=$showAddLocation ? 'invisible' : '' ?>">
-                <select name="eventkrake-input-locationlist" size="10">
+            <p><?=__('Ich möchte', 'g4rf_eventkrake2')?></p>
+            <label>
+                <input name="eventkrake-input-location-radio" type="radio"
+                       value="select" checked />
+                <?=__('einen vorhandenen Ort auswählen', 'g4rf_eventkrake2')?>
+            </label>
+            <label>
+                <input name="eventkrake-input-location-radio" type="radio"
+                       value="add" />
+                <?=__('einen neuen Ort eintragen.', 'g4rf_eventkrake2')?>
+            </label>
+
+
+            <fieldset id="eventkrake-input-select-location">
+                <select name="eventkrake-input-locationlist" size="15">
                     <?php
                         $selectedId = isset($newLocationId) ? $newLocationId : 
-                                @$_POST['eventkrake-input-locationlist'];
+                            filter_input(INPUT_POST, 'eventkrake-input-locationlist');
                         $locations = Eventkrake::getLocations(false);
                         foreach($locations as $l) {
                             ?><option value='<?=$l->ID?>'<?php
@@ -238,79 +230,31 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                                 ?>><?=$l->post_title?> (<?=Eventkrake::getSinglePostMeta($l->ID, 'address')?>)<?php
                             ?></option><?php
                         } ?>
-                </select>
-                <?php
-                $locationId = 0;
-                if(isset($newLocationId)) {
-                    $locationId = $newLocationId;
-                } elseif(isset($_POST['eventkrake-input-locationlist'])) {
-                    $locationId = $_POST['eventkrake-input-locationlist'];
-                }
-                if($locationId != 0) { ?>
-                    <div id="eventkrake-input-location-info">
-                        <?php
-                            $href = "mailto:{$atts['email']}?subject=Meldung zum Ort '"
-                                . rawurlencode(get_the_title($locationId))
-                                . "'&body=Name des Ortes: " . rawurlencode(get_the_title($locationId))
-                                . "%0ALink zur Bearbeitung: " . rawurlencode(site_url())
-                                    . "/wp-admin/post.php?post=$locationId%26action=edit"
-                                . "%0A%0AMeine Nachricht:%0A%0A%0A";
-                        ?>
-                        <br />
-                        <a href="<?=$href?>">
-                            <b><?=__('Änderungen zum Ort melden', 'g4rf_eventkrake2')?></b>
-                        </a><br />
-                        <br />
-                        <b>Veranstaltungen am Ort:</b><br />
-                        <table><?php
-                            $events = Eventkrake::getEvents($locationId, false);
-                            foreach($events as $e) {
-                                $start = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'start'));
-                                $end = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'end'));
-                                ?><tr>
-                                    <td><b><?=$e->post_title?></b></td>
-                                    <td>
-                                        <?=$start->format('d.m.Y<\b\r />G:i') . '&nbsp;' .  
-                                            __('Uhr', 'g4rf_eventkrake2')?>
-                                    </td>
-                                    <td>&ndash;</td>
-                                    <td>
-                                        <?=$end->format('d.m.Y<\b\r />G:i') . '&nbsp;' .  
-                                            __('Uhr', 'g4rf_eventkrake2')?>
-                                    </td>
-                                    <td><?=wp_trim_excerpt($e->post_content)?></td>
-                                </tr><?php
-                            }
-                        ?></table>
-                    </div>
-                <?php } ?>
+                </select>                
             </fieldset>
-        </div>
-        
-        <?php /*** Neuer ORT ***/ ?>
-        <div class="eventkrake-input-tab"
-             data-previous="locationquestion" data-me="locationnew" data-next="events">
             
-            <fieldset id="eventkrake-input-add-location" 
-                    class="<?=$showAddLocation ? '' : 'invisible' ?>">
+            <fieldset id="eventkrake-input-add-location">
+                <hr />
+                <h3><?=__('Angaben zur Adresse', 'g4rf_eventkrake2')?></h3>
                 <?php // Adresse
-                $lat = isset($_POST['eventkrake-lat']) ? $_POST['eventkrake-lat']
-                        : $atts["lat"];
-                $lng = isset($_POST['eventkrake-lng']) ? $_POST['eventkrake-lng']
-                        : $atts["lng"];
+                    $lat = filter_input(INPUT_POST, 'eventkrake-lat');
+                    if(! $lat) $lat = $atts["lat"];
+                    $lng = filter_input(INPUT_POST, 'eventkrake-lng');
+                    if(! $lng) $lng = $atts["lng"];
                 ?>
                 <input type="hidden" name="eventkrake-lat" value="<?=$lat?>" />
                 <input type="hidden" name="eventkrake-lng" value="<?=$lng?>" />
+                
                 <div id="eventkrake-map" class="eventkrake_map eventkrake_h250"
                      data-lat="<?=$lat?>" data-lng="<?=$lng?>">
                     <?=__('Bitte aktiviere JavaScript um die Karte zu benutzen.', 'g4rf_eventkrake2')?>
                 </div>
                 <br />
-                <span class="description">Vorschlag: </span>
+                <span class="description"><?=__('Vorschlag', 'g4rf_eventkrake2')?>: </span>
                 <span id="eventkrake-rec" title="<?=__('Vorschlag übernehmen', 'g4rf_eventkrake2')?>"></span><br />
                 <span class="description"><?=__('Adresse:', 'g4rf_eventkrake2')?>&nbsp;</span>
                 <input type="text" name="eventkrake-address" maxlength="255"
-                       value="<?=@$_POST['eventkrake-address']?>" />
+                       value="<?=filter_input(INPUT_POST, 'eventkrake-address')?>" />
                 <input value="<?=__('Adresse suchen', 'g4rf_eventkrake2')?>" type="button"
                     class="eventkrake_lookforaddress" /><br />
                 <span class="description"><?php
@@ -318,78 +262,39 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
                     klicken. Durch einfaches Klicken in der Karte kannst du den Ort verändern.',
                     'g4rf_eventkrake2');
                 ?></span>
+                
                 <hr />
-
-                <table><tr>
-                    <th><?=__('Der Name des Ortes', 'g4rf_eventkrake2')?></th>
-                    <td>
-                        <input type="text" name="eventkrake-location-name" 
-                               value="<?=@$_POST['eventkrake-location-name']?>" /><br />
-                        <span class="description">
-                            <?=__('Der Name des Ortes.', 'g4rf_eventkrake2')?>
-                        </span>
-                    </td>
-                </tr><tr>
-                    <th><?=__('Beschreibung', 'g4rf_eventkrake2')?></th>
-                    <td>
-                        <textarea name="eventkrake-location-text" rows="7"><?=
-                            @$_POST['eventkrake-location-text']
-                        ?></textarea><br />
-                        <span class="description">
-                            <?=__('Ein kurzer Text zum Ort.', 'g4rf_eventkrake2')?>
-                        </span>
-                    </td>
-                </tr><!--tr>
-                    <th><?=__('Ein Bild', 'g4rf_eventkrake2')?></th>
-                    <td>
-                        <input type="text" name="eventkrake-location-image" 
-                               value="<?=@$_POST['eventkrake-location-image']?>" /><br />
-                        <span class="description">
-                            <?=__('Die URL zu einem Bild.', 'g4rf_eventkrake2')?>
-                        </span>
-                    </td>
-                </tr--><tr>
-                    <th><?=__('Eine Webseite zum Ort', 'g4rf_eventkrake2')?></th>
-                    <td>
-                        <input type="text" name="eventkrake-location-website" 
-                               value="<?=@$_POST['eventkrake-location-website']?>" /><br />
-                        <span class="description">
-                            <?=__('Eine Webseite, die nähere Infos über den Ort enthält.',
-                                    'g4rf_eventkrake2')?>
-                        </span>
-                    </td>
-                </tr><tr>
-                    <th><?=__('Die Kategorien', 'g4rf_eventkrake2')?></th>
-                    <td>
-                        <?php
-                            $apiCategories = Eventkrake::getCategories();
-                            $selectedCategories = 
-                                isset($_POST['eventkrake_location_categories']) ?
-                                    $_POST['eventkrake_location_categories'] : array();
-                            foreach($apiCategories as $c) {
-                                ?><label><input name="eventkrake_location_categories[]"
-                                    type="checkbox" value="<?=$c->id?>"<?=
-                                    in_array($c->id, $selectedCategories) ? ' checked' : ''
-                                ?> />&nbsp;<?=$c->category?></label><?php
-                            }
-                        ?><br />
-                        <span class="description"><?php
-                _e('Wähle hier die Kategorien für den Ort aus. Du kannst mehrere 
-                    Kategorien auswählen.', 'g4rf_eventkrake2');
-                       ?></span>
-                    </td>
-                </tr></table>
-                <hr />
-                <div class="eventkrake_center">
-                    <input value="<?=__('Ort erstellen', 'g4rf_eventkrake2')?>"
-                        data-action="addlocation" type="button" class="submit" />
-                </div>
+                <h3><?=__('Weitere Angaben zum Ort', 'g4rf_eventkrake2')?></h3>
+                
+                <label>
+                    <?=__('Der Name des Ortes', 'g4rf_eventkrake2')?><br />
+                    <input type="text" name="eventkrake-location-name" 
+                            value="<?=filter_input(INPUT_POST, 'eventkrake-location-name')?>" />
+                </label>
+                <label>
+                    <?=__('Beschreibung', 'g4rf_eventkrake2')?><br />
+                    <textarea name="eventkrake-location-text" rows="7"><?=
+                        filter_input(INPUT_POST, 'eventkrake-location-text')
+                    ?></textarea><br />
+                    <span class="description"><?=
+                        __('Ein kurzer Text zum Ort.', 'g4rf_eventkrake2')
+                    ?></span>
+                </label>
+                <label>
+                    <?=__('Eine Webseite zum Ort', 'g4rf_eventkrake2')?><br />
+                    <input type="text" name="eventkrake-location-website" 
+                           value="<?=filter_input(INPUT_POST, 'eventkrake-location-website')?>" /><br />
+                    <span class="description"><?=
+                        __('Eine Webseite, die nähere Infos über den Ort enthält.',
+                                'g4rf_eventkrake2')
+                    ?></span>
+                </label>
             </fieldset>
         </div>
         
         <?php /*** EVENTS ***/ ?>
         <div class="eventkrake-input-tab"
-             data-previous="locationselect" data-me="events" data-next="save">
+             data-previous="location" data-me="events" data-next="save">
         
             <h2><?=__('Veranstaltung', 'g4rf_eventkrake2') ?></h2>
             <fieldset>
@@ -513,13 +418,13 @@ if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-re
     </div>
     
     <div id="eventkrake-input-form-buttons">
-        <button id="eventkrake-input-back" class="disabled">
+        <button id="eventkrake-input-back">
             <?=__('Zurück', 'g4rf_eventkrake2')?>
         </button>
-        <button id="eventkrake-input-next" class="">
+        <button id="eventkrake-input-next">
             <?=__('Weiter', 'g4rf_eventkrake2')?>
         </button>
-        <button id="eventkrake-input-save" class="disabled">
+        <button id="eventkrake-input-save" disabled>
             <?=__('Speichern', 'g4rf_eventkrake2')?>
         </button>
     </div>

@@ -1,57 +1,67 @@
+/* global Leaflet, google */
+
 jQuery(document).ready(function() {
     /*** Eventbindings ***/
+    
+    // disables automatic button action in text fields
+    jQuery("#eventkrake-input-form input[type='text']").keypress(function(e) {
+        if (e.which == 13) {
+            return false;
+        }
+    });
+    
     // start form
     jQuery("#eventkrake-input-start").click(function() {
-        jQuery("#eventkrake-input-background").appendTo("body").show();
-        jQuery("#eventkrake-input-form").appendTo("body").show();
-        jQuery("#eventkrake-input-loader").appendTo("body").hide();
+        jQuery("#eventkrake-input-background").appendTo("body");
+        jQuery("#eventkrake-input-form").appendTo("body");
+        jQuery("#eventkrake-input-loader").appendTo("body");
+        Eventkrake.Input.hideAnimation();
+        Eventkrake.Input.show();
     });
     
     // move between screens
     jQuery("#eventkrake-input-back").click(function() {
-        if(jQuery(this).hasClass("disabled")) return false;
+        var action = jQuery(".eventkrake-input-tab:visible").data("previous");
+        
+        if(action == "close") {
+            Eventkrake.Input.hide();
+            return false;
+        }
+        
+        jQuery(".eventkrake-input-tab").removeClass("visible");
+        jQuery(".eventkrake-input-tab[data-me='" + action + "']")
+                .addClass("visible");
+        
+        jQuery("#eventkrake-input-form-elements").scrollTop(0);
+        return false;
     });
     jQuery("#eventkrake-input-next").click(function() {
-        if(jQuery(this).hasClass("disabled")) return false;
+        var action = jQuery(".eventkrake-input-tab:visible").data("next");
         
+        jQuery(".eventkrake-input-tab").removeClass("visible");
+        jQuery(".eventkrake-input-tab[data-me='" + action + "']")
+                .addClass("visible");
+        
+        jQuery("#eventkrake-input-form-elements").scrollTop(0);
         return false;
     });
     
-    // Ortliste auswählen
-    jQuery("#eventkrake-input-select-location-button").click(function() {
-        jQuery(this).addClass('eventkrake-selected');
-        jQuery("#eventkrake-input-add-location-button")
-                .removeClass('eventkrake-selected');
-        jQuery('#eventkrake-input-select-location').show();
-        jQuery('#eventkrake-input-add-location').hide();
-        jQuery('#eventkrake-input-events').show();
-    });
-    // Ort erstellen
-    jQuery("#eventkrake-input-add-location-button").click(function() {
-        jQuery(this).addClass('eventkrake-selected');
-        jQuery("#eventkrake-input-select-location-button")
-                .removeClass('eventkrake-selected');
-        jQuery('#eventkrake-input-select-location').hide();
-        jQuery('#eventkrake-input-add-location').show();    
-        jQuery('#eventkrake-input-events').hide();
+    // switch between location list and add new location
+    jQuery("[name='eventkrake-input-location-radio']").click(function() {        
+        if(jQuery(this).val() == "add") {
+            // Ort erstellen
+            jQuery('#eventkrake-input-add-location').slideDown();
+            jQuery('#eventkrake-input-select-location').slideUp();
+            if(Eventkrake.Input.map == null) Eventkrake.Input.loadMap();
         
-        if(! Eventkrake.Input.mapLoaded) {
-            Eventkrake.Input.mapLoaded = true;
-            Eventkrake.Input.loadMap();
+        } else {
+            // Ortliste
+            jQuery('#eventkrake-input-add-location').slideUp();
+            jQuery('#eventkrake-input-select-location').slideDown();
         }
     });
-    // wenn Ort in Liste angeklickt, Formular abschicken
-    jQuery("select[name='eventkrake-input-locationlist']").change(function() {
-        Eventkrake.Input.showAnimation();
-        jQuery("#eventkrake-input form").submit();
-    });
-    // Karte laden, falls Karte sichtbar
-    if(! Eventkrake.Input.mapLoaded 
-            && ! jQuery("#eventkrake-input-add-location").hasClass('invisible')) {
-        Eventkrake.Input.mapLoaded = true;
-        Eventkrake.Input.loadMap();
-    }
-    // Date-Picker laden
+    
+    // load date picker
     jQuery(".datepicker").datepicker({
         dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", 
             "Freitag", "Samstag"],
@@ -88,9 +98,7 @@ jQuery(document).ready(function() {
     );
     
     /*** Submits (form validation) ***/
-    jQuery("#eventkrake-input-save").click(function() {
-        if(jQuery(this).hasClass("disabled")) return false;
-        
+    jQuery("#eventkrake-input-save").click(function() {        
         Eventkrake.Input.showAnimation();
         var valid = true;
         
@@ -188,8 +196,7 @@ jQuery(document).ready(function() {
 
 var Eventkrake = Eventkrake || {};
 Eventkrake.Input = {
-    mapLoaded: false,
-    map: {},
+    map: null,
     
     showAnimation: function() {
         jQuery("#eventkrake-input-loader").show();
@@ -197,6 +204,16 @@ Eventkrake.Input = {
     
     hideAnimation: function() {
         jQuery("#eventkrake-input-loader").hide();
+    },
+    
+    show: function() {
+        jQuery("#eventkrake-input-background").show();
+        jQuery("#eventkrake-input-form").show();
+    },
+    
+    hide: function() {
+        jQuery("#eventkrake-input-form").fadeOut(200);
+        jQuery("#eventkrake-input-background").fadeOut(250);        
     },
     
     printMessage: function(message, error) {
@@ -220,8 +237,8 @@ Eventkrake.Input = {
     },
     
     loadMap: function() {
-        // kein Map COntainer
-        if(! jQuery("#eventkrake-map").length) return;
+        // no visible map container
+        if(! jQuery("#eventkrake-map:visible").length) return;
         
         /* Map für die Auswahl des Ortes */
         var lat = Eventkrake.Geo.StandardLat;
@@ -234,7 +251,7 @@ Eventkrake.Input = {
         Eventkrake.Input.map = Leaflet.map('eventkrake-map');
         var layer = new Leaflet.tileLayer(Eventkrake.Map.tileUrl, {
             attribution: Eventkrake.Map.attribution,
-            maxZoom: 20
+            maxZoom: 19
         });
         Eventkrake.Input.map.setView([lat, lng], 17);
         Eventkrake.Input.map.addLayer(layer);
@@ -253,17 +270,27 @@ Eventkrake.Input = {
             );
         });
 
-        jQuery('#eventkrake-input .eventkrake_lookforaddress').click(function() {
+        // search geo coordinates for address
+        jQuery('#eventkrake-input-form .eventkrake_lookforaddress').click(function() {
             Eventkrake.Geo.getLatLng(
                 jQuery("input[name='eventkrake-address']").val(),
                 Eventkrake.Input.loadNewAddressForLocation
             );
         });
 
+        // fill suggestion into address text field
         jQuery("#eventkrake-rec").click(function() {
             jQuery("input[name='eventkrake-address']").val(
                 jQuery(this).text()
             );
+        });
+        
+        // search address on enter in address field
+        jQuery("input[name='eventkrake-address']").keypress(function(e) {
+            if (e.which == 13) {
+                jQuery(".eventkrake_lookforaddress").click();
+                return false;
+            }
         });
     },
     
