@@ -630,7 +630,8 @@ add_shortcode('eventkrake_input', function($attributes) {
         'festival' => '',
         'email' => get_option('admin_email', ''),
         'lat' => '',
-        'lng' => ''
+        'lng' => '',
+        'categories' => ''
     ), $attributes);
     ?><div id="eventkrake-input"><?php
         include('input_frontend.php');

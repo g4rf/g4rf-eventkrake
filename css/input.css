@@ -2,6 +2,11 @@
 *, ::before, ::after { box-sizing: inherit; }
 #eventkrake-input { box-sizing: border-box; } 
 
+/** general classes **/
+.eventkrake-input-template {
+	/*display: none;*/
+}
+
 /** fixed elements **/
 #eventkrake-input-background {
 	display: none;
@@ -130,14 +135,39 @@
 	display: block;
 }
 
+#eventkrake-input-form textarea {
+	resize: vertical;
+}
+
+#eventkrake-input-form table {
+	width: 100%;
+	margin-bottom: 10px;
+	border-right: solid 1px #888;
+}
+#eventkrake-input-form tr {
+	padding-bottom: 5px;
+	border: solid 1px #888;
+	border-left: none;
+	border-top: none;
+}
+#eventkrake-input-form td, #eventkrake-input-form th {
+	padding: 5px;
+	border: solid 1px #888;
+	border-right: none;
+	border-top: none;
+}
+
 #eventkrake-input-form input[type="text"],
+#eventkrake-input-form input[type="email"],
+#eventkrake-input-form input[type="number"],
 #eventkrake-input-form textarea,
 #eventkrake-input-form select {
 	font-family: Open Sans, sans-serif;
-	padding: 5px;
-	width: 100%;
+	padding: 1%;
+	width: 98%;
 	max-width: 600px;
 	border: inset 1px #333;
+	font-size: 0.9em;
 }
 #eventkrake-input-form textarea {
 	resize: vertical;
@@ -152,4 +182,21 @@
 }
 #eventkrake-rec:hover {
     text-decoration: underline;
+}
+
+.eventkrake-input-delete-event {
+	color: #f33;
+}
+
+.eventkrake-input-events select {
+	width: auto !important;
+}
+.eventkrake-dateselect input[type="number"] {
+	width: 40px !important;
+	text-align: right;
+}
+.eventkrake-input-delete-event {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
 }

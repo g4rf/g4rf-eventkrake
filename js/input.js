@@ -23,6 +23,11 @@ jQuery(document).ready(function() {
     jQuery("#eventkrake-input-back").click(function() {
         var action = jQuery(".eventkrake-input-tab:visible").data("previous");
         
+        // deactivate save button and activate next button
+        jQuery("#eventkrake-input-save").prop("disabled", true);
+        jQuery("#eventkrake-input-next").prop("disabled", false);
+        
+        // first tab
         if(action == "close") {
             Eventkrake.Input.hide();
             return false;
@@ -37,6 +42,12 @@ jQuery(document).ready(function() {
     });
     jQuery("#eventkrake-input-next").click(function() {
         var action = jQuery(".eventkrake-input-tab:visible").data("next");
+        
+        // on last step deactivate this button and activate save button
+        if(action == "events") {
+            jQuery(this).prop("disabled", true);
+            jQuery("#eventkrake-input-save").prop("disabled", false);
+        }
         
         jQuery(".eventkrake-input-tab").removeClass("visible");
         jQuery(".eventkrake-input-tab[data-me='" + action + "']")
