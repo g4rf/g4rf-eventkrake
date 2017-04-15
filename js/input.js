@@ -1,210 +1,5 @@
 /* global Leaflet, google */
 
-jQuery(document).ready(function() {
-    /*** Eventbindings ***/
-    
-    // disables automatic button action in text fields
-    jQuery("#eventkrake-input-form input[type='text']").keypress(function(e) {
-        if (e.which == 13) {
-            return false;
-        }
-    });
-    
-    // start form
-    jQuery("#eventkrake-input-start").click(function() {
-        jQuery("#eventkrake-input-background").appendTo("body");
-        jQuery("#eventkrake-input-form").appendTo("body");
-        jQuery("#eventkrake-input-loader").appendTo("body");
-        Eventkrake.Input.hideAnimation();
-        Eventkrake.Input.show();
-    });
-    
-    // move between screens
-    jQuery("#eventkrake-input-back").click(function() {
-        var action = jQuery(".eventkrake-input-tab:visible").data("previous");
-        
-        // deactivate save button and activate next button
-        jQuery("#eventkrake-input-save").prop("disabled", true);
-        jQuery("#eventkrake-input-next").prop("disabled", false);
-        
-        // first tab
-        if(action == "close") {
-            Eventkrake.Input.hide();
-            return false;
-        }
-        
-        jQuery(".eventkrake-input-tab").removeClass("visible");
-        jQuery(".eventkrake-input-tab[data-me='" + action + "']")
-                .addClass("visible");
-        
-        jQuery("#eventkrake-input-form-elements").scrollTop(0);
-        return false;
-    });
-    jQuery("#eventkrake-input-next").click(function() {
-        var action = jQuery(".eventkrake-input-tab:visible").data("next");
-        
-        // on last step deactivate this button and activate save button
-        if(action == "events") {
-            jQuery(this).prop("disabled", true);
-            jQuery("#eventkrake-input-save").prop("disabled", false);
-        }
-        
-        jQuery(".eventkrake-input-tab").removeClass("visible");
-        jQuery(".eventkrake-input-tab[data-me='" + action + "']")
-                .addClass("visible");
-        
-        jQuery("#eventkrake-input-form-elements").scrollTop(0);
-        return false;
-    });
-    
-    // switch between location list and add new location
-    jQuery("[name='eventkrake-input-location-radio']").click(function() {        
-        if(jQuery(this).val() == "add") {
-            // Ort erstellen
-            jQuery('#eventkrake-input-add-location').slideDown();
-            jQuery('#eventkrake-input-select-location').slideUp();
-            if(Eventkrake.Input.map == null) Eventkrake.Input.loadMap();
-        
-        } else {
-            // Ortliste
-            jQuery('#eventkrake-input-add-location').slideUp();
-            jQuery('#eventkrake-input-select-location').slideDown();
-        }
-    });
-    
-    // load date picker
-    jQuery(".datepicker").datepicker({
-        dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", 
-            "Freitag", "Samstag"],
-        dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-        dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-        monthNames: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
-            "August", "September", "Oktober", "November", "Dezember"],
-        monthNamesShort: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul",
-            "Aug", "Sep", "Okt", "Nov", "Dez"],        
-        dateFormat: "DD, d. M yy",
-        firstDay: 1,
-        
-        onSelect: function(dateText, inst)  {
-            var date = jQuery.datepicker.parseDate(
-                jQuery(this).datepicker("option", "dateFormat"), 
-                dateText,
-                {
-                    dayNamesMin: jQuery(this).datepicker("option", "dayNamesMin"),
-                    dayNamesShort: jQuery(this).datepicker("option", "dayNamesShort"),
-                    dayNames: jQuery(this).datepicker("option", "dayNames"),
-                    monthNamesShort: jQuery(this).datepicker("option", "monthNamesShort"),
-                    monthNames: jQuery(this).datepicker("option", "monthNames")
-                }
-            );
-            var id = jQuery(this).data('id');
-            jQuery("#"+id).val(jQuery.datepicker.formatDate("yy-mm-dd", date));
-        }
-    });    
-    jQuery(".datepicker[data-id='eventkrake-startdate']").datepicker(
-        "setDate", new Date(jQuery("#eventkrake-startdate").data("default-date"))
-    );
-    jQuery(".datepicker[data-id='eventkrake-enddate']").datepicker(
-        "setDate", new Date(jQuery("#eventkrake-enddate").data("default-date"))
-    );
-    
-    /*** Submits (form validation) ***/
-    jQuery("#eventkrake-input-save").click(function() {        
-        Eventkrake.Input.showAnimation();
-        var valid = true;
-        
-        // alte Nachrichten löschen
-        Eventkrake.Input.clearMessages();
-        
-        // Response angegeben?
-        if(! jQuery("input[name='eventkrake-input-response']").val().length) {
-            jQuery("input[name='eventkrake-input-response']").addClass("highlight");
-            valid = false;
-            Eventkrake.Input.printMessage(
-                    Eventkrake.Input.getTranslation("response-missing"), true);
-        } else jQuery("input[name='eventkrake-input-response']").removeClass("highlight");
-        
-        // E-Mail checken
-        if(! jQuery("input[name='eventkrake-input-email']").val().length) {
-            jQuery("input[name='eventkrake-input-email']").addClass("highlight");
-            valid = false;
-            Eventkrake.Input.printMessage(
-                    Eventkrake.Input.getTranslation("email-missing"), true);
-        } else jQuery("input[name='eventkrake-input-email']").removeClass("highlight");
-        
-        // action wählen
-        switch(jQuery(this).data("action")) {
-            case "addlocation":
-                if(! jQuery("input[name='eventkrake-lat']").val().length
-                    || ! jQuery("input[name='eventkrake-lng']").val().length
-                    || ! jQuery("input[name='eventkrake-address']").val().length) {
-                        jQuery("input[name='eventkrake-address']").addClass("highlight");
-                        valid = false;
-                        Eventkrake.Input.printMessage(
-                            Eventkrake.Input.getTranslation("address-missing"), true);
-                } else jQuery("input[name='eventkrake-address']").removeClass("highlight");
-                if(! jQuery("input[name='eventkrake-location-name']").val().length) {
-                    jQuery("input[name='eventkrake-location-name']").addClass("highlight");
-                    valid = false;
-                    Eventkrake.Input.printMessage(
-                        Eventkrake.Input.getTranslation("location-name-missing"), true);
-                } else jQuery("input[name='eventkrake-location-name']").removeClass("highlight");
-                
-                // Form übermitteln
-                if(valid) {
-                    jQuery("#eventkrake-input form").append(
-                        "<input type='hidden' name='eventkrake-input-action'" +
-                            " value='addlocation' />").submit();
-                } else {
-                    Eventkrake.Input.hideAnimation();
-                }
-                break;
-            case "addevent":
-                if(! jQuery("select[name='eventkrake-input-locationlist'] option:selected").length) {
-                    jQuery("select[name='eventkrake-input-locationlist']").addClass("highlight");
-                    valid = false;
-                    Eventkrake.Input.printMessage(
-                        Eventkrake.Input.getTranslation("event-location-missing"), true);
-                } else jQuery("select[name='eventkrake-input-locationlist']").removeClass("highlight");
-                if(! jQuery("input[name='eventkrake-event-title']").val().length) {
-                    jQuery("input[name='eventkrake-event-title']").addClass("highlight");
-                    valid = false;
-                    Eventkrake.Input.printMessage(
-                        Eventkrake.Input.getTranslation("event-title-missing"), true);
-                } else jQuery("input[name='eventkrake-event-title']").removeClass("highlight");
-                if(! jQuery("textarea[name='eventkrake-event-text']").val().length) {
-                    jQuery("textarea[name='eventkrake-event-text']").addClass("highlight");
-                    valid = false;
-                    Eventkrake.Input.printMessage(
-                        Eventkrake.Input.getTranslation("event-text-missing"), true);
-                } else jQuery("textarea[name='eventkrake-event-text']").removeClass("highlight");
-                // Begin > Ende?
-                var selStart = jQuery("#eventkrake-startdate").val() + "T" + 
-                        jQuery("[name='eventkrake-starthour']").val() + ":" +
-                        jQuery("[name='eventkrake-startminute']").val() + ":00";
-                var selEnd = jQuery("#eventkrake-enddate").val() + "T" + 
-                        jQuery("[name='eventkrake-endhour']").val() + ":" +
-                        jQuery("[name='eventkrake-endminute']").val() + ":00";
-                if(selStart > selEnd) {
-                    jQuery("td.eventkrake-dateselect").addClass("highlight");
-                    valid = false;
-                    Eventkrake.Input.printMessage(
-                        Eventkrake.Input.getTranslation("event-date-error"), true);
-                } else jQuery("td.eventkrake-dateselect").removeClass("highlight");
-                
-                // Form übermitteln
-                if(valid) {
-                    jQuery("#eventkrake-input form").append(
-                        "<input type='hidden' name='eventkrake-input-action'" +
-                            " value='addevent' />").submit();
-                } else {
-                    Eventkrake.Input.hideAnimation();
-                }
-                break;
-        }
-    });
-});
-
 var Eventkrake = Eventkrake || {};
 Eventkrake.Input = {
     map: null,
@@ -227,24 +22,76 @@ Eventkrake.Input = {
         jQuery("#eventkrake-input-background").fadeOut(250);        
     },
     
-    printMessage: function(message, error) {
-        if(typeof error == 'undefined') error = false;
-        
-        jQuery("<div>| " + message + "</div>").css({
-            "font-weight": "bold",
-            "color": error ? "#c00" : "#060"
-        }).appendTo("#eventkrake-input-messages");
-        
-        // Nachrichten anzeigen
-        document.getElementById("eventkrake-input-messages").scrollIntoView();
+    hint: function(msg) {
+        var hint = jQuery("#eventkrake-input-hint");
+        jQuery("p", hint).empty().append(msg);
+        hint.finish().show().delay(5000).fadeOut();
     },
     
-    clearMessages: function() {
-        jQuery("#eventkrake-input-messages").empty();
+    mark: function(element) {
+        jQuery(element).css("box-shadow", "0 0 3px 2px #f33").focus();
+    },
+    
+    demark: function() {
+        jQuery("#eventkrake-input-form :input").css("box-shadow", "none");
     },
     
     getTranslation: function(dataId) {
         return jQuery("#eventkrake-input-js-translations").data(dataId);
+    },
+    
+    datepicker: function(datepicker) {
+        jQuery(datepicker).each(function() {
+            var dateField = jQuery(this)
+                    .closest(".eventkrake-dateselect")
+                    .find("input[name='eventkrake-startdate[]']");
+
+            jQuery(this).datepicker({
+                dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", 
+                    "Freitag", "Samstag"],
+                dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+                dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+                monthNames: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
+                    "August", "September", "Oktober", "November", "Dezember"],
+                monthNamesShort: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul",
+                    "Aug", "Sep", "Okt", "Nov", "Dez"],        
+                dateFormat: "DD, d. M yy",
+                firstDay: 1,
+
+                onSelect: function(dateText, inst)  {
+                    var date = jQuery.datepicker.parseDate(
+                        jQuery(this).datepicker("option", "dateFormat"), 
+                        dateText,
+                        {
+                            dayNamesMin: jQuery(this).datepicker("option", "dayNamesMin"),
+                            dayNamesShort: jQuery(this).datepicker("option", "dayNamesShort"),
+                            dayNames: jQuery(this).datepicker("option", "dayNames"),
+                            monthNamesShort: jQuery(this).datepicker("option", "monthNamesShort"),
+                            monthNames: jQuery(this).datepicker("option", "monthNames")
+                        }
+                    );                    
+                    jQuery(dateField).val(
+                            jQuery.datepicker.formatDate("yy-mm-dd", date));
+                }
+            });
+            
+            jQuery(this).datepicker(
+                "setDate",
+                new Date(jQuery(dateField).data("default-date"))
+            );
+        });  
+    },
+    
+    addEventRow: function() {
+        var table = jQuery(".eventkrake-input-events table");
+        var row = jQuery(".eventkrake-input-template", table).clone()
+                .removeClass("eventkrake-input-template")
+                .appendTo(table);
+        Eventkrake.Input.datepicker(jQuery(".datepicker", row));
+    },
+    
+    removeEventRow: function(row) {
+        jQuery(row).remove();
     },
     
     loadMap: function() {
@@ -326,3 +173,162 @@ Eventkrake.Input = {
         jQuery("input[name='eventkrake-lng']").val(lng);
     }
 };
+
+/*** Eventbindings ***/
+jQuery(document).ready(function() {
+    // disables automatic button action in text fields
+    jQuery("#eventkrake-input-form input[type='text']").keypress(function(e) {
+        if (e.which == 13) {
+            return false;
+        }
+    });
+    
+    // start form
+    jQuery("#eventkrake-input-start").click(function() {
+        jQuery("#eventkrake-input-background").appendTo("body");
+        jQuery("#eventkrake-input-form").appendTo("body");
+        jQuery("#eventkrake-input-loader").appendTo("body");
+        Eventkrake.Input.hideAnimation();
+        Eventkrake.Input.show();
+    });
+    
+    // prev screen
+    jQuery("#eventkrake-input-back").click(function() {
+        var action = jQuery(".eventkrake-input-tab:visible").data("previous");
+        
+        // deactivate save button and activate next button
+        jQuery("#eventkrake-input-save").prop("disabled", true);
+        jQuery("#eventkrake-input-next").prop("disabled", false);
+        
+        // first tab
+        if(action == "close") {
+            Eventkrake.Input.hide();
+            return false;
+        }
+        
+        jQuery(".eventkrake-input-tab").removeClass("visible");
+        jQuery(".eventkrake-input-tab[data-me='" + action + "']")
+                .addClass("visible");
+        
+        jQuery("#eventkrake-input-form-elements").scrollTop(0);
+        return false;
+    });
+    
+    // next screen
+    jQuery("#eventkrake-input-next").click(function() {
+        Eventkrake.Input.demark();        
+        
+        var action = jQuery(".eventkrake-input-tab:visible").data("next");
+        
+        switch(action) {
+            case "location": // coming from captcha
+                if(jQuery("[name='eventkrake-input-response']").val() == "") {
+                    Eventkrake.Input.mark("[name='eventkrake-input-response']");
+                    Eventkrake.Input.hint(
+                        Eventkrake.Input.getTranslation("response-missing"));
+                    return false;
+                }
+                if(jQuery("[name='eventkrake-input-email']").val() == "") {
+                    Eventkrake.Input.mark("[name='eventkrake-input-email']");
+                    Eventkrake.Input.hint(
+                        Eventkrake.Input.getTranslation("email-missing"));
+                    return false;
+                }
+                break;
+            case "events": // coming from location
+                // if new location check data
+                if(jQuery("#eventkrake-input-add-location:visible").length) {
+                    if(jQuery("[name='eventkrake-address']").val() == "") {
+                        Eventkrake.Input.mark("[name='eventkrake-address']");
+                        Eventkrake.Input.hint(
+                            Eventkrake.Input.getTranslation("address-missing"));
+                        return false;
+                    }
+                    if(jQuery("[name='eventkrake-location-name']").val() == "") {
+                        Eventkrake.Input.mark("[name='eventkrake-location-name']");
+                        Eventkrake.Input.hint(
+                            Eventkrake.Input.getTranslation("location-name-missing"));
+                        return false;
+                    }
+                }
+                
+                // deactivate this button and activate save button
+                jQuery(this).prop("disabled", true);
+                jQuery("#eventkrake-input-save").prop("disabled", false);
+                break;
+        }
+        
+        jQuery(".eventkrake-input-tab").removeClass("visible");
+        jQuery(".eventkrake-input-tab[data-me='" + action + "']")
+                .addClass("visible");
+        
+        jQuery("#eventkrake-input-form-elements").scrollTop(0);
+        return false;
+    });
+    
+    // submit data
+    jQuery("#eventkrake-input-save").click(function() {
+        Eventkrake.Input.demark();
+        
+        // check if events is complete
+        var error = false;
+        // Have to do this in reverse order, as a return false in the loop will 
+        // cause no effect on marking the element. So we'll do this on every
+        // empty element.
+        jQuery(jQuery("[name='eventkrake-event-title[]']:visible").get().reverse())
+            .each(function() {
+                if(jQuery(this).val() == "") {
+                    Eventkrake.Input.mark(this);
+                    Eventkrake.Input.hint(
+                        Eventkrake.Input.getTranslation("event-title-missing"));
+                    error = true;
+                }
+            }
+        );
+        if(error) return false;
+        
+        //Eventkrake.Input.showAnimation();
+        jQuery.ajax({
+            cache: false,
+            method: "POST",
+            data: jQuery("#eventkrake-input-form").serialize(),
+            statusCode: {
+                200: function() {
+                    
+                }
+            }
+        });
+        
+        return false; // just to prevent submitting the form the normal way
+    });
+    
+    // switch between location list and add new location
+    jQuery("[name='eventkrake-input-location-radio']").click(function() {        
+        if(jQuery(this).val() == "add") {
+            // Ort erstellen
+            jQuery('#eventkrake-input-add-location').slideDown();
+            jQuery('#eventkrake-input-select-location').slideUp();
+            if(Eventkrake.Input.map == null) Eventkrake.Input.loadMap();
+        
+        } else {
+            // Ortliste
+            jQuery('#eventkrake-input-add-location').slideUp();
+            jQuery('#eventkrake-input-select-location').slideDown();
+        }
+    });
+    
+    // create empty event entries
+    for(var i = 0; i < 5; i++) {
+        Eventkrake.Input.addEventRow();
+    }
+    
+    // add new event row
+    jQuery("#eventkrake-input-add-event").click(Eventkrake.Input.addEventRow);
+    
+    // remove event row
+    jQuery(".eventkrake-input-events").on("click", 
+        ".eventkrake-input-delete-event", function() {
+            Eventkrake.Input.removeEventRow(jQuery(this).closest("tr"));
+        }
+    );
+});

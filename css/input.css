@@ -4,7 +4,7 @@
 
 /** general classes **/
 .eventkrake-input-template {
-	/*display: none;*/
+	display: none;
 }
 
 /** fixed elements **/
@@ -64,6 +64,22 @@
 	height: 50px;
 	padding-top: 10px;
 	text-align: center;
+}
+
+#eventkrake-input-hint {
+	display: none;
+	position: fixed;
+	top: 75%;
+	left: 25%;
+	right: 25%;
+	background-color: #dcdcdc;
+	border-radius: 10px;
+	box-shadow: 0 0 5px 3px #555;
+}
+#eventkrake-input-hint p {
+	margin: 10px;
+	font-weight: bold;
+	font-size: 1.1em;
 }
 
 /** AJAX Loader **/
@@ -142,7 +158,6 @@
 #eventkrake-input-form table {
 	width: 100%;
 	margin-bottom: 10px;
-	border-right: solid 1px #888;
 }
 #eventkrake-input-form tr {
 	padding-bottom: 5px;
@@ -150,11 +165,12 @@
 	border-left: none;
 	border-top: none;
 }
+#eventkrake-input-form tr:nth-child(odd) td {
+	background-color: #ddd;
+}
 #eventkrake-input-form td, #eventkrake-input-form th {
 	padding: 5px;
-	border: solid 1px #888;
-	border-right: none;
-	border-top: none;
+	border-bottom: solid 1px #000;
 }
 
 #eventkrake-input-form input[type="text"],
