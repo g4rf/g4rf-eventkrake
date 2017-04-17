@@ -1,4 +1,4 @@
-/* global Leaflet, google */
+/* global Leaflet, google, EventkrakeInputAjax */
 
 var Eventkrake = Eventkrake || {};
 Eventkrake.Input = {
@@ -288,13 +288,46 @@ jQuery(document).ready(function() {
         if(error) return false;
         
         //Eventkrake.Input.showAnimation();
-        jQuery.ajax({
+        jQuery.ajax(EventkrakeInputAjax.url, {
             cache: false,
             method: "POST",
             data: jQuery("#eventkrake-input-form").serialize(),
             statusCode: {
-                200: function() {
-                    
+                200: function(data) {
+                    if(typeof data.error != "undefined" && data.error == true) {
+                        if(typeof data.captcha != "undefined") {
+                        jQuery("#eventkrake-input-challenge").empty()
+                            .append(data.captcha);
+                        }
+                        if(typeof data.tab != "undefined") {
+                            jQuery(".eventkrake-input-tab").removeClass("visible");
+                            jQuery(data.tab).addClass("visible");
+                        }
+                        if(typeof data.focus != "undefined") {
+                            jQuery(data.focus).focus();
+                        }
+                        if(typeof data.msg != "undefined") {
+                            Eventkrake.Input.hint(data.msg);
+                        }
+                        return;
+                    }
+                    //window.location.href = "?location=" + data.locationId;
+                },
+                400: function(data) {
+                    if(typeof data.captcha != "undefined") {
+                        jQuery("#eventkrake-input-challenge").empty()
+                            .append(data.captcha);
+                    }
+                    if(typeof data.tab != "undefined") {
+                        jQuery(".eventkrake-input-tab").removeClass("visible");
+                        jQuery(data.tab).addClass("visible");
+                    }
+                    if(typeof data.focus != "undefined") {
+                        jQuery(data.focus).focus();
+                    }
+                    if(typeof data.msg != "undefined") {
+                        Eventkrake.Input.hint(data.msg);
+                    }
                 }
             }
         });

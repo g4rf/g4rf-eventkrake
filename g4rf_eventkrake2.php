@@ -81,6 +81,9 @@ add_action('wp_enqueue_scripts', function() {
     // Input JS
     wp_register_script('eventkrake_input',  "$path/js/input.js", array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'eventkrake'));
     wp_enqueue_script('eventkrake_input');
+    wp_localize_script('eventkrake_input', 'EventkrakeInputAjax', array(
+        'url' => admin_url('admin-ajax.php')
+    ));
 
     // allgemeines CSS
     wp_register_style('eventkrake_all', "$path/css/all.css");
@@ -619,7 +622,8 @@ add_shortcode('eventkrake', function($atts, $content = null) {
     ?><div class="Eventkrake"<?=$dataAtts?>></div><?php
 });
 
-/***** Shortcode für Frontend-Eingabemaske *****/
+/***** Frontend-Eingabemaske *****/
+// shortcode
 add_shortcode('eventkrake_input', function($attributes) {
     ob_start();
     $atts = shortcode_atts(array(
@@ -639,6 +643,150 @@ add_shortcode('eventkrake_input', function($attributes) {
     return ob_get_clean();
 });
 
+// ajax function for Eventkrake input
+add_action('wp_ajax_EventkrakeInputAjax', 'EventkrakeInputAjax');
+add_action('wp_ajax_nopriv_EventkrakeInputAjax', 'EventkrakeInputAjax');
+function EventkrakeInputAjax() {    
+    // check human challenge
+    if(! Eventkrake::humanChallenge($_SESSION['challenge'],
+            filter_input(INPUT_POST, 'eventkrake-input-response'))) {
+        $_SESSION['challenge'] = Eventkrake::humanChallenge();
+        EventkrakeExitAjax(400, array(
+            'error' => true,
+            'captcha' => $_SESSION['challenge'],
+            'msg' => __('Bitte gib eine Antwort an um zu prüfen, ob Du menschlich bist.',
+                    'g4rf_eventkrake2'),
+            'tab' => '[data-me="captcha"]',
+            'focus' => '[name="eventkrake-input-response"]'
+        ));
+    }
+    
+    // check e-mail
+    if(empty(filter_input(INPUT_POST, 'eventkrake-input-email'))) {
+        EventkrakeExitAjax(400, array(
+            'error' => true,
+            'msg' => __('Gib bitte eine E-Mail-Adresse an.', 'g4rf_eventkrake2'),
+            'tab' => '[data-me="captcha"]',
+            'focus' => '[name="eventkrake-input-email"]'
+        ));
+    }    
+    
+    // selected existing location
+    if('list' == filter_input(INPUT_POST, 'eventkrake-input-location-radio')) {
+        $locationId = filter_input(INPUT_POST, 'eventkrake-input-locationlist');
+        
+    } else { // new location added
+        // address or geo coords missing
+        if(empty($_POST['eventkrake-lat']) || empty($_POST['eventkrake-lng'])
+                || empty($_POST['eventkrake-address'])) {
+            EventkrakeExitAjax(400, array(
+                'error' => true,
+                'msg' => __('Keine Adresse angegeben oder Marker nicht gesetzt.',
+                    'g4rf_eventkrake2'),
+                'tab' => '[date-me="location"]',
+                'focus' => '[name="eventkrake-address"]'
+            ));
+        }
+
+        // location name missing
+        if(empty($_POST['eventkrake-location-name'])) {
+            EventkrakeExitAjax(400, array(
+                'error' => true,
+                'msg' => __('Keinen Namen für den Ort angegeben.',
+                    'g4rf_eventkrake2'),
+                'tab' => '[date-me="location"]',
+                'focus' => '[name="eventkrake-location-name"]'
+            ));
+        }
+
+        // insert location into database
+        $locationId = wp_insert_post(array(
+            'post_title' => wp_strip_all_tags(
+                    filter_input(INPUT_POST, 'eventkrake-location-name')),
+            'post_content' => nl2br(
+                    filter_input(INPUT_POST, 'eventkrake-location-text')),
+            'post_type' => 'eventkrake_location',
+            'post_author' => $atts['author']
+        ));
+        if($locationId) {
+            // add meta data
+            Eventkrake::setSinglePostMeta($locationId,
+                    'lat', filter_input(INPUT_POST, 'eventkrake-lat'));
+            Eventkrake::setSinglePostMeta($locationId, 
+                    'lng', filter_input(INPUT_POST, 'eventkrake-lng'));
+            Eventkrake::setSinglePostMeta($locationId,
+                    'address', filter_input(INPUT_POST, 'eventkrake-address'));
+            Eventkrake::setSinglePostMeta($locationId, 
+                    'website', filter_input(INPUT_POST, 'eventkrake-location-website'));
+            Eventkrake::setPostMeta($locationId, 'categories', 
+                isset($_POST['eventkrake_location_categories']) ?
+                    filter_input(INPUT_POST, 'eventkrake_location_categories')
+                    : array());
+            if(! empty($_POST['eventkrake-input-festival'])) {
+                Eventkrake::setPostMeta($locationId,
+                    'festivals', array(filter_input(INPUT_POST, 'festival')));
+            }
+
+            Eventkrake::setSinglePostMeta($locationId, 
+                    'tags', filter_input(INPUT_POST, 'eventkrake-input-email'));
+        }
+    }
+
+    // add events
+    $startDates = filter_input(INPUT_POST, 'eventkrake-startdate');
+    $startHours = filter_input(INPUT_POST, 'eventkrake-starthour');
+    $startMinutes = filter_input(INPUT_POST, 'eventkrake-startminute');
+    $lengthHours = filter_input(INPUT_POST, 'eventkrake-lengthhour');
+    $lengthMinutes = filter_input(INPUT_POST, 'eventkrake-lengthminute');
+    $titles = filter_input(INPUT_POST, 'eventkrake-event-title');
+    $texts = filter_input(INPUT_POST, 'eventkrake-event-text');
+    $categories = filter_input(INPUT_POST, 'eventkrake-event-category');
+    for($i = 0; $i < count($titles); $i++) {
+        // no title, no event
+        if(empty($titles[$i])) continue;
+        
+        $eventId = wp_insert_post(array(
+            'post_title' => wp_strip_all_tags($titles[$i]),
+            'post_content' => nl2br($texts[$i]),
+            'post_type' => 'eventkrake_event',
+            'post_author' => $atts['author']
+        ));
+        if($eventId) {
+            // add meta data
+            Eventkrake::setSinglePostMeta($eventId, 
+                    'locationid_wordpress', $locationId);
+
+            $start = new DateTime($startDates[$i] . ' ' .
+                    $startHours[$i] . ':' . $startMinutes[$i] . ':00'); 
+            Eventkrake::setSinglePostMeta($eventId, 'start', $start->format('c'));
+            $end = $start->add(
+                new DateInterval("PT{$lengthHours[$i]}H{$lengthMinutes[$i]}M")
+            );
+            Eventkrake::setSinglePostMeta($eventId, 'end', $end->format('c'));
+            
+            Eventkrake::setPostMeta($eventId, 'categories', 
+                    isset($categories[$i]) ? $categories[$i] : array());
+            
+            if(! empty($atts['festival'])) {
+                Eventkrake::setSinglePostMeta($eventId, 'festival', 
+                        $atts['festival']);
+            }
+
+            Eventkrake::setSinglePostMeta($eventId, 
+                'tags', filter_input(INPUT_POST, 'eventkrake-input-email'));
+        }
+    }
+    
+    // all done
+    EventkrakeExitAjax(200, array('locationId' => $locationId));
+}
+
+function EventkrakeExitAjax($code, $data) {
+    status_header($code);
+    header( "Content-Type: application/json" );    
+    print json_encode($data);
+	wp_die();
+}
 
 /***** Editor anpassen *****/
 /*function eventkrake_add_editor_buttons() {

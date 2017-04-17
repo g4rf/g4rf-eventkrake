@@ -5,164 +5,6 @@ if(!session_id()) {
         . ' gesperrt.', 'g4rf_eventkrake2');
     return;
 }
-
-// check if AJAX request
-if(! empty(filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) && 
-    strtolower(filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest') {
-    
-    //ob_clean();
-    //http_response_code(201);
-    wp_send_json(array(
-        "status" => 'test',
-        'message' => 'do this'));
-    exit("ajax");
-    // check data and persist to database if everything okay
-    if(isset($_POST['eventkrake-input-action']) && isset($_POST['eventkrake-input-response'])) {
-        // wir haben eine Datenübermittlung
-        if(! Eventkrake::humanChallenge($_SESSION['challenge'],
-                $_POST['eventkrake-input-response'])) {
-            Eventkrake::printMessage(__('Die Frage wurde falsch beantwortet. Bist'
-                    . ' Du ein Mensch?', 'g4rf_eventkrake2'), true);
-            if($_POST['eventkrake-input-action'] == 'addlocation') $showAddLocation = true;
-        } elseif(empty($_POST['eventkrake-input-email'])) {
-            Eventkrake::printMessage(__('Keine E-Mail-Adresse angegeben.',
-                    'g4rf_eventkrake2'), true);
-            if($_POST['eventkrake-input-action'] == 'addlocation') $showAddLocation = true;
-        } else { // ab geht es
-            switch($_POST['eventkrake-input-action']) {
-                case 'addlocation':
-                    $valid = true;
-                    if(empty($_POST['eventkrake-lat'])
-                        || empty($_POST['eventkrake-lng'])
-                        || empty($_POST['eventkrake-address'])) {
-                            Eventkrake::printMessage(__('Keine Adresse angegeben oder'
-                                    . ' Marker nicht gesetzt.', 'g4rf_eventkrake2'), true);
-                            $valid = false;
-                    }
-                    if(empty($_POST['eventkrake-location-name'])) {
-                        Eventkrake::printMessage(__('Keinen Namen für den Ort angegeben.',
-                                'g4rf_eventkrake2'), true);
-                        $valid = false;
-                    }
-
-                    if($valid) { // Eintragen
-                        $newLocationId = wp_insert_post(array(
-                            'post_title' => wp_strip_all_tags($_POST['eventkrake-location-name']),
-                            'post_content' => nl2br($_POST['eventkrake-location-text']),
-                            'post_type' => 'eventkrake_location',
-                            'post_author' => $atts['author']
-                        ));
-                        unset($_POST['eventkrake-location-name']);
-                        unset($_POST['eventkrake-location-text']);
-                        if($newLocationId) {
-                            // add meta data
-                            Eventkrake::setSinglePostMeta($newLocationId,
-                                    'lat', $_POST['eventkrake-lat']);
-                            unset($_POST['eventkrake-lat']);
-                            Eventkrake::setSinglePostMeta($newLocationId, 
-                                    'lng', $_POST['eventkrake-lng']);
-                            unset($_POST['eventkrake-lng']);
-                            Eventkrake::setSinglePostMeta($newLocationId,
-                                    'address', $_POST['eventkrake-address']);
-                            unset($_POST['eventkrake-address']);
-                            Eventkrake::setSinglePostMeta($newLocationId, 
-                                    'website', $_POST['eventkrake-location-website']);
-                            unset($_POST['eventkrake-location-website']);
-                            Eventkrake::setPostMeta($newLocationId, 'categories', 
-                                isset($_POST['eventkrake_location_categories']) ?
-                                $_POST['eventkrake_location_categories'] : array());
-                            unset($_POST['eventkrake_location_categories']);
-                            if(! empty($atts['festival'])) {
-                                Eventkrake::setPostMeta($newLocationId,
-                                    'festivals', array($atts['festival']));
-                            }
-
-                            Eventkrake::setSinglePostMeta($newLocationId, 
-                                    'tags', $_POST['eventkrake-input-email']);
-
-                            Eventkrake::printMessage(__('Der Ort wurde erfolgreich angelegt.',
-                                'g4rf_eventkrake2'));
-                        } else {
-                            Eventkrake::printMessage(__('Es trat ein interner Fehler auf.',
-                                'g4rf_eventkrake2'), true);
-                        }
-                    } else {
-                        $showAddLocation = true;
-                    }
-                    break;
-                case 'addevent':
-                    $valid = true;
-                    if(empty($_POST['eventkrake-input-locationlist'])) {
-                            Eventkrake::printMessage(__('Kein Ort angegeben',
-                                    'g4rf_eventkrake2'), true);
-                            $valid = false;
-                    }
-                    if(empty($_POST['eventkrake-event-title'])) {
-                        Eventkrake::printMessage(__('Keinen Titel für die'
-                                . ' Veranstaltung angegeben.', 'g4rf_eventkrake2'), true);
-                        $valid = false;
-                    }
-                    if(empty($_POST['eventkrake-event-text'])) {
-                        Eventkrake::printMessage(__('Keine Beschreibung für die'
-                                . ' Veranstaltung angegeben.', 'g4rf_eventkrake2'), true);
-                        $valid = false;
-                    }
-
-                    if($valid) { // Eintragen
-                        $newEventId = wp_insert_post(array(
-                            'post_title' => wp_strip_all_tags($_POST['eventkrake-event-title']),
-                            'post_content' => nl2br($_POST['eventkrake-event-text']),
-                            'post_type' => 'eventkrake_event',
-                            'post_author' => $atts['author']
-                        ));
-                        unset($_POST['eventkrake-event-title']);
-                        unset($_POST['eventkrake-event-text']);
-                        if($newEventId) {
-                            // add meta data
-                            Eventkrake::setSinglePostMeta($newEventId, 
-                                    'locationid_wordpress', $_POST['eventkrake-input-locationlist']);
-
-                            Eventkrake::setSinglePostMeta($newEventId, 'start', 
-                                    $_POST['eventkrake-startdate'] . 'T' .
-                                    $_POST['eventkrake-starthour'] . ':' . 
-                                    $_POST['eventkrake-startminute'] . ':00');
-                            unset($_POST['eventkrake-startdate']);
-                            unset($_POST['eventkrake-starthour']);
-                            unset($_POST['eventkrake-startminute']);
-                            Eventkrake::setSinglePostMeta($newEventId, 'end',
-                                    $_POST['eventkrake-enddate'] . 'T' .
-                                    $_POST['eventkrake-endhour'] . ':' . 
-                                    $_POST['eventkrake-endminute'] . ':00');
-                            unset($_POST['eventkrake-enddate']);
-                            unset($_POST['eventkrake-endhour']);
-                            unset($_POST['eventkrake-endminute']);
-                            Eventkrake::setSinglePostMeta($newEventId,
-                                    'website', $_POST['eventkrake-event-website']);
-                            unset($_POST['eventkrake-event-website']);
-                            Eventkrake::setPostMeta($newEventId, 'categories', 
-                                    isset($_POST['eventkrake_event_categories']) ?
-                                    $_POST['eventkrake_event_categories'] : array());
-                            unset($_POST['eventkrake_event_categories']);
-                            if(! empty($atts['festival'])) {
-                                Eventkrake::setSinglePostMeta($newEventId,
-                                    'festival', $atts['festival']);
-                            }
-
-                            Eventkrake::setSinglePostMeta($newEventId, 
-                                    'tags', $_POST['eventkrake-input-email']);
-
-                            Eventkrake::printMessage(__('Die Veranstaltung wurde'
-                                    . ' erfolgreich angelegt.', 'g4rf_eventkrake2'));
-                        } else {
-                            Eventkrake::printMessage(__('Es trat ein interner Fehler auf.',
-                                'g4rf_eventkrake2'), true);
-                        }
-                    }
-                    break;
-            }
-        }
-    }
-}
 ?>
 
 <div id="eventkrake-input-messages"></div>
@@ -177,6 +19,7 @@ if(! empty(filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) &&
 <button id="eventkrake-input-start"><?=__(
     'Veranstaltungen eintragen', 'g4rf_eventkrake2'
 )?></button>
+<noscript><?=__('Bitte aktiviere Javascript.', 'g4rf_eventkrake2')?></noscript>
 
 <div id="eventkrake-input-background"></div>
 
@@ -186,6 +29,12 @@ if(! empty(filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) &&
         <img src="http://eventkrake.de/wp-content/themes/eventkrake/img/eventkrake-logo.png"
             alt="powered by eventkrake" />
     </a>
+    
+    <input type="hidden" name="action" value="EventkrakeInputAjax" />
+    <?php if(! empty($atts['festival'])) { ?>
+        <input type="hidden" name="eventkrake-input-festival" 
+               value="<?=$atts['festival']?>" />
+    <?php } ?>
     
     <div id="eventkrake-input-form-elements">
         
@@ -198,7 +47,7 @@ if(! empty(filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) &&
                 $_SESSION['challenge'] = Eventkrake::humanChallenge();
             ?>
             <label>
-                <span><?=$_SESSION['challenge'] ?></span>
+                <span id="eventkrake-input-challenge"><?=$_SESSION['challenge'] ?></span>
                 <input name="eventkrake-input-response" type="text" />
             </label>
             <label>
@@ -215,7 +64,7 @@ if(! empty(filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH')) &&
             <p><?=__('Ich möchte', 'g4rf_eventkrake2')?></p>
             <label>
                 <input name="eventkrake-input-location-radio" type="radio"
-                       value="select" checked />
+                       value="list" checked />
                 <?=__('einen vorhandenen Ort auswählen', 'g4rf_eventkrake2')?>
             </label>
             <label>
