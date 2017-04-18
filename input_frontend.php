@@ -7,7 +7,6 @@ if(!session_id()) {
 }
 ?>
 
-<div id="eventkrake-input-messages"></div>
 <div class="eventkrake-input-data" id="eventkrake-input-js-translations"
      data-response-missing="<?=__('Bitte gib eine Antwort an um zu prüfen, ob Du menschlich bist.', 'g4rf_eventkrake2')?>"
      data-email-missing="<?=__('Gib bitte eine E-Mail-Adresse an.', 'g4rf_eventkrake2')?>"
@@ -20,6 +19,139 @@ if(!session_id()) {
     'Veranstaltungen eintragen', 'g4rf_eventkrake2'
 )?></button>
 <noscript><?=__('Bitte aktiviere Javascript.', 'g4rf_eventkrake2')?></noscript>
+
+<h2><?=__('Eingetragene Veranstaltungen', 'g4rf_eventkrake2')?></h2>
+
+<p class="description"><?=
+    __('Wähle einen Ort aus, um die Angaben zu überprüfen.', 'g4rf_eventkrake2')
+?></p>
+<form method="GET"><select id="eventkrake-input-select-locations" 
+                           name="location" size="10">
+<?php
+    $locationId = filter_input(INPUT_GET, 'location');
+    $noLocations = true;
+    foreach(Eventkrake::getLocations(false) as $l) {
+        $events = Eventkrake::getEvents($l->ID, false);
+        // test if any events
+        if(! count($events)) continue;
+        // if festival, than show only, if festival events are present
+        $festivalEvents = true;
+        if(! empty($atts['festival'])) {
+            $festivalEvents = false;
+            foreach($events as $e) {
+                if($atts['festival'] == 
+                        Eventkrake::getSinglePostMeta($e->ID, 'festival')) {
+                    $festivalEvents = true;
+                    break;
+                }
+            }
+        }
+        if(! $festivalEvents) continue;
+        
+        $noLocations = false;
+        if(! $locationId) $locationId = $l->ID;
+        
+        ?><option value="<?=$l->ID?>"
+            <?=$l->ID == $locationId ? ' selected' : '' ?>><?=
+            $l->post_title?> (<?=Eventkrake::getSinglePostMeta($l->ID, 'address')?>)
+        </option><?php
+    }
+?></select></form>
+
+<?php if(! $noLocations) { ?>
+
+    <h3><?=__('Ort', 'g4rf_eventkrake2')?></h3>
+    <?php // report changes for location
+    $href = 'mailto:webmaster@brn-schwafelrunde.de?subject=Meldung'
+            . ' zum Ort: ' . get_the_title($locationId) . '&body=Name'
+            . ' des Ortes: ' . get_the_title($locationId) . '%0ALink zur'
+            . ' Bearbeitung: ' . admin_url('post.php', 'http')
+            . '?post=' . $locationId . '%26action=edit%0A%0AMeine'
+            . ' Nachricht:%0A%0A%0A';
+    ?><a href="<?=$href?>" ><?=
+        __('Änderung zum Ort melden', 'g4rf_eventkrake2')
+    ?></a>
+    <table id="eventkrake-input-location"><tr>
+        <td><?=__('Name', 'g4rf_eventkrake2')?></td>
+        <td class="eventkrake-location-name"><?=
+            get_the_title($locationId)
+        ?></td>
+    </tr><tr>
+        <td><?=__('Adresse', 'g4rf_eventkrake2')?></td>
+        <td class="eventkrake-location-address"><?=
+            Eventkrake::getSinglePostMeta($locationId, 'address')
+        ?></td>
+    </tr><tr>
+        <td><?=__('Beschreibung', 'g4rf_eventkrake2')?></td>
+        <td class="eventkrake-location-description"><?=
+            apply_filters('the_content', get_post_field('post_content', $locationId));
+        ?></td>
+    </tr><tr>
+        <td><?=__('Webseite', 'g4rf_eventkrake2')?></td>
+        <td class="eventkrake-location-website"><?=
+            Eventkrake::getSinglePostMeta($locationId, 'website')
+        ?></td>
+    </tr></table>
+
+    <h3><?=__('Veranstaltungen', 'g4rf_eventkrake2')?></h3>
+    <table id="eventkrake-input-events"><tr>
+        <th><?=__('Zeit', 'g4rf_eventkrake2')?></th>
+        <th><?=__('Titel', 'g4rf_eventkrake2')?></th>
+        <th><?=__('Beschreibung', 'g4rf_eventkrake2')?></th>
+        <th><?=__('Kategorie', 'g4rf_eventkrake2')?></th>
+        <th>&nbsp;</th>
+    </tr><?php
+        foreach(Eventkrake::getEvents($locationId, false) as $e) {
+            if(! empty($atts['festival'])) {
+                if($atts['festival'] != 
+                        Eventkrake::getSinglePostMeta($e->ID, 'festival')) {
+                    continue;
+                }
+            }
+            ?><tr>
+                <!-- time -->
+                <td><?php
+                    $start = new DateTime(
+                            Eventkrake::getSinglePostMeta($e->ID, 'start'));
+                    print $start->format('D, j.n., H:i');
+                    print '&nbsp;' . __('Uhr', 'g4rf_eventkrake2') . ' -<br />';
+                    $end = new DateTime(
+                            Eventkrake::getSinglePostMeta($e->ID, 'end'));
+                    print $end->format('D, j.n., H:i');
+                    print '&nbsp;' . __('Uhr', 'g4rf_eventkrake2');
+                ?></td>
+                <!-- title -->
+                <td class="eventkrake-bold"><?=
+                    get_the_title($e->ID);
+                ?></td>
+                <!-- description -->
+                <td class="eventkrake-description"><?=
+                    apply_filters('the_content', 
+                            get_post_field('post_content', $e->ID));
+                ?></td>
+                <!-- category -->
+                <td class="eventkrake-category"><?=
+                    implode(', ', Eventkrake::getPostMeta($e->ID, 'categories'))
+                ?></td>
+                <!-- report event -->
+                <td><?php
+                    $href = 'mailto:webmaster@brn-schwafelrunde.de?subject=Meldung'
+                            . ' zum Event: ' . get_the_title($e->ID) . '&body=Name'
+                            . ' des Ortes: ' . get_the_title($e->ID) . '%0ALink zur'
+                            . ' Bearbeitung: ' . admin_url('post.php', 'http')
+                            . '?post=' . $e->ID . '%26action=edit%0A%0AMeine'
+                            . ' Nachricht:%0A%0A%0A';
+                    ?><a href="<?=$href?>" ><?=
+                        __('Änderung melden', 'g4rf_eventkrake2')
+                    ?></a>
+                </td>
+            </tr><?php
+        }
+    ?></table>
+
+<?php } ?>
+
+<!--/// add location and events ///-->
 
 <div id="eventkrake-input-background"></div>
 

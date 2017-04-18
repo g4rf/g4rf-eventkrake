@@ -4,7 +4,7 @@ Plugin Name: Eventkrake 2 WP Plugin
 Plugin URI: http://eventkrake.de/code/
 Description: Eine Veranstaltungsverwaltung, die Veranstaltungen mit Orten samt Geokoordinaten verknüpft. Die Darstellung ist über Templates flexibel anpassbar.
 Author: Jan Kossick
-Version: 2.34beta
+Version: 2.4beta
 License: CC-BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: http://jankossick.de
 Min WP Version: 3.7
@@ -288,8 +288,14 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
     $tags = $_POST['eventkrake_tags'];
     $website = empty($_POST['eventkrake_website']) ?
             get_permalink($post_id) : $_POST['eventkrake_website'];
-    $categories = isset($_POST['eventkrake_categories']) ? 
-        $_POST['eventkrake_categories'] : array();
+    $categories = array();
+    if(isset($_POST['eventkrake_categories'])) {
+        $cats = explode(",", $_POST['eventkrake_categories']);
+        foreach($cats as $c) {
+            $c = trim($c);
+            if(strlen($c) > 0) $categories[] = $c;
+        }
+    }
     $festivals = isset($_POST['eventkrake_festivals']) ? 
         $_POST['eventkrake_festivals'] : array();
     
@@ -435,8 +441,14 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
             $_POST['eventkrake_endminute'] . ':00';
     $website = empty($_POST['eventkrake_website']) ?
             get_permalink($post_id) : $_POST['eventkrake_website'];
-    $categories = isset($_POST['eventkrake_categories']) ? 
-        $_POST['eventkrake_categories'] : array();
+    $categories = array();
+    if(isset($_POST['eventkrake_categories'])) {
+        $cats = explode(",", $_POST['eventkrake_categories']);
+        foreach($cats as $c) {
+            $c = trim($c);
+            if(strlen($c) > 0) $categories[] = $c;
+        }
+    }
     $festival = isset($_POST['eventkrake_festival']) ? 
         $_POST['eventkrake_festival'] : 0;
     // location ID, jeweils Wordpress _und_ Eventkrake
@@ -709,39 +721,60 @@ function EventkrakeInputAjax() {
             'post_author' => $atts['author']
         ));
         if($locationId) {
-            // add meta data
+            // lat
             Eventkrake::setSinglePostMeta($locationId,
                     'lat', filter_input(INPUT_POST, 'eventkrake-lat'));
+            // lng
             Eventkrake::setSinglePostMeta($locationId, 
                     'lng', filter_input(INPUT_POST, 'eventkrake-lng'));
+            // address
             Eventkrake::setSinglePostMeta($locationId,
                     'address', filter_input(INPUT_POST, 'eventkrake-address'));
+            // website
             Eventkrake::setSinglePostMeta($locationId, 
                     'website', filter_input(INPUT_POST, 'eventkrake-location-website'));
-            Eventkrake::setPostMeta($locationId, 'categories', 
-                isset($_POST['eventkrake_location_categories']) ?
-                    filter_input(INPUT_POST, 'eventkrake_location_categories')
-                    : array());
-            if(! empty($_POST['eventkrake-input-festival'])) {
-                Eventkrake::setPostMeta($locationId,
-                    'festivals', array(filter_input(INPUT_POST, 'festival')));
+            // categories
+            $categories = filter_input(INPUT_POST, 'eventkrake_location_categories');
+            if($categories) {
+                if(! is_array($categories[$i])) {
+                    $categories[$i] = explode(",", $categories[$i]);
+                    foreach($categories[$i] as &$c) {
+                        $c = trim($c);
+                    }
+                    unset($c);
+                }
+                Eventkrake::setPostMeta($locationId, 'categories', $categories[$i]);
             }
-
+            // festivals
+            if(! empty($_POST['eventkrake-input-festival'])) {
+                Eventkrake::setPostMeta($locationId, 'festivals',
+                        array(filter_input(INPUT_POST, 'eventkrake-input-festival')));
+            }
+            // tags
             Eventkrake::setSinglePostMeta($locationId, 
                     'tags', filter_input(INPUT_POST, 'eventkrake-input-email'));
         }
     }
-
+    
     // add events
-    $startDates = filter_input(INPUT_POST, 'eventkrake-startdate');
-    $startHours = filter_input(INPUT_POST, 'eventkrake-starthour');
-    $startMinutes = filter_input(INPUT_POST, 'eventkrake-startminute');
-    $lengthHours = filter_input(INPUT_POST, 'eventkrake-lengthhour');
-    $lengthMinutes = filter_input(INPUT_POST, 'eventkrake-lengthminute');
-    $titles = filter_input(INPUT_POST, 'eventkrake-event-title');
-    $texts = filter_input(INPUT_POST, 'eventkrake-event-text');
-    $categories = filter_input(INPUT_POST, 'eventkrake-event-category');
-    for($i = 0; $i < count($titles); $i++) {
+    $startDates = filter_input(INPUT_POST, 'eventkrake-startdate',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $startHours = filter_input(INPUT_POST, 'eventkrake-starthour',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $startMinutes = filter_input(INPUT_POST, 'eventkrake-startminute',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $lengthHours = filter_input(INPUT_POST, 'eventkrake-lengthhour',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $lengthMinutes = filter_input(INPUT_POST, 'eventkrake-lengthminute',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $titles = filter_input(INPUT_POST, 'eventkrake-event-title',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $texts = filter_input(INPUT_POST, 'eventkrake-event-text',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $categories = filter_input(INPUT_POST, 'eventkrake-event-category',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    // ! index 0 is the row template and must not be used
+    for($i = 1; $i < count($titles); $i++) {
         // no title, no event
         if(empty($titles[$i])) continue;
         
@@ -752,26 +785,35 @@ function EventkrakeInputAjax() {
             'post_author' => $atts['author']
         ));
         if($eventId) {
-            // add meta data
+            // location id
             Eventkrake::setSinglePostMeta($eventId, 
                     'locationid_wordpress', $locationId);
-
+            // start
             $start = new DateTime($startDates[$i] . ' ' .
                     $startHours[$i] . ':' . $startMinutes[$i] . ':00'); 
             Eventkrake::setSinglePostMeta($eventId, 'start', $start->format('c'));
+            //end
             $end = $start->add(
                 new DateInterval("PT{$lengthHours[$i]}H{$lengthMinutes[$i]}M")
             );
             Eventkrake::setSinglePostMeta($eventId, 'end', $end->format('c'));
-            
-            Eventkrake::setPostMeta($eventId, 'categories', 
-                    isset($categories[$i]) ? $categories[$i] : array());
-            
-            if(! empty($atts['festival'])) {
-                Eventkrake::setSinglePostMeta($eventId, 'festival', 
-                        $atts['festival']);
+            // categories
+            if(isset($categories[$i])) {
+                if(! is_array($categories[$i])) {
+                    $categories[$i] = explode(",", $categories[$i]);
+                    foreach($categories[$i] as &$c) {
+                        $c = trim($c);
+                    }
+                    unset($c);
+                }
+                Eventkrake::setPostMeta($eventId, 'categories', $categories[$i]);
             }
-
+            // festival
+            if(! empty($_POST['eventkrake-input-festival'])) {
+                Eventkrake::setSinglePostMeta($eventId, 'festival',
+                        filter_input(INPUT_POST, 'eventkrake-input-festival'));
+            }
+            // tags
             Eventkrake::setSinglePostMeta($eventId, 
                 'tags', filter_input(INPUT_POST, 'eventkrake-input-email'));
         }

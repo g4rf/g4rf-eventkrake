@@ -183,6 +183,11 @@ jQuery(document).ready(function() {
         }
     });
     
+    // select location
+    jQuery("#eventkrake-input-select-locations").change(function() {
+        jQuery(this).parent("form").submit();
+    });
+    
     // start form
     jQuery("#eventkrake-input-start").click(function() {
         jQuery("#eventkrake-input-background").appendTo("body");
@@ -311,7 +316,8 @@ jQuery(document).ready(function() {
                         }
                         return;
                     }
-                    //window.location.href = "?location=" + data.locationId;
+                    // all done
+                    window.location.href = "?location=" + data.locationId;
                 },
                 400: function(data) {
                     if(typeof data.captcha != "undefined") {

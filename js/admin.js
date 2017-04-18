@@ -101,6 +101,19 @@ jQuery(document).ready(function() {
         }
         return false;
     });
+    
+    // suggested categories
+    jQuery(".eventkrake-cat-suggestion").click(function() {
+        var categories = jQuery("[name='eventkrake_categories']")
+                .val().split(",");
+        var newCategories = [];
+        for(var i = 0; i < categories.length; i++) {
+            categories[i] = categories[i].trim();
+            if(categories[i].length > 0) newCategories.push(categories[i]);
+        }
+        newCategories.push(jQuery(this).text());
+        jQuery("[name='eventkrake_categories']").val(newCategories.join(", "));
+    });
 });
 
 var Eventkrake = Eventkrake || {};

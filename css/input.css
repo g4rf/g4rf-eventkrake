@@ -114,6 +114,7 @@
 }
 
 /** form elements */
+#eventkrake-input .description,
 #eventkrake-input-form .description {
     font-style: italic;
 }
@@ -155,19 +156,27 @@
 	resize: vertical;
 }
 
+#eventkrake-input table,
 #eventkrake-input-form table {
 	width: 100%;
 	margin-bottom: 10px;
 }
+#eventkrake-input tr,
 #eventkrake-input-form tr {
 	padding-bottom: 5px;
 	border: solid 1px #888;
 	border-left: none;
 	border-top: none;
 }
+#eventkrake-input td,
+#eventkrake-input-form td {
+	vertical-align: top;
+}
+#eventkrake-input tr:nth-child(odd) td,
 #eventkrake-input-form tr:nth-child(odd) td {
 	background-color: #ddd;
 }
+#eventkrake-input td, #eventkrake-input th,
 #eventkrake-input-form td, #eventkrake-input-form th {
 	padding: 5px;
 	border-bottom: solid 1px #000;
@@ -177,7 +186,8 @@
 #eventkrake-input-form input[type="email"],
 #eventkrake-input-form input[type="number"],
 #eventkrake-input-form textarea,
-#eventkrake-input-form select {
+#eventkrake-input-form select,
+#eventkrake-input select {
 	font-family: Open Sans, sans-serif;
 	padding: 1%;
 	width: 98%;

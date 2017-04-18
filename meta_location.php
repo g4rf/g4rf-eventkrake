@@ -71,26 +71,20 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
 </tr><tr>
     <th><?=__('Die Kategorien', 'g4rf_eventkrake2')?></th>
     <td>
-        <select class="eventkrake_formselect" name="eventkrake_categories[]" size="5" multiple>
-            <option value="0">-- <?=__('Anderes', 'g4rf_eventkrake2')?> --</option>
-            <?php
-                $postCategories = Eventkrake::getPostMeta($post->ID, 'categories');
-                $apiCategories = Eventkrake::getCategories();
-                foreach($apiCategories as $c) {
-                    ?><option value="<?=$c->id?>"<?php
-                    if(in_array($c->id, $postCategories)) print ' selected';
-                    ?>><?=$c->category?></option><?php
-                } 
-            ?>
-        </select><br />
+        <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
+            implode(', ', Eventkrake::getPostMeta($post->ID, 'categories'));
+        ?></textarea><br />
         <span class="description"><?php
-_e('Wähle hier die Kategorien für den Ort aus. Du kannst mit [STRG] mehrere 
-    Kategorien auswählen.<br />
-    Wenn Dir eine Kategorie fehlt, doppelt enthalten ist oder einfach 
-    falsch geschrieben, melde das 
-    <a target="_new" href="http://eventkrake.de/support/kategorie">hier</a>.',
-    'g4rf_eventkrake2');
-       ?></span>
+            _e('Notiere hier mit Komma getrennt Kategorien, z.B.:',
+                'g4rf_eventkrake2');
+            ?><br /><?php
+            $apiCategories = Eventkrake::getCategories();
+            foreach($apiCategories as $c) {
+                ?><span class="eventkrake-cat-suggestion"><?=
+                    $c->category
+                ?></span><?php
+            }
+        ?></span>
     </td>
 </tr><tr>
     <th><?=__('Festivals, die hier stattfinden', 'g4rf_eventkrake2')?></th>
