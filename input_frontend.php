@@ -184,7 +184,8 @@ if(!session_id()) {
             </label>
             <label>
                 <span><?=__('Deine E-Mail-Adresse:', 'g4rf_eventkrake2')?></span>
-                <input name="eventkrake-input-email" type="email" />
+                <input name="eventkrake-input-email" type="email" 
+                       placeholder="abc@xyz.de" />
             </label>
         </div>
         
@@ -239,7 +240,8 @@ if(!session_id()) {
                 <span class="description"><?=__('Vorschlag', 'g4rf_eventkrake2')?>: </span>
                 <span id="eventkrake-rec" title="<?=__('Vorschlag übernehmen', 'g4rf_eventkrake2')?>"></span><br />
                 <span class="description"><?=__('Adresse:', 'g4rf_eventkrake2')?>&nbsp;</span>
-                <input type="text" name="eventkrake-address" maxlength="255" />
+                <input type="text" name="eventkrake-address" maxlength="255"
+                       placeholder="Prießnitzstraße 18, 01099 Dresden" />
                 <input value="<?=__('Adresse suchen', 'g4rf_eventkrake2')?>" type="button"
                     class="eventkrake_lookforaddress" /><br />
                 <span class="description"><?php
@@ -253,18 +255,22 @@ if(!session_id()) {
                 
                 <label>
                     <?=__('Der Name des Ortes', 'g4rf_eventkrake2')?><br />
-                    <input type="text" name="eventkrake-location-name" />
+                    <input type="text" name="eventkrake-location-name" 
+                           placeholder="Stadtteilhaus" />
                 </label>
                 <label>
                     <?=__('Beschreibung', 'g4rf_eventkrake2')?><br />
-                    <textarea name="eventkrake-location-text" rows="7"></textarea><br />
+                    <textarea name="eventkrake-location-text" rows="7"
+                              placeholder="<?=__('Beschreibung', 
+                                      'g4rf_eventkrake2')?>"></textarea><br />
                     <span class="description"><?=
                         __('Ein kurzer Text zum Ort.', 'g4rf_eventkrake2')
                     ?></span>
                 </label>
                 <label>
                     <?=__('Eine Webseite zum Ort', 'g4rf_eventkrake2')?><br />
-                    <input type="text" name="eventkrake-location-website" /><br />
+                    <input type="text" name="eventkrake-location-website" 
+                           placeholder="http://www.brn-schwafelrunde.de" /><br />
                     <span class="description"><?=
                         __('Eine Webseite, die nähere Infos über den Ort enthält.',
                                 'g4rf_eventkrake2')
@@ -309,12 +315,16 @@ if(!session_id()) {
                 </td>
                 <!-- title -->
                 <td>
-                    <input type="text" name="eventkrake-event-title[]" />
+                    <input type="text" name="eventkrake-event-title[]" 
+                           placeholder="<?=__('Veranstaltungsname', 
+                                   'g4rf_eventkrake2')?>" />
                 </td>
                 <!-- description -->
                 <td>
-                    <textarea name="eventkrake-event-text[]" rows="2"
-                              maxlength="50"></textarea>
+                    <textarea name="eventkrake-event-text[]" rows="3"
+                              maxlength="500" 
+                              placeholder="<?=__('Informationen/Ablauf/Webseite', 
+                                      'g4rf_eventkrake2')?>"></textarea>
                 </td>
                 <!-- categories -->
                 <td>

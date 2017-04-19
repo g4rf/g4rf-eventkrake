@@ -292,7 +292,7 @@ jQuery(document).ready(function() {
         );
         if(error) return false;
         
-        //Eventkrake.Input.showAnimation();
+        Eventkrake.Input.showAnimation();
         jQuery.ajax(EventkrakeInputAjax.url, {
             cache: false,
             method: "POST",
@@ -336,7 +336,7 @@ jQuery(document).ready(function() {
                     }
                 }
             }
-        });
+        }).always(Eventkrake.Input.hideAnimation);
         
         return false; // just to prevent submitting the form the normal way
     });
@@ -357,7 +357,7 @@ jQuery(document).ready(function() {
     });
     
     // create empty event entries
-    for(var i = 0; i < 5; i++) {
+    for(var i = 0; i < 3; i++) {
         Eventkrake.Input.addEventRow();
     }
     
