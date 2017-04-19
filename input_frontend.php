@@ -286,13 +286,19 @@ if(!session_id()) {
             <h2><?=__('Veranstaltungen', 'g4rf_eventkrake2') ?></h2>
             
             <table><tr>
+                <th>&nbsp;</th>
                 <th><?=__('Beginn', 'g4rf_eventkrake2')?></th>
                 <th><?=__('Dauer', 'g4rf_eventkrake2')?></th>
                 <th><?=__('Titel', 'g4rf_eventkrake2')?></th>
                 <th><?=__('Beschreibung', 'g4rf_eventkrake2')?></th>
-                <th><?=__('Kategorie', 'g4rf_eventkrake2')?></th>
-                <th>&nbsp;</th>
+                <th><?=__('Kategorie', 'g4rf_eventkrake2')?></th>                
             </tr><tr class="eventkrake-input-template">
+                <!-- delete event -->
+                <td>
+                    <input type="button" class="eventkrake-input-delete-event"
+                           value="&#10060;" title="<?=
+                            __('Veranstaltung entfernen', 'g4rf_eventkrake2')?>" />
+                </td>
                 <!-- start -->
                 <td class="eventkrake-dateselect"><?php
                     $startdate = new DateTime($atts['startdate']);
@@ -316,7 +322,7 @@ if(!session_id()) {
                 <!-- title -->
                 <td>
                     <input type="text" name="eventkrake-event-title[]" 
-                           placeholder="<?=__('Veranstaltungsname', 
+                           placeholder="<?=__('Name Veranstaltung/Künstler*in/Band', 
                                    'g4rf_eventkrake2')?>" />
                 </td>
                 <!-- description -->
@@ -343,12 +349,6 @@ if(!session_id()) {
                                 ?><option value="<?=$c?>"><?=$c?></option><?php
                             }
                         ?></select>
-                </td>
-                <!-- delete event -->
-                <td>
-                    <input type="button" class="eventkrake-input-delete-event"
-                           value="&#10060;" title="<?=
-                            __('Veranstaltung entfernen', 'g4rf_eventkrake2')?>" />
                 </td>
             </tr></table>
             <input type="button" id="eventkrake-input-add-event" value="<?=
