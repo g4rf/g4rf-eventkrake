@@ -15,12 +15,25 @@ if(!session_id()) {
      data-event-title-missing="<?=__('Gib bitte einen Titel für die Veranstaltung an oder entferne die Veranstaltung.', 'g4rf_eventkrake2')?>"
 ></div>
 
+<h2><?=__('Neue Veranstaltungen eintragen', 'g4rf_eventkrake2')?></h2>
+
+<p class="description"><?=
+    __('Klicke auf den Knopf um neue Veranstaltungen und Orte einzutragen.', 'g4rf_eventkrake2')
+?></p>
+
 <button id="eventkrake-input-start"><?=__(
     'Veranstaltungen eintragen', 'g4rf_eventkrake2'
 )?></button>
 <noscript><?=__('Bitte aktiviere Javascript.', 'g4rf_eventkrake2')?></noscript>
 
-<h2><?=__('Eingetragene Veranstaltungen', 'g4rf_eventkrake2')?></h2>
+<br /><br /><p style="color:#3c3;font-size:1.1em;font-weight:bold;"><?php
+    if(filter_input(INPUT_GET, 'success') == '1') {
+        _e('Die Veranstaltungen wurden erfolgreich eingetragen. Du kannst diese '
+                . 'unten kontrollieren.', 'g4rf_eventkrake2');
+    }
+?></p><br /><hr /> 
+
+<h2><?=__('Bereits eingetragene Veranstaltungen', 'g4rf_eventkrake2')?></h2>
 
 <p class="description"><?=
     __('Wähle einen Ort aus, um die Angaben zu überprüfen.', 'g4rf_eventkrake2')

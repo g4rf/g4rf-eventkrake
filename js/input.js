@@ -317,7 +317,8 @@ jQuery(document).ready(function() {
                         return;
                     }
                     // all done
-                    window.location.href = "?location=" + data.locationId;
+                    window.location.href = "?location=" + data.locationId +
+                            "&success=1";
                 },
                 400: function(data) {
                     if(typeof data.captcha != "undefined") {
