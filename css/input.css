@@ -2,6 +2,11 @@
 *, ::before, ::after { box-sizing: inherit; }
 #eventkrake-input { box-sizing: border-box; } 
 
+/** html tags **/
+#eventkrake-input td {
+	text-align: left;
+}
+
 /** general classes **/
 .eventkrake-input-template {
 	display: none;

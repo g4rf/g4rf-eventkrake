@@ -97,7 +97,8 @@ if(!session_id()) {
     </tr><tr>
         <td><?=__('Beschreibung', 'g4rf_eventkrake2')?></td>
         <td class="eventkrake-location-description"><?=
-            apply_filters('the_content', get_post_field('post_content', $locationId));
+            get_post_field('post_content', $locationId)
+            //apply_filters('the_content', get_post_field('post_content', $locationId));
         ?></td>
     </tr><tr>
         <td><?=__('Webseite', 'g4rf_eventkrake2')?></td>
@@ -139,8 +140,9 @@ if(!session_id()) {
                 ?></td>
                 <!-- description -->
                 <td class="eventkrake-description"><?=
-                    apply_filters('the_content', 
-                            get_post_field('post_content', $e->ID));
+                    get_post_field('post_content', $e->ID);
+                    //apply_filters('the_content', 
+                    //        get_post_field('post_content', $e->ID));
                 ?></td>
                 <!-- category -->
                 <td class="eventkrake-category"><?=
