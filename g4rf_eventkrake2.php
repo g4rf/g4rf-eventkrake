@@ -771,6 +771,8 @@ function EventkrakeInputAjax() {
             FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $texts = filter_input(INPUT_POST, 'eventkrake-event-text',
             FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $websites = filter_input(INPUT_POST, 'eventkrake-event-website',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $categories = filter_input(INPUT_POST, 'eventkrake-event-category',
             FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // ! index 0 is the row template and must not be used
@@ -792,11 +794,14 @@ function EventkrakeInputAjax() {
             $start = new DateTime($startDates[$i] . ' ' .
                     $startHours[$i] . ':' . $startMinutes[$i] . ':00'); 
             Eventkrake::setSinglePostMeta($eventId, 'start', $start->format('c'));
-            //end
+            // end
             $end = $start->add(
                 new DateInterval("PT{$lengthHours[$i]}H{$lengthMinutes[$i]}M")
             );
             Eventkrake::setSinglePostMeta($eventId, 'end', $end->format('c'));
+            // website
+            if(strlen($websites[$i]) > 0)
+                Eventkrake::setSinglePostMeta($eventId, 'website', $websites[$i]);
             // categories
             if(isset($categories[$i])) {
                 if(! is_array($categories[$i])) {

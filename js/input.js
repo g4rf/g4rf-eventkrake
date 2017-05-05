@@ -314,6 +314,8 @@ jQuery(document).ready(function() {
                         if(typeof data.msg != "undefined") {
                             Eventkrake.Input.hint(data.msg);
                         }
+                        
+                        Eventkrake.Input.hideAnimation();
                         return;
                     }
                     // all done
@@ -335,9 +337,11 @@ jQuery(document).ready(function() {
                     if(typeof data.msg != "undefined") {
                         Eventkrake.Input.hint(data.msg);
                     }
+                    
+                    Eventkrake.Input.hideAnimation();
                 }
             }
-        }).always(Eventkrake.Input.hideAnimation);
+        });
         
         return false; // just to prevent submitting the form the normal way
     });

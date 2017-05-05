@@ -344,8 +344,16 @@ if(!session_id()) {
                 <td>
                     <textarea name="eventkrake-event-text[]" rows="3"
                               maxlength="500" 
-                              placeholder="<?=__('Informationen/Ablauf/Webseite', 
+                              placeholder="<?=__('Informationen/Ablauf/Promotext', 
                                       'g4rf_eventkrake2')?>"></textarea>
+                    <br />
+                    <span class="description" style="font-size:0.85em"><?=
+                        __('Webseite', 'g4rf_eventkrake2')
+                    ?>:</span>
+                    <br />
+                    <input type="text" name="eventkrake-event-website[]" 
+                           placeholder="<?=__('Webseite zur Künstler*in/Band', 
+                                   'g4rf_eventkrake2')?>" />
                 </td>
                 <!-- categories -->
                 <td>
