@@ -53,10 +53,12 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter'
     <th><?=__('Start der Veranstaltung', 'g4rf_eventkrake2')?></th>
     <td><?php
         $startdate = Eventkrake::getSinglePostMeta($post->ID, 'start');
-        if(!$startdate) {
+        try {
+            $startdate = new DateTime($startdate);
+        } catch (Exception $ex) {
             $startdate = new DateTime();
             $startdate->setTime($startdate->format('H'), 0);
-        } else $startdate = new DateTime($startdate);
+        }
         ?>
         <input id="eventkrake-startdate" name="eventkrake_startdate"
                value="<?=$startdate->format('Y-m-d')?>" type="hidden" />
@@ -73,11 +75,13 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter'
 </tr><tr>
     <th><?=__('Ende der Veranstaltung', 'g4rf_eventkrake2')?></th>
     <td><?php
-        $enddate = Eventkrake::getSinglePostMeta($post->ID, 'end');
-        if(!$enddate) {
+        $enddate = Eventkrake::getSinglePostMeta($post->ID, 'end');            
+        try {
+            $enddate = new DateTime($enddate);
+        } catch (Exception $ex) {
             $enddate = new DateTime();
             $enddate->setTime($enddate->format('H') + 2, 0);
-        } else $enddate = new DateTime($enddate);
+        }
         ?>
         <input id="eventkrake-enddate" name="eventkrake_enddate"
                value="<?=$enddate->format('Y-m-d')?>" type="hidden" />
