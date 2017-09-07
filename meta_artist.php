@@ -44,6 +44,31 @@ Eventkrake::printPostMessages($post->ID);
             </div>
         <?php } ?>
     </td>
+</tr><tr>
+    <th><?=__('Festivals der Künstlerin', 'g4rf_eventkrake2')?></th>
+    <td>
+        <select class="eventkrake_formselect" name="eventkrake_festivals[]" size="5" multiple>
+            <option value="0">---</option>
+            <?php
+                $postFestivals = Eventkrake::getPostMeta($post->ID, 'festivals');
+                foreach(Eventkrake::getFestivals() as $f) {
+                    $fStart = new DateTime($f->date_start);
+                    $fEnd = new DateTime($f->date_end);
+                    ?><option value='<?=$f->id?>'<?php
+                        ?><?=in_array($f->id,$postFestivals) ? ' selected' : '' ?><?php
+                        ?>><?=$f->long_title?> (<?=$fStart->format('d.m.Y')?> - <?=$fEnd->format('d.m.Y')?>)<?php
+                    ?></option><?php
+                } ?>
+        </select><br />
+        <span class="description"><?php
+_e('Wähle die Festivals aus, an denen die Künstlerin teilnimmt. Mittels [STRG] 
+    ist eine Mehrfachauswahl möglich.<br>
+    Nur berechtigte Personen haben Zugriff auf Festivals. Wenn Du selbst ein
+    Festival erstellen willst, frage
+    <a target="_new" href="http://eventkrake.de/kontakt">hier</a> nach.',
+    'g4rf_eventkrake2');
+        ?></span>
+    </td>
 </tr></table>
 <hr />
 <table class="form-table">

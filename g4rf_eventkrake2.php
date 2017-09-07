@@ -616,11 +616,15 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
         $_POST['eventkrake_linkurls3'],
         $_POST['eventkrake_linkurls4']
     );
+    $festivals = filter_input(INPUT_POST, 'eventkrake_festivals', 
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    if(! $festivals) $festivals = [];
     
     // save fields
     Eventkrake::setSinglePostMeta($post_id, 'origin', $origin);
     Eventkrake::setPostMeta($post_id, 'linknames', $linkNames);
     Eventkrake::setPostMeta($post_id, 'linkurls', $linkUrls);
+    Eventkrake::setPostMeta($post_id, 'festivals', $festivals);
 }, 1, 2);
 
 /***** Shortcode für Ausgabe *****/

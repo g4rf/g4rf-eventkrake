@@ -89,7 +89,6 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
 </tr><tr>
     <th><?=__('Festivals, die hier stattfinden', 'g4rf_eventkrake2')?></th>
     <td>
-        <?php Eventkrake::getFestivals() ?>
         <select class="eventkrake_formselect" name="eventkrake_festivals[]" size="5" multiple>
             <option value="0">---</option>
             <?php
