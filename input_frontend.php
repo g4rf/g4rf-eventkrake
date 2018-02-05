@@ -155,7 +155,7 @@ if(!session_id()) {
                 <td><?php
                     $href = "mailto:$adminMail?subject=Meldung"
                             . ' zum Event: ' . get_the_title($e->ID) . '&body=Name'
-                            . ' des Ortes: ' . get_the_title($e->ID) . '%0ALink zur'
+                            . ' des Events: ' . get_the_title($e->ID) . '%0ALink zur'
                             . ' Bearbeitung: ' . admin_url('post.php', 'http')
                             . '?post=' . $e->ID . '%26action=edit%0A%0AMeine'
                             . ' Nachricht:%0A%0A%0A';
