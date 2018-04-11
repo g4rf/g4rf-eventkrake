@@ -75,7 +75,7 @@ if(!session_id()) {
 
     <h3><?=__('Ort', 'g4rf_eventkrake2')?></h3>
     <?php // report changes for location
-    $adminMail = get_option("admin_email");
+    $adminMail = $atts['email'];
     
     $href = "mailto:$adminMail?subject=Meldung"
             . ' zum Ort: ' . get_the_title($locationId) . '&body=Name'
