@@ -16,14 +16,14 @@ setlocale(LC_TIME, get_locale());
 require_once 'Eventkrake.php';
 
 // own excerpt function that works also outside the loop
-add_filter('wp_trim_excerpt', function($text='') {
+/*add_filter('wp_trim_excerpt', function($text='') {
     $excerpt_length = apply_filters('excerpt_length', 55);
     $excerpt_more = apply_filters('excerpt_more', ' ' . '[&hellip;]');
     return wp_trim_words(
         str_replace(']]>', ']]&gt;',
             apply_filters('the_content', 
                 strip_shortcodes($text))), $excerpt_length, $excerpt_more);
-});
+});*/
 
 /***** Session-Funktionalität (CAPTCHA etc.) *****/
 add_action('init', function() {
@@ -42,26 +42,26 @@ add_action('admin_enqueue_scripts', function() {
     wp_register_script('eventkrake_googlemaps',  'https://maps.google.com/maps/api/js?region=DE&key=AIzaSyClvezOaz9z-nZKjMmYRe0cvvWEiCnWjmE');
     wp_enqueue_script('eventkrake_googlemaps');
     // Leaflet
-    wp_register_script('eventkrake_leaflet',  "$path/leaflet/leaflet.js", array('jquery'));
+    wp_register_script('eventkrake_leaflet',  $path.'leaflet/leaflet.js', array('jquery'));
     wp_enqueue_script('eventkrake_leaflet');
     // allgemeine Scripte
-    wp_register_script('eventkrake',  "$path/js/plugin.js", array('eventkrake_leaflet'));
+    wp_register_script('eventkrake',  $path.'js/plugin.js', array('eventkrake_leaflet'));
     wp_enqueue_script('eventkrake');
     // Adminscripte
-    wp_register_script('eventkrake_admin',  "$path/js/admin.js", array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'eventkrake'));
+    wp_register_script('eventkrake_admin', $path.'js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'eventkrake'));
     wp_enqueue_script('eventkrake_admin');    
 
     // allgemeines CSS
-    wp_register_style('eventkrake_all', "$path/css/all.css");
+    wp_register_style('eventkrake_all', $path.'css/all.css');
     wp_enqueue_style('eventkrake_all');
     // Admin-CSS
-    wp_register_style('eventkrake_admin', "$path/css/admin.css", array('eventkrake_all'));
+    wp_register_style('eventkrake_admin', $path.'css/admin.css', array('eventkrake_all'));
     wp_enqueue_style('eventkrake_admin');
     // jQuery-UI
     wp_register_style('eventkrake_jquery-ui', 'https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
     wp_enqueue_style('eventkrake_jquery-ui');
     // Leaflet CSS
-    wp_register_style('eventkrake_leaflet', "$path/leaflet/leaflet.css");
+    wp_register_style('eventkrake_leaflet', $path.'leaflet/leaflet.css');
     wp_enqueue_style('eventkrake_leaflet');
 });
 
@@ -70,32 +70,32 @@ add_action('wp_enqueue_scripts', function() {
     $path = plugin_dir_url(__FILE__);
         
     // Geolokalisation
-    wp_register_script('eventkrake_googlemaps',  'https://maps.google.com/maps/api/js?region=DE');
+    wp_register_script('eventkrake_googlemaps',  'https://maps.google.com/maps/api/js?region=DE&key=AIzaSyClvezOaz9z-nZKjMmYRe0cvvWEiCnWjmE');
     wp_enqueue_script('eventkrake_googlemaps');
     // Leaflet-JS
-    wp_register_script('eventkrake_leaflet',  "$path/leaflet/leaflet.js", array('jquery'));
+    wp_register_script('eventkrake_leaflet',  $path.'leaflet/leaflet.js', array('jquery'));
     wp_enqueue_script('eventkrake_leaflet');
     // allgemeines JS
-    wp_register_script('eventkrake',  "$path/js/plugin.js", array('eventkrake_leaflet'));
+    wp_register_script('eventkrake',  $path.'js/plugin.js', array('eventkrake_leaflet'));
     wp_enqueue_script('eventkrake');
     // Input JS
-    wp_register_script('eventkrake_input',  "$path/js/input.js", array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'eventkrake'));
+    wp_register_script('eventkrake_input',  $path.'js/input.js', array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'eventkrake'));
     wp_enqueue_script('eventkrake_input');
     wp_localize_script('eventkrake_input', 'EventkrakeInputAjax', array(
         'url' => admin_url('admin-ajax.php')
     ));
 
     // allgemeines CSS
-    wp_register_style('eventkrake_all', "$path/css/all.css");
+    wp_register_style('eventkrake_all', $path.'css/all.css');
     wp_enqueue_style('eventkrake_all');
     // Input CSS
-    wp_register_style('eventkrake_input', "$path/css/input.css");
+    wp_register_style('eventkrake_input', $path.'css/input.css');
     wp_enqueue_style('eventkrake_input');
     // jQuery-UI
     wp_register_style('eventkrake_jquery-ui', 'https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
     wp_enqueue_style('eventkrake_jquery-ui');
     // Leaflet-CSS
-    wp_register_style('eventkrake_leaflet', "$path/leaflet/leaflet.css");
+    wp_register_style('eventkrake_leaflet', $path.'leaflet/leaflet.css');
     wp_enqueue_style('eventkrake_leaflet');
 });
 

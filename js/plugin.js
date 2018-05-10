@@ -14,7 +14,7 @@ var Eventkrake = {
     },
     
     Map: {
-	tileUrl: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+	tileUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 	//tileUrl: 'http://{s}.tile.cloudmade.com/d53fe132e8734827be5f33054d8c16a6/107213/256/{z}/{x}/{y}.png',
 	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors | Event data and WordPress plugin by <a href="http://eventkrake.de">Eventkrake</a>'
     },
