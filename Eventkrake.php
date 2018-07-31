@@ -105,7 +105,7 @@ class Eventkrake {
             CURLOPT_SSL_VERIFYPEER => false, // SSL nicht für Clientauth, nur für Transaktionsverschlüsselung
             CURLOPT_SSL_VERIFYHOST => 0, // SSL nicht für Serverauth, nur für Transaktionsverschlüsselung
             CURLOPT_POSTFIELDS => http_build_query($queryData),
-            CURLOPT_URL => "http://api.eventkrake.de/$action/",
+            CURLOPT_URL => "https://api.eventkrake.de/$action/",
             CURLOPT_HEADER => 0,
             CURLOPT_HTTPHEADER => array(
                 'Cache-Control: no-cache, must-revalidate',
