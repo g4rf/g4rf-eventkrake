@@ -464,6 +464,10 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     // Künstler*innen
     $artists = is_array($_POST['eventkrake_artists']) ? 
             $_POST['eventkrake_artists'] : array();
+    // delete the 0 value
+    if (($key = array_search(0, $artists)) !== false) {
+        unset($artists[$key]);
+    }
     
     // save fields
     Eventkrake::setSinglePostMeta($post_id, 
