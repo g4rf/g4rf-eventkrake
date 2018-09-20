@@ -330,8 +330,7 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
         }
         
         if(has_post_thumbnail($post_id) ) {
-            $imgInfos = wp_get_attachment_image_src(get_post_thumbnail_id($post_id));
-            $request['image'] = $imgInfos[0];
+            $request['image'] = get_the_post_thumbnail_url($post_id, 'full');
         }
 
         $id = isset($_POST['eventkrake_id']) ? $_POST['eventkrake_id'] : '';
@@ -505,8 +504,7 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
         }
         
         if(has_post_thumbnail($post_id) ) {
-            $imgInfos = wp_get_attachment_image_src(get_post_thumbnail_id($post_id));
-            $request['image'] = $imgInfos[0];
+            $request['image'] = get_the_post_thumbnail_url($post_id, 'full');
         }
 
         $id = isset($_POST['eventkrake_id']) ? $_POST['eventkrake_id'] : '';
