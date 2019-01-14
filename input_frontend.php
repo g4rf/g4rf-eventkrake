@@ -174,9 +174,9 @@ if(!session_id()) {
 <div id="eventkrake-input-background"></div>
 
 <form id="eventkrake-input-form">    
-    <a id="eventkrake-input-logo" href="http://eventkrake.de" 
+    <a id="eventkrake-input-logo" href="https://eventkrake.de" 
        title="powered by eventkrake" target="_blank">
-        <img src="http://eventkrake.de/wp-content/themes/eventkrake/img/eventkrake-logo.png"
+        <img src="https://eventkrake.de/wp-content/themes/eventkrake/img/eventkrake-logo.png"
             alt="powered by eventkrake" />
     </a>
     
@@ -288,7 +288,7 @@ if(!session_id()) {
                 <label>
                     <?=__('Eine Webseite zum Ort', 'g4rf_eventkrake2')?><br />
                     <input type="text" name="eventkrake-location-website" 
-                           placeholder="http://www.brn-schwafelrunde.de" /><br />
+                           placeholder="https://www.brn-buero.de" /><br />
                     <span class="description"><?=
                         __('Eine Webseite, die nähere Infos über den Ort enthält.',
                                 'g4rf_eventkrake2')
