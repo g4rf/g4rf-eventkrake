@@ -16,6 +16,7 @@ Eventkrake::printPostMessages($post->ID);
         $artTypes = [
             'music' => __('Musik', 'g4rf_eventkrake2'),
             'fine arts' => __('Bildende Kunst', 'g4rf_eventkrake2'),
+            'photography' => __('Film & Fotografie', 'g4rf_eventkrake2'),
             'dance' => __('Tanz', 'g4rf_eventkrake2'),
             'theatre' => __('Theater', 'g4rf_eventkrake2'),
             'literature' => __('Literatur', 'g4rf_eventkrake2')
@@ -39,14 +40,14 @@ Eventkrake::printPostMessages($post->ID);
         $linknames = Eventkrake::getPostMeta($post->ID, 'linknames');
         $linkurls = Eventkrake::getPostMeta($post->ID, 'linkurls');
         for($i = 0; $i < 5; $i++) { ?>
-            <div style="border: solid 1px #ccc; padding: 10px;">                
-                <input value="<?=empty($linknames[$i]) ? '' : $linknames[$i]?>" 
+            <div style="border: solid 1px #ccc; padding: 10px;">
+                <input value="<?=empty($linknames[$i]) ? '' : $linknames[$i]?>"
                     type="text" name="eventkrake_linknames<?=$i?>"
                     class="regular-text i18n-multilingual" />
                 <span class="description">
                     <?=__('Name des Links', 'g4rf_eventkrake2')?>
-                </span><br />                
-                <input value="<?=empty($linkurls[$i]) ? '' : $linkurls[$i] ?>" 
+                </span><br />
+                <input value="<?=empty($linkurls[$i]) ? '' : $linkurls[$i] ?>"
                     type="text" name="eventkrake_linkurls<?=$i?>" class="regular-text" />
                 <span class="description">
                     <?=__('Link (http://...)', 'g4rf_eventkrake2')?>
@@ -57,7 +58,7 @@ Eventkrake::printPostMessages($post->ID);
 </tr><tr>
     <th><?=__('Stadt/Land', 'g4rf_eventkrake2')?></th>
     <td>
-        <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'origin')?>" 
+        <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'origin')?>"
             type="text" name="eventkrake_origin"
             class="regular-text i18n-multilingual" /><br />
         <span class="description">
@@ -81,7 +82,7 @@ Eventkrake::printPostMessages($post->ID);
                 } ?>
         </select><br />
         <span class="description"><?php
-_e('Wähle die Festivals aus, an denen die Künstlerin teilnimmt. Mittels [STRG] 
+_e('Wähle die Festivals aus, an denen die Künstlerin teilnimmt. Mittels [STRG]
     ist eine Mehrfachauswahl möglich.<br>
     Nur berechtigte Personen haben Zugriff auf Festivals. Wenn Du selbst ein
     Festival erstellen willst, frage
