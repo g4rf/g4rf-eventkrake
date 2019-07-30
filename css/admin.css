@@ -23,3 +23,7 @@
 .eventkrake-cat-suggestion:hover {
     text-decoration: underline;
 }
+
+#eventkrake_artist label {
+    margin: 10px;
+}

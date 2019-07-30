@@ -9,14 +9,24 @@ Eventkrake::printPostMessages($post->ID);
 <input type="hidden" name="eventkrake_on_edit_screen" />
 
 <table class="form-table"><tr>
-    <th><?=__('Stadt/Land', 'g4rf_eventkrake2')?></th>
+    <th><?=__('Kunstform', 'g4rf_eventkrake2')?></th>
     <td>
-        <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'origin')?>" 
-            type="text" name="eventkrake_origin"
-            class="regular-text i18n-multilingual" /><br />
-        <span class="description">
-            <?=__('Die Herkunftsstadt und/oder das Land', 'g4rf_eventkrake2')?>
-        </span>
+        <?php
+        $artTypesArtist = Eventkrake::getPostMeta($post->ID, 'artTypes');
+        $artTypes = [
+            'music' => __('Musik', 'g4rf_eventkrake2'),
+            'fine arts' => __('Bildende Kunst', 'g4rf_eventkrake2'),
+            'dance' => __('Tanz', 'g4rf_eventkrake2'),
+            'theatre' => __('Theater', 'g4rf_eventkrake2'),
+            'literature' => __('Literatur', 'g4rf_eventkrake2')
+        ];
+        foreach($artTypes as $type => $name) { ?>
+            <label>
+                <input value="<?=$type?>" type="checkbox" name="art_types[]"<?php
+                    if(in_array($type, $artTypesArtist)) print " checked";
+                ?> /><?=$name
+            ?></label>
+        <?php } ?>
     </td>
 </tr><tr>
     <th><?=__('Links', 'g4rf_eventkrake2')?></th>
@@ -43,6 +53,16 @@ Eventkrake::printPostMessages($post->ID);
                 </span>
             </div>
         <?php } ?>
+    </td>
+</tr><tr>
+    <th><?=__('Stadt/Land', 'g4rf_eventkrake2')?></th>
+    <td>
+        <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'origin')?>" 
+            type="text" name="eventkrake_origin"
+            class="regular-text i18n-multilingual" /><br />
+        <span class="description">
+            <?=__('Die Herkunftsstadt und/oder das Land', 'g4rf_eventkrake2')?>
+        </span>
     </td>
 </tr><tr>
     <th><?=__('Festivals der Künstlerin', 'g4rf_eventkrake2')?></th>

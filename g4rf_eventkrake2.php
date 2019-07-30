@@ -603,7 +603,8 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
     if (wp_is_post_revision($post_id)) return;
 
     // check POST-fields
-    $origin = $_POST['eventkrake_origin'];
+    $artTypes = $_POST['art_types'];
+    
     $linkNames = array(
         $_POST['eventkrake_linknames0'],
         $_POST['eventkrake_linknames1'],
@@ -618,14 +619,18 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
         $_POST['eventkrake_linkurls3'],
         $_POST['eventkrake_linkurls4']
     );
+    
+    $origin = $_POST['eventkrake_origin'];
+    
     $festivals = filter_input(INPUT_POST, 'eventkrake_festivals', 
             FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     if(! $festivals) $festivals = [];
     
     // save fields
-    Eventkrake::setSinglePostMeta($post_id, 'origin', $origin);
+    Eventkrake::setPostMeta($post_id, 'artTypes', $artTypes);
     Eventkrake::setPostMeta($post_id, 'linknames', $linkNames);
     Eventkrake::setPostMeta($post_id, 'linkurls', $linkUrls);
+    Eventkrake::setSinglePostMeta($post_id, 'origin', $origin);
     Eventkrake::setPostMeta($post_id, 'festivals', $festivals);
 }, 1, 2);
 
