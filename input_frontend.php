@@ -31,14 +31,14 @@ if(!session_id()) {
         _e('Die Veranstaltungen wurden erfolgreich eingetragen. Du kannst diese '
                 . 'unten kontrollieren.', 'g4rf_eventkrake2');
     }
-?></p><br /><hr /> 
+?></p><br /><hr />
 
 <h2><?=__('Bereits eingetragene Veranstaltungen', 'g4rf_eventkrake2')?></h2>
 
 <p class="description"><?=
     __('Wähle einen Ort aus, um die Angaben zu überprüfen.', 'g4rf_eventkrake2')
 ?></p>
-<form method="GET"><select id="eventkrake-input-select-locations" 
+<form method="GET"><select id="eventkrake-input-select-locations"
                            name="location" size="10">
 <?php
     $locationId = filter_input(INPUT_GET, 'location');
@@ -52,7 +52,7 @@ if(!session_id()) {
         if(! empty($atts['festival'])) {
             $festivalEvents = false;
             foreach($events as $e) {
-                if($atts['festival'] == 
+                if($atts['festival'] ==
                         Eventkrake::getSinglePostMeta($e->ID, 'festival')) {
                     $festivalEvents = true;
                     break;
@@ -60,10 +60,10 @@ if(!session_id()) {
             }
         }
         if(! $festivalEvents) continue;
-        
+
         $noLocations = false;
         if(! $locationId) $locationId = $l->ID;
-        
+
         ?><option value="<?=$l->ID?>"
             <?=$l->ID == $locationId ? ' selected' : '' ?>><?=
             $l->post_title?> (<?=Eventkrake::getSinglePostMeta($l->ID, 'address')?>)
@@ -76,7 +76,7 @@ if(!session_id()) {
     <h3><?=__('Ort', 'g4rf_eventkrake2')?></h3>
     <?php // report changes for location
     $adminMail = $atts['email'];
-    
+
     $href = "mailto:$adminMail?subject=Meldung"
             . ' zum Ort: ' . get_the_title($locationId) . '&body=Name'
             . ' des Ortes: ' . get_the_title($locationId) . '%0ALink zur'
@@ -120,7 +120,7 @@ if(!session_id()) {
     </tr><?php
         foreach(Eventkrake::getEvents($locationId, false) as $e) {
             if(! empty($atts['festival'])) {
-                if($atts['festival'] != 
+                if($atts['festival'] !=
                         Eventkrake::getSinglePostMeta($e->ID, 'festival')) {
                     continue;
                 }
@@ -144,7 +144,7 @@ if(!session_id()) {
                 <!-- description -->
                 <td class="eventkrake-description"><?=
                     get_post_field('post_content', $e->ID);
-                    //apply_filters('the_content', 
+                    //apply_filters('the_content',
                     //        get_post_field('post_content', $e->ID));
                 ?></td>
                 <!-- category -->
@@ -169,27 +169,29 @@ if(!session_id()) {
 
 <?php } ?>
 
+    
+
 <!--/// add location and events ///-->
 
 <div id="eventkrake-input-background"></div>
 
-<form id="eventkrake-input-form">    
-    <a id="eventkrake-input-logo" href="https://eventkrake.de" 
+<form id="eventkrake-input-form">
+    <a id="eventkrake-input-logo" href="https://eventkrake.de"
        title="powered by eventkrake" target="_blank">
         <img src="https://eventkrake.de/wp-content/themes/eventkrake/img/eventkrake-logo.png"
             alt="powered by eventkrake" />
     </a>
-    
+
     <input type="hidden" name="action" value="EventkrakeInputAjax" />
     <?php if(! empty($atts['festival'])) { ?>
-        <input type="hidden" name="eventkrake-input-festival" 
+        <input type="hidden" name="eventkrake-input-festival"
                value="<?=$atts['festival']?>" />
     <?php } ?>
-    
+
     <div id="eventkrake-input-form-elements">
-        
+
         <?php /*** Captcha ***/ ?>
-        <div class="eventkrake-input-tab visible" 
+        <div class="eventkrake-input-tab visible"
              data-previous="close" data-me="captcha" data-next="location">
             <h2><?=__('Bist Du ein Mensch?', 'g4rf_eventkrake2')?></h2>
 
@@ -202,13 +204,13 @@ if(!session_id()) {
             </label>
             <label>
                 <span><?=__('Deine E-Mail-Adresse:', 'g4rf_eventkrake2')?></span>
-                <input name="eventkrake-input-email" type="email" 
+                <input name="eventkrake-input-email" type="email"
                        placeholder="abc@xyz.de" />
             </label>
         </div>
-        
+
         <?php /*** ORTE ***/ ?>
-        <div class="eventkrake-input-tab" 
+        <div class="eventkrake-input-tab"
              data-previous="captcha" data-me="location" data-next="events">
             <h2><?=__('Orte', 'g4rf_eventkrake2') ?></h2>
 
@@ -228,18 +230,18 @@ if(!session_id()) {
             <fieldset id="eventkrake-input-select-location">
                 <select name="eventkrake-input-locationlist" size="15">
                     <?php
-                        $locations = Eventkrake::getLocations(false);                        
+                        $locations = Eventkrake::getLocations(false);
                         $selectedId = $locations[0]->ID;
-                        
+
                         foreach($locations as $l) {
                             ?><option value='<?=$l->ID?>'<?php
                                 ?><?=$l->ID == $selectedId ? ' selected' : '' ?><?php
                                 ?>><?=$l->post_title?> (<?=Eventkrake::getSinglePostMeta($l->ID, 'address')?>)<?php
                             ?></option><?php
                         } ?>
-                </select>                
+                </select>
             </fieldset>
-            
+
             <fieldset id="eventkrake-input-add-location">
                 <hr />
                 <h3><?=__('Angaben zur Adresse', 'g4rf_eventkrake2')?></h3>
@@ -249,7 +251,7 @@ if(!session_id()) {
                 ?>
                 <input type="hidden" name="eventkrake-lat" value="<?=$lat?>" />
                 <input type="hidden" name="eventkrake-lng" value="<?=$lng?>" />
-                
+
                 <div id="eventkrake-map" class="eventkrake_map eventkrake_h250"
                      data-lat="<?=$lat?>" data-lng="<?=$lng?>">
                     <?=__('Bitte aktiviere JavaScript um die Karte zu benutzen.', 'g4rf_eventkrake2')?>
@@ -267,19 +269,19 @@ if(!session_id()) {
                     klicken. Durch einfaches Klicken in der Karte kannst du den Ort verändern.',
                     'g4rf_eventkrake2');
                 ?></span>
-                
+
                 <hr />
                 <h3><?=__('Weitere Angaben zum Ort', 'g4rf_eventkrake2')?></h3>
-                
+
                 <label>
                     <?=__('Der Name des Ortes', 'g4rf_eventkrake2')?><br />
-                    <input type="text" name="eventkrake-location-name" 
+                    <input type="text" name="eventkrake-location-name"
                            placeholder="Stadtteilhaus" />
                 </label>
                 <label>
                     <?=__('Beschreibung', 'g4rf_eventkrake2')?><br />
                     <textarea name="eventkrake-location-text" rows="7"
-                              placeholder="<?=__('Beschreibung', 
+                              placeholder="<?=__('Beschreibung',
                                       'g4rf_eventkrake2')?>"></textarea><br />
                     <span class="description"><?=
                         __('Ein kurzer Text zum Ort.', 'g4rf_eventkrake2')
@@ -287,7 +289,7 @@ if(!session_id()) {
                 </label>
                 <label>
                     <?=__('Eine Webseite zum Ort', 'g4rf_eventkrake2')?><br />
-                    <input type="text" name="eventkrake-location-website" 
+                    <input type="text" name="eventkrake-location-website"
                            placeholder="https://www.brn-buero.de" /><br />
                     <span class="description"><?=
                         __('Eine Webseite, die nähere Infos über den Ort enthält.',
@@ -296,20 +298,20 @@ if(!session_id()) {
                 </label>
             </fieldset>
         </div>
-        
+
         <?php /*** EVENTS ***/ ?>
         <div class="eventkrake-input-tab eventkrake-input-events"
              data-previous="location" data-me="events" data-next="events">
-        
+
             <h2><?=__('Veranstaltungen', 'g4rf_eventkrake2') ?></h2>
-            
+
             <table><tr>
                 <th>&nbsp;</th>
                 <th><?=__('Beginn', 'g4rf_eventkrake2')?></th>
                 <th><?=__('Dauer', 'g4rf_eventkrake2')?></th>
                 <th><?=__('Titel', 'g4rf_eventkrake2')?></th>
                 <th><?=__('Beschreibung', 'g4rf_eventkrake2')?></th>
-                <th><?=__('Kategorie', 'g4rf_eventkrake2')?></th>                
+                <th><?=__('Kategorie', 'g4rf_eventkrake2')?></th>
             </tr><tr class="eventkrake-input-template">
                 <!-- delete event -->
                 <td>
@@ -332,30 +334,30 @@ if(!session_id()) {
                 </td>
                 <!-- end -->
                 <td class="eventkrake-dateselect">
-                    <input name="eventkrake-lengthhour[]" type="number" 
+                    <input name="eventkrake-lengthhour[]" type="number"
                            min="0" max="72" value="1" />h
                     <input name="eventkrake-lengthminute[]" type="number"
                            min="0" max="59" value="0" />m
                 </td>
                 <!-- title -->
                 <td>
-                    <input type="text" name="eventkrake-event-title[]" 
-                           placeholder="<?=__('Name Veranstaltung/Künstler*in/Band', 
+                    <input type="text" name="eventkrake-event-title[]"
+                           placeholder="<?=__('Name Veranstaltung/Künstler*in/Band',
                                    'g4rf_eventkrake2')?>" />
                 </td>
                 <!-- description -->
                 <td>
                     <textarea name="eventkrake-event-text[]" rows="3"
-                              maxlength="500" 
-                              placeholder="<?=__('Informationen/Ablauf/Promotext', 
+                              maxlength="500"
+                              placeholder="<?=__('Informationen/Ablauf/Promotext',
                                       'g4rf_eventkrake2')?>"></textarea>
                     <br />
                     <span class="description" style="font-size:0.85em"><?=
                         __('Webseite', 'g4rf_eventkrake2')
                     ?>:</span>
                     <br />
-                    <input type="text" name="eventkrake-event-website[]" 
-                           placeholder="<?=__('Webseite zur Künstler*in/Band', 
+                    <input type="text" name="eventkrake-event-website[]"
+                           placeholder="<?=__('Webseite zur Künstler*in/Band',
                                    'g4rf_eventkrake2')?>" />
                 </td>
                 <!-- categories -->
@@ -369,7 +371,7 @@ if(!session_id()) {
                                 $categories[] = $c->category;
                             }
                         }
-                        
+
                         ?><select name="eventkrake-event-category[]"><?php
                             foreach($categories as $c) {
                                 ?><option value="<?=$c?>"><?=$c?></option><?php
@@ -382,7 +384,7 @@ if(!session_id()) {
             ?>" />
         </div>
     </div>
-    
+
     <div id="eventkrake-input-form-buttons">
         <button id="eventkrake-input-back">
             <?=__('Zurück', 'g4rf_eventkrake2')?>
@@ -394,7 +396,7 @@ if(!session_id()) {
             <?=__('Speichern', 'g4rf_eventkrake2')?>
         </button>
     </div>
-    
+
     <div id="eventkrake-input-hint"><p></p></div>
 </form>
 

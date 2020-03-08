@@ -1,7 +1,9 @@
-jQuery(document).ready(function() {	
+/* global Leaflet, google */
+
+jQuery(document).ready(function() {
     /* Datepicker */
     jQuery(".datepicker").datepicker({
-        dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", 
+        dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag",
             "Freitag", "Samstag"],
         dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
         dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
@@ -9,12 +11,12 @@ jQuery(document).ready(function() {
             "August", "September", "Oktober", "November", "Dezember"],
         monthNamesShort: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul",
             "Aug", "Sep", "Okt", "Nov", "Dez"],
-        
+
         dateFormat: "DD, d. M yy",
-        
+
         onSelect: function(dateText, inst)  {
             var date = jQuery.datepicker.parseDate(
-                jQuery(this).datepicker("option", "dateFormat"), 
+                jQuery(this).datepicker("option", "dateFormat"),
                 dateText,
                 {
                     dayNamesMin: jQuery(this).datepicker("option", "dayNamesMin"),
@@ -79,20 +81,20 @@ jQuery(document).ready(function() {
             );
         });
     }
-    
+
     jQuery('.eventkrake_lookforaddress').click(function() {
         Eventkrake.Geo.getLatLng(
             jQuery("#" + Eventkrake.Admin.addressId).val(),
             Eventkrake.Admin.loadNewAddressForLocation
         );
     });
-    
+
     jQuery('#' + Eventkrake.Admin.recId).click(function() {
         jQuery("#" + Eventkrake.Admin.addressId).val(
             jQuery(this).text()
         );
     });
-    
+
     // Link bei Events zu "Ort bearbeiten"
     jQuery("#eventkrake_locationid_wordpress_edit_location").click(function() {
         var locationId = jQuery("select[name='eventkrake_locationid_wordpress']").val();
@@ -101,7 +103,7 @@ jQuery(document).ready(function() {
         }
         return false;
     });
-    
+
     // suggested categories
     jQuery(".eventkrake-cat-suggestion").click(function() {
         var categories = jQuery("[name='eventkrake_categories']")
@@ -114,6 +116,14 @@ jQuery(document).ready(function() {
         newCategories.push(jQuery(this).text());
         jQuery("[name='eventkrake_categories']").val(newCategories.join(", "));
     });
+
+    // add new link in meta
+    jQuery(".eventkrake-add-link").click(function(e) {
+        e.preventDefault();
+        jQuery(".eventkrake-links-template").clone()
+                .removeClass("eventkrake-links-template eventkrake-hide")
+                .insertBefore(jQuery(this).parent());
+    });
 });
 
 var Eventkrake = Eventkrake || {};
@@ -123,7 +133,7 @@ Eventkrake.Admin = {
     recId: "eventkrake_rec",
     latId: "eventkrake_lat",
     lngId: "eventkrake_lng",
-    
+
     /** @ignore */
     map: null,
 
@@ -134,7 +144,7 @@ Eventkrake.Admin = {
     imageId: 0,
 
     /** Ändere Karte, Adresstext und LatLng. */
-    loadNewAddressForLocation: function(gLatLng, address) {        
+    loadNewAddressForLocation: function(gLatLng, address) {
         if(gLatLng === false) {
             jQuery("#" + Eventkrake.Admin.recId).empty().append(address);
             return;
@@ -161,12 +171,12 @@ Eventkrake.Admin = {
             action: 'getlocations',
             location_search: words,
             limit: 100
-        };		
+        };
         jQuery.getJSON(url, params, function(data) {
             var sel = "#location_" + id;
             jQuery(sel).find("option").not(".fixed").remove();
             for(var key in data) {
-                jQuery(sel).append("<option value='" + data[key].id + "'>" + 
+                jQuery(sel).append("<option value='" + data[key].id + "'>" +
                     data[key].name + " (" + data[key].address + ")</option>");
             }
         });
@@ -195,7 +205,7 @@ Eventkrake.Admin = {
     /** Gibt Infos zu einem Ort in einem DIV aus
      * @param {String} url Die Webservice-URL.
      * @param {Number} locationId Die Id des Ortes.
-     * @param {Object} div Das Element, wo die Daten abgelegt werden. Dazu wird 
+     * @param {Object} div Das Element, wo die Daten abgelegt werden. Dazu wird
      *      jedes Element mit dem Attribut data-info="{Wert}" mit dem
      *      entsprechenden {Wert} befüllt.
      */
@@ -203,7 +213,7 @@ Eventkrake.Admin = {
         var params = {
             action: 'getlocation',
             location_id: locationId
-        };		
+        };
         jQuery.getJSON(url, params, function(location) {
             if(typeof location !== "object") return;
             jQuery(elem).find("[data-info]").each(function() {
