@@ -106,7 +106,7 @@ add_action('wp_enqueue_scripts', function() {
 
 /***** Custom Post Types *****/
 
-/* Locations anlegen */
+/* LOCATIONS */
 add_action('init', function () {
     register_post_type('eventkrake_location', array(
         'public' => true,
@@ -161,12 +161,12 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
     if (wp_is_post_revision($post_id)) return;
 
     // check POST-fields
-    $name = $_POST['post_title'];
-    $text = $_POST['post_content'];
     $lat = $_POST['eventkrake_lat'];
     $lng = $_POST['eventkrake_lng'];
     $address = $_POST['eventkrake_address'];
-
+    $tags = $_POST['eventkrake_tags'];
+    
+    // links
     $linksKeys = $_POST['eventkrake-links-key'];
     $linksValues = $_POST['eventkrake-links-value'];
     $linksArray = [];
@@ -178,6 +178,7 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
     }
     $links = json_encode($linksArray);
 
+    // categories
     $categories = array();
     if(isset($_POST['eventkrake_categories'])) {
         $cats = explode(",", $_POST['eventkrake_categories']);
@@ -186,7 +187,6 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
             if(strlen($c) > 0) $categories[] = $c;
         }
     }
-    $tags = $_POST['eventkrake_tags'];
 
     // save fields
     Eventkrake::setSinglePostMeta($post_id, 'lat', $lat);
@@ -197,7 +197,8 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
     Eventkrake::setPostMeta($post_id, 'categories', $categories);
 }, 1, 2);
 
-/* Veranstaltungen anlegen */
+
+/* EVENTS */
 add_action('init', function () {
     register_post_type('eventkrake_event', array(
         'public' => true,
@@ -206,14 +207,17 @@ add_action('init', function () {
             'name' => __('Veranstaltungen', 'g4rf_eventkrake2'),
             'singular_name' => __('Veranstaltung', 'g4rf_eventkrake2'),
             'add_new' => __('Veranstaltung anlegen', 'g4rf_eventkrake2'),
-            'add_new_item' => __('Neue Veranstaltung anlegen', 'g4rf_eventkrake2'),
+            'add_new_item' =>
+                __('Neue Veranstaltung anlegen', 'g4rf_eventkrake2'),
             'edit' => __('Veranstaltung ändern', 'g4rf_eventkrake2'),
             'edit_item' => __('Veranstaltung ändern', 'g4rf_eventkrake2'),
             'new_item' => __('Veranstaltung anlegen', 'g4rf_eventkrake2'),
             'view' => __('Veranstaltung ansehen', 'g4rf_eventkrake2'),
             'search_items' => __('Veranstaltung suchen', 'g4rf_eventkrake2'),
-            'not_found' => __('Keine Veranstaltungen gefunden', 'g4rf_eventkrake2'),
-            'not_found_in_trash' => __('Keine gelöschten Veranstaltungen', 'g4rf_eventkrake2')
+            'not_found' => 
+                __('Keine Veranstaltungen gefunden', 'g4rf_eventkrake2'),
+            'not_found_in_trash' =>
+                __('Keine gelöschten Veranstaltungen', 'g4rf_eventkrake2')
         ),
         'rewrite' => array('slug' => 'event'),
         'menu_position' => Eventkrake::getNextMenuPosition(),
@@ -250,19 +254,32 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     // If this is just a revision, do nothing.
     if (wp_is_post_revision($post_id)) return;
 
-    // check POST-fields
-    $title = $_POST['post_title'];
-    $text = $_POST['post_content'];
-    $excerpt = $_POST['post_excerpt'];
+    // check POST fields
     $tags = $_POST['eventkrake_tags'];
-    $dateStart = $_POST['eventkrake_startdate'] . 'T' .
-            $_POST['eventkrake_starthour'] . ':' .
-            $_POST['eventkrake_startminute'] . ':00';
-    $dateEnd = $_POST['eventkrake_enddate'] . 'T' .
-            $_POST['eventkrake_endhour'] . ':' .
-            $_POST['eventkrake_endminute'] . ':00';
-    $website = empty($_POST['eventkrake_website']) ?
-            get_permalink($post_id) : $_POST['eventkrake_website'];
+
+    // times
+    for($i = 1; $i < count($_POST['eventkrake_startdate']); $i++) {
+        $datesStart[] = $_POST['eventkrake_startdate'][$i] . 'T' .
+            $_POST['eventkrake_starthour'][$i] . ':' .
+            $_POST['eventkrake_startminute'][$i] . ':00';
+        $datesEnd[] = $_POST['eventkrake_enddate'][$i] . 'T' .
+            $_POST['eventkrake_endhour'][$i] . ':' .
+            $_POST['eventkrake_endminute'][$i] . ':00';
+    }
+    
+    // links
+    $linksKeys = $_POST['eventkrake-links-key'];
+    $linksValues = $_POST['eventkrake-links-value'];
+    $linksArray = [];
+    for($i = 0; $i < count($linksKeys); $i++) {
+        if(empty($linksKeys[$i])) continue;
+        if(empty($linksValues[$i])) continue;
+
+        $linksArray[$linksKeys[$i]] = $linksValues[$i];
+    }
+    $links = json_encode($linksArray);
+    
+    // categories
     $categories = array();
     if(isset($_POST['eventkrake_categories'])) {
         $cats = explode(",", $_POST['eventkrake_categories']);
@@ -271,19 +288,12 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
             if(strlen($c) > 0) $categories[] = $c;
         }
     }
-    $festival = isset($_POST['eventkrake_festival']) ?
-        $_POST['eventkrake_festival'] : 0;
-    // location ID, jeweils Wordpress _und_ Eventkrake
-    $locationIdWordpress = 0;
-    $locationIdEventkrake = 0;
-    if(isset($_POST['eventkrake_locationid_wordpress'])) {
-        $locationIdWordpress = $_POST['eventkrake_locationid_wordpress'];
-        if($locationIdWordpress != 0) {
-            $locationIdEventkrake = Eventkrake::getSinglePostMeta(
-                    $locationIdWordpress, 'id');
-        }
-    }
-    // Künstler*innen
+
+    // location id
+    $locationId = isset($_POST['eventkrake_locationid']) ?
+        $_POST['eventkrake_locationid'] : 0;
+    
+    // artists
     $artists = is_array($_POST['eventkrake_artists']) ?
             $_POST['eventkrake_artists'] : array();
     // delete the 0 value
@@ -292,44 +302,47 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     }
 
     // save fields
-    Eventkrake::setSinglePostMeta($post_id,
-            'locationid_wordpress', $locationIdWordpress);
-    Eventkrake::setSinglePostMeta($post_id,
-            'locationid_eventkrake', $locationIdEventkrake);
-    Eventkrake::setSinglePostMeta($post_id, 'start', $dateStart);
-    Eventkrake::setSinglePostMeta($post_id, 'end', $dateEnd);
+    Eventkrake::setSinglePostMeta($post_id, 'locationid_wordpress', $locationId);
+    
+    Eventkrake::setPostMeta($post_id, 'start', $datesStart);
+    Eventkrake::setPostMeta($post_id, 'end', $datesEnd);
+    
     Eventkrake::setSinglePostMeta($post_id, 'tags', $tags);
-    Eventkrake::setSinglePostMeta($post_id, 'website', $website);
+    Eventkrake::setSinglePostMeta($post_id, 'links', $links);
     Eventkrake::setPostMeta($post_id, 'categories', $categories);
-    Eventkrake::setSinglePostMeta($post_id, 'festival', $festival);
+
     Eventkrake::setPostMeta($post_id, 'artists', $artists);
 
 }, 1, 2);
 
-/* Künstlerinnen und Künstler */
+
+/* ARTISTS */
 add_action('init', function () {
     register_post_type('eventkrake_artist', array(
         'public' => true,
         'has_archive' => true,
         'labels' => array(
-            'name' => __('KünstlerInnen', 'g4rf_eventkrake2'),
-            'singular_name' => __('KünstlerIn', 'g4rf_eventkrake2'),
-            'add_new' => __('KünstlerIn hinzufügen', 'g4rf_eventkrake2'),
-            'add_new_item' => __('Neue KünstlerIn hinzufügen', 'g4rf_eventkrake2'),
-            'edit' => __('KünstlerIn bearbeiten', 'g4rf_eventkrake2'),
-            'edit_item' => __('KünstlerIn bearbeiten', 'g4rf_eventkrake2'),
-            'new_item' => __('KünstlerIn hinzufügen', 'g4rf_eventkrake2'),
-            'view' => __('KünstlerIn ansehen', 'g4rf_eventkrake2'),
-            'search_items' => __('KünstlerIn suchen', 'g4rf_eventkrake2'),
-            'not_found' => __('Keine KünstlerIn gefunden', 'g4rf_eventkrake2'),
-            'not_found_in_trash' => __('Keine gelöschten KünstlerInnen', 'g4rf_eventkrake2')
+            'name' => __('Künstler:innen', 'g4rf_eventkrake2'),
+            'singular_name' => __('Künstler:in', 'g4rf_eventkrake2'),
+            'add_new' => __('Künstler:in hinzufügen', 'g4rf_eventkrake2'),
+            'add_new_item' => 
+                    __('Neue Künstler:in hinzufügen', 'g4rf_eventkrake2'),
+            'edit' => __('Künstler:in bearbeiten', 'g4rf_eventkrake2'),
+            'edit_item' => __('Künstler:in bearbeiten', 'g4rf_eventkrake2'),
+            'new_item' => __('Künstler:in hinzufügen', 'g4rf_eventkrake2'),
+            'view' => __('Künstler:in ansehen', 'g4rf_eventkrake2'),
+            'search_items' => __('Künstler:in suchen', 'g4rf_eventkrake2'),
+            'not_found' => __('Keine Künstler:in gefunden', 'g4rf_eventkrake2'),
+            'not_found_in_trash' => 
+                    __('Keine gelöschten Künstler:innen', 'g4rf_eventkrake2')
         ),
         'rewrite' => array('slug' => 'artist'),
         'menu_position' => Eventkrake::getNextMenuPosition(),
         'menu_icon' => plugin_dir_url(__FILE__) . '/img/artist.png',
-        'description' => __('Künstlerinnen und Künstler sind Einzelpersonen oder'
-                . ' Gruppen.', 'g4rf_eventkrake2'),
-        'supports' => array('title', 'excerpt', 'revisions', 'editor', 'thumbnail'),
+        'description' => 
+                __('Künstler:innen sind Einzelpersonen oder
+                         Gruppen.', 'g4rf_eventkrake2'),
+        'supports' => array('title', 'excerpt', 'editor', 'thumbnail'),
         'register_meta_box_cb' => function() {
             // Metaboxen laden
             add_meta_box(
@@ -359,36 +372,35 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
     // If this is just a revision, do nothing.
     if (wp_is_post_revision($post_id)) return;
 
-    // check POST-fields
-    $artTypes = $_POST['art_types'];
+    // check POST fields
+    $tags = $_POST['eventkrake_tags'];
+    
+    // categories
+    $categories = array();
+    if(isset($_POST['eventkrake_categories'])) {
+        $cats = explode(",", $_POST['eventkrake_categories']);
+        foreach($cats as $c) {
+            $c = trim($c);
+            if(strlen($c) > 0) $categories[] = $c;
+        }
+    }
 
-    $linkNames = array(
-        $_POST['eventkrake_linknames0'],
-        $_POST['eventkrake_linknames1'],
-        $_POST['eventkrake_linknames2'],
-        $_POST['eventkrake_linknames3'],
-        $_POST['eventkrake_linknames4']
-    );
-    $linkUrls = array(
-        $_POST['eventkrake_linkurls0'],
-        $_POST['eventkrake_linkurls1'],
-        $_POST['eventkrake_linkurls2'],
-        $_POST['eventkrake_linkurls3'],
-        $_POST['eventkrake_linkurls4']
-    );
+    // links
+    $linksKeys = $_POST['eventkrake-links-key'];
+    $linksValues = $_POST['eventkrake-links-value'];
+    $linksArray = [];
+    for($i = 0; $i < count($linksKeys); $i++) {
+        if(empty($linksKeys[$i])) continue;
+        if(empty($linksValues[$i])) continue;
 
-    $origin = $_POST['eventkrake_origin'];
-
-    $festivals = filter_input(INPUT_POST, 'eventkrake_festivals',
-            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    if(! $festivals) $festivals = [];
+        $linksArray[$linksKeys[$i]] = $linksValues[$i];
+    }
+    $links = json_encode($linksArray);
 
     // save fields
-    Eventkrake::setPostMeta($post_id, 'artTypes', $artTypes);
-    Eventkrake::setPostMeta($post_id, 'linknames', $linkNames);
-    Eventkrake::setPostMeta($post_id, 'linkurls', $linkUrls);
-    Eventkrake::setSinglePostMeta($post_id, 'origin', $origin);
-    Eventkrake::setPostMeta($post_id, 'festivals', $festivals);
+    Eventkrake::setSinglePostMeta($post_id, 'tags', $tags);
+    Eventkrake::setPostMeta($post_id, 'categories', $categories);
+    Eventkrake::setSinglePostMeta($post_id, 'links', $links);
 }, 1, 2);
 
 

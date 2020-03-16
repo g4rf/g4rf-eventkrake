@@ -23,4 +23,16 @@
 #eventkrake_artist label {
   margin: 10px;
 }
-/*# sourceMappingURL=admin.css.map */
+.eventkrake-dates {
+  margin: 10px 0;
+}
+.eventkrake-dates .eventkrake-date-start,
+.eventkrake-dates .eventkrake-date-end,
+.eventkrake-dates .eventkrake-remove-date {
+  display: inline-block;
+}
+.eventkrake-dates .eventkrake-remove-date {
+  cursor: pointer;
+  margin-right: 10px;
+  text-decoration: none;
+}

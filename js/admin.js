@@ -1,35 +1,8 @@
 /* global Leaflet, google */
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function() {    
     /* Datepicker */
-    jQuery(".datepicker").datepicker({
-        dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag",
-            "Freitag", "Samstag"],
-        dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-        dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-        monthNames: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
-            "August", "September", "Oktober", "November", "Dezember"],
-        monthNamesShort: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul",
-            "Aug", "Sep", "Okt", "Nov", "Dez"],
-
-        dateFormat: "DD, d. M yy",
-
-        onSelect: function(dateText, inst)  {
-            var date = jQuery.datepicker.parseDate(
-                jQuery(this).datepicker("option", "dateFormat"),
-                dateText,
-                {
-                    dayNamesMin: jQuery(this).datepicker("option", "dayNamesMin"),
-                    dayNamesShort: jQuery(this).datepicker("option", "dayNamesShort"),
-                    dayNames: jQuery(this).datepicker("option", "dayNames"),
-                    monthNamesShort: jQuery(this).datepicker("option", "monthNamesShort"),
-                    monthNames: jQuery(this).datepicker("option", "monthNames")
-                }
-            );
-            var id = jQuery(this).data('id');
-            jQuery("#"+id).val(jQuery.datepicker.formatDate("yy-mm-dd", date));
-        }
-    });
+    Eventkrake.Admin.loadDatepicker(".datepicker:visible");
 
     /* Ort suchen */
     /*jQuery('input[name="addressfinder"]').keydown(function(event) {
@@ -123,6 +96,22 @@ jQuery(document).ready(function() {
         jQuery(".eventkrake-links-template").clone()
                 .removeClass("eventkrake-links-template eventkrake-hide")
                 .insertBefore(jQuery(this).parent());
+    });
+    
+    // add new time on events
+    jQuery(".eventkrake-add-time").click(function(e) {
+        e.preventDefault();
+        var dates = jQuery(".eventkrake-template.eventkrake-dates").clone()
+                .removeClass("eventkrake-template")
+                .insertBefore(jQuery(this).parent());
+        console.log(jQuery(".datepicker", dates));
+        Eventkrake.Admin.loadDatepicker(jQuery(".datepicker", dates));
+    });
+    
+    // remove time on events
+    jQuery("body").on("click", ".eventkrake-remove-date", function(e) {
+        e.preventDefault();
+        jQuery(this).parent().remove();
     });
 });
 
@@ -225,4 +214,38 @@ Eventkrake.Admin = {
             });
         });
     }*/
+    
+    loadDatepicker: function(selector) {
+        jQuery(selector).datepicker({
+            dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag",
+                "Freitag", "Samstag"],
+            dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+            dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+            monthNames: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
+                "August", "September", "Oktober", "November", "Dezember"],
+            monthNamesShort: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul",
+                "Aug", "Sep", "Okt", "Nov", "Dez"],
+
+            dateFormat: "DD, d. M yy",
+
+            onSelect: function(dateText, inst)  {
+                var date = jQuery.datepicker.parseDate(
+                    jQuery(this).datepicker("option", "dateFormat"),
+                    dateText,
+                    {
+                        dayNamesMin: jQuery(this).datepicker("option", "dayNamesMin"),
+                        dayNamesShort: jQuery(this).datepicker("option", "dayNamesShort"),
+                        dayNames: jQuery(this).datepicker("option", "dayNames"),
+                        monthNamesShort: jQuery(this).datepicker("option", "monthNamesShort"),
+                        monthNames: jQuery(this).datepicker("option", "monthNames")
+                    }
+                );
+        
+                // save date machine readable
+                var machineDate = jQuery(".eventkrake-machine-date", 
+                                                    jQuery(this).parent());
+                machineDate.val(jQuery.datepicker.formatDate("yy-mm-dd", date));
+            }
+        });
+    }
 };

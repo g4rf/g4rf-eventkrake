@@ -162,14 +162,34 @@ class Eventkrake {
      * @return array Ein Array von Event-Kategorien.
      */
     public static function getCategories() {
-        $standard = ['Dating', 'Führung & Vortrag', 'Konzert',
-            'Karneval & Fasching', 'Messe', 'Party & Feier', 'Theater & Bühne',
-            'Kinder', 'Ausstellung & Lesung', 'Markt', 'Volksfest',
-            'Freizeit & Ausflug', 'Gesundheit', 'Klassik & Opern',
-            'Kurse & Seminare', 'Musicals & Shows', 'Sport', 'Kino',
-            'Bar & Kneipe', 'Restaurant & Buffett', 'Diskussion & Podium', 'DJ',
-            'Tanz', 'Sonstiges', 'Akrobatik & Jonglage'];
-        return $standard;
+        global $wpdb;
+        
+        $categories = [
+            'Dating' => 0, 'Führung & Vortrag' => 0, 'Konzert' => 0,
+            'Karneval & Fasching' => 0, 'Messe' => 0, 'Party & Feier' => 0,
+            'Theater & Bühne' => 0, 'Kinder' => 0, 'Ausstellung & Lesung' => 0,
+            'Markt' => 0, 'Volksfest' => 0, 'Freizeit & Ausflug' => 0,
+            'Gesundheit' => 0, 'Klassik & Opern' => 0, 'Kurse & Seminare' => 0,
+            'Musicals & Shows' => 0, 'Sport' => 0, 'Kino' => 0, 
+            'Bar & Kneipe' => 0, 'Restaurant & Buffett' => 0, 
+            'Diskussion & Podium' => 0, 'DJ' => 0, 'Tanz' => 0,
+            'Sonstiges' => 0, 'Zirkus, Akrobatik & Jonglage' => 0];
+        
+        $usedCategories = $wpdb->get_col($wpdb->prepare(
+            "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = %s",
+                'eventkrake_categories'));
+                
+        foreach($usedCategories as $u) {
+            if(isset($categories[$u])) {
+                $categories[$u]++;
+            } else {
+                $categories[$u] = 1;
+            }
+        }
+        
+        natsort($categories);
+        
+        return array_reverse(array_keys($categories));
     }
 
     /**
@@ -211,6 +231,46 @@ class Eventkrake {
         return false;
     }
 
+    public static function printDatePeriodPicker($startDate, $endDate,
+            $classes = '', $removable = true) {
+        ?>
+        <div class="eventkrake-dates <?=$classes?>">
+            
+            <?php if($removable) { ?>
+                <a class="eventkrake-remove-date"
+                   title="<?=__('Zeit entfernen', 'g4rf_eventkrake2')?>">❌</a>
+            <?php } ?>
+            
+            <div class="eventkrake-date-start">
+                <input class="eventkrake-machine-date" name="eventkrake_startdate[]"
+                    value="<?=$startDate->format('Y-m-d')?>" type="hidden" />
+                <input type="text"
+                    value="<?=strftime('%A, %d. %B %Y', $startDate->format('U'))?>"
+                    class="datepicker" readonly="readonly" /><?php        
+                Eventkrake::printTimePicker(
+                    'eventkrake_starthour[]', 'eventkrake_startminute[]',
+                    $startDate->format('H'), $startDate->format('i'));
+                ?>
+            </div>
+            
+            <div class="eventkrake-date-end">
+                <span class="eventkrake-bold"><?=
+                        __('bis', 'g4rf_eventkrake2')?></span>
+                <input class="eventkrake-machine-date" name="eventkrake_enddate[]"
+                    value="<?=$endDate->format('Y-m-d')?>" type="hidden" />
+                <input type="text"
+                    value="<?=strftime('%A, %d. %B %Y', $endDate->format('U'))?>"
+                    class="datepicker" readonly="readonly" /><?php        
+                Eventkrake::printTimePicker(
+                    'eventkrake_endhour[]', 'eventkrake_endminute[]',
+                    $endDate->format('H'), $endDate->format('i'));
+                ?>
+            </div>
+            
+        </div>
+        <?php
+    }
+    
     /**
      * Erzeugt einen Timepicker.
      * @param string $nameHour Der Formular-Name der Stundenauswahl.
@@ -218,7 +278,8 @@ class Eventkrake {
      * @param int $selHour Die selektierte Stunde.
      * @param int $selMin Die selektierte Minute.
      */
-    public static function printTimePicker($nameHour, $nameMin, $selHour = 0, $selMin = 0) { ?>
+    public static function printTimePicker($nameHour, $nameMin, $selHour = 0, 
+            $selMin = 0) { ?>
         <select style="min-width:auto" name="<?=$nameHour?>"><?php
             for($i = 0; $i < 24; $i++) {
                 $h = substr("0$i", -2); ?>
@@ -233,7 +294,7 @@ class Eventkrake {
                     <?=$m?>
                 </option>
             <?php } ?>
-        </select>&nbsp;Uhr
+        </select>
     <?php }
 
     /**

@@ -20,7 +20,8 @@
   height: 250px;
 }
 .eventkrake_hide,
-.eventkrake-hide {
+.eventkrake-hide,
+.eventkrake-template {
   display: none !important;
 }
 .eventkrake_center {
@@ -38,4 +39,3 @@
 .eventkrake_formselect {
   width: 25em;
 }
-/*# sourceMappingURL=all.css.map */

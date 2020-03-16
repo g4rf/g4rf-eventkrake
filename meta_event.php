@@ -2,39 +2,28 @@
 
 global $post;
 
-// wir können nichts in der Eventkrake speichern
-if(! Eventkrake::verifyApiKey()) { 
-    Eventkrake::printMessage(__('Die Daten werden nicht mit der Eventkrake'
-        . ' synchronisiert. Hinterlege dafür bitte eine'
-        . ' <a href="options-general.php?page=eventkrake_settings">korrekte'
-        . ' E-Mail-Adresse und einen korrekten Schlüssel</a>.', 'g4rf_eventkrake2'),
-        true); 
-}
-
-// evtl. Post Messages ausgeben
-Eventkrake::printPostMessages($post->ID);
 ?>
 
 <?php // damit WP nur Änderungen vom Edit-Screen durchführt ?>
 <input type="hidden" name="eventkrake_on_edit_screen" />
 
-<?php // EventID für die API ?>
-<input type="hidden" name="eventkrake_id" 
-    value="<?=Eventkrake::getSinglePostMeta($post->ID, 'id')?>" />
-
 <table class="form-table">
 <tr>
+    
     <th><?=__('Der Ort der Veranstaltung', 'g4rf_eventkrake2')?></th>
     <td>
-        <select class="eventkrake_formselect" name="eventkrake_locationid_wordpress">
+        <select class="eventkrake_formselect" name="eventkrake_locationid">
             <option value="0">---</option>
             <?php
                 $locations = Eventkrake::getLocations(false);
-                $postLocationIdWordpress = Eventkrake::getSinglePostMeta($post->ID, 'locationid_wordpress');
+                $postLocationId = Eventkrake::getSinglePostMeta(
+                                            $post->ID, 'locationid_wordpress');
                 foreach($locations as $l) {
                     ?><option value='<?=$l->ID?>'<?php
-                        ?><?=$l->ID == $postLocationIdWordpress ? ' selected' : '' ?><?php
-                        ?>><?=get_the_title($l->ID)?> (<?=Eventkrake::getSinglePostMeta($l->ID, 'address')?>)<?php
+                        ?><?=$l->ID == $postLocationId ? ' selected' : '' ?>><?=
+                            get_the_title($l->ID)?> (<?=
+                            Eventkrake::getSinglePostMeta($l->ID, 'address')
+                        ?>)<?php
                     ?></option><?php
                 } ?>
         </select>
@@ -43,64 +32,58 @@ Eventkrake::printPostMessages($post->ID);
             <?=__('Ort bearbeiten', 'g4rf_eventkrake2')?>
         </a><br />
         <span class="description"><?php
-_e('Wähle einen Ort für die Veranstaltung aus. Unter'
-. ' <a href="edit.php?post_type=eventkrake_location">Orte</a> kannst Du'
-. ' <a href="post-new.php?post_type=eventkrake_location">neue Orte anlegen</a>.',
+_e('Wähle einen Ort für die Veranstaltung aus. Unter
+    <a href="edit.php?post_type=eventkrake_location">Orte</a> kannst Du
+    <a href="post-new.php?post_type=eventkrake_location">neue Orte anlegen</a>.',
         'g4rf_eventkrake2');
         ?></span>
     </td>
-</tr><tr>
-    <th><?=__('Start der Veranstaltung', 'g4rf_eventkrake2')?></th>
-    <td><?php
-        $startdate = Eventkrake::getSinglePostMeta($post->ID, 'start');
-        try {
-            $startdate = new DateTime($startdate);
-        } catch (Exception $ex) {
-            $startdate = new DateTime();
-            $startdate->setTime($startdate->format('H'), 0);
-        }
-        ?>
-        <input id="eventkrake-startdate" name="eventkrake_startdate"
-               value="<?=$startdate->format('Y-m-d')?>" type="hidden" />
-        <input data-id="eventkrake-startdate" type="text"
-               value="<?=strftime('%A, %d. %B %Y', $startdate->format('U'))?>"
-               class="datepicker" readonly="readonly" /><?php
-        Eventkrake::printTimePicker(
-                'eventkrake_starthour', 'eventkrake_startminute',
-                $startdate->format('H'), $startdate->format('i'));
-        ?><br /><span class="description">
-            <?=__('Startdatum und -zeit der Veranstaltung.', 'g4rf_eventkrake2')?>
-        </span>        
-    </td>
-</tr><tr>
-    <th><?=__('Ende der Veranstaltung', 'g4rf_eventkrake2')?></th>
-    <td><?php
-        $enddate = Eventkrake::getSinglePostMeta($post->ID, 'end');            
-        try {
-            $enddate = new DateTime($enddate);
-        } catch (Exception $ex) {
-            $enddate = new DateTime();
-            $enddate->setTime($enddate->format('H') + 2, 0);
-        }
-        ?>
-        <input id="eventkrake-enddate" name="eventkrake_enddate"
-               value="<?=$enddate->format('Y-m-d')?>" type="hidden" />
-        <input data-id="eventkrake-enddate" type="text"
-               value="<?=strftime('%A, %d. %B %Y', $enddate->format('U'))?>"
-               class="datepicker" readonly="readonly" /><?php
-        Eventkrake::printTimePicker(
-                'eventkrake_endhour', 'eventkrake_endminute',
-                $enddate->format('H'), $enddate->format('i'));
-        ?><br /><span class="description">
-            <?=__('Schlussdatum und -zeit der Veranstaltung.', 'g4rf_eventkrake2')?>
-        </span>        
-    </td>
 </tr>
+</table>
 
+<hr />
+
+<table class="form-table"><tr>
+   
+<th><?=__('Zeiten', 'g4rf_eventkrake2')?></th>
+    
+<td>
+
+    <?php // template
+    $templateDate = new DateTime();
+    $templateDate->setTime(12, 0, 0);
+    
+    Eventkrake::printDatePeriodPicker($templateDate, $templateDate,
+            'eventkrake-template');
+    ?>
+        
+    <?php // dates
+    $startDates = Eventkrake::getPostMeta($post->ID, 'start');
+    $endDates = Eventkrake::getPostMeta($post->ID, 'end');
+    
+    for($i = 0; $i < count($startDates); $i++) {
+        $startDate = new DateTime($startDates[$i]);
+        $endDate = new DateTime($endDates[$i]);
+        
+        Eventkrake::printDatePeriodPicker($startDate, $endDate);
+    }
+    ?>
+    
+    <div>
+        <hr />
+        <input type="button" class="eventkrake-add-time"
+            value="<?=__('Zeit hinzufügen', 'g4rf_eventkrake2')?>" />
+    </div>
+</td></tr></table>
+
+<hr />
+
+<table class="form-table">
 <tr>
-    <th><?=__('Teilnehmende KünstlerInnen', 'g4rf_eventkrake2')?></th>
+    <th><?=__('Teilnehmende Künstler:innen', 'g4rf_eventkrake2')?></th>
     <td>
-        <select class="eventkrake_formselect" name="eventkrake_artists[]" size="5" multiple>
+        <select class="eventkrake_formselect" name="eventkrake_artists[]" 
+                size="5" multiple>
             <option value="0">-- <?=__('keine', 'g4rf_eventkrake2')?> --</option>
             <?php
                 $artists = Eventkrake::getArtists(false);
@@ -120,18 +103,9 @@ _e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
     </td>
 </tr>
 
+
 <tr>
-    <th><?=__('Eine Webseite zur Veranstaltung', 'g4rf_eventkrake2')?></th>
-    <td>
-        <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'website')?>" 
-            type="text" name="eventkrake_website" class="regular-text" /><br />
-        <span class="description">
-            <?=__('Eine Webseite, die nähere Infos über die Veranstaltung enthält. Falls'
-                    . ' Du hier nichts eingibst, wird der Permalink des Posts'
-                    . ' verwendet.', 'g4rf_eventkrake2')?>
-        </span>
-    </td>
-</tr><tr>
+    
     <th><?=__('Die Kategorien', 'g4rf_eventkrake2')?></th>
     <td>
         <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
@@ -141,41 +115,59 @@ _e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
             _e('Notiere hier mit Komma getrennt Kategorien, z.B.:',
                 'g4rf_eventkrake2');
             ?><br /><?php
-            $apiCategories = Eventkrake::getCategories();
-            foreach($apiCategories as $c) {
+            foreach(Eventkrake::getCategories() as $c) {
                 ?><span class="eventkrake-cat-suggestion"><?=
-                    $c->category
+                    $c
                 ?></span><?php
             }
         ?></span>
     </td>
+    
 </tr><tr>
-    <th><?=__('Festival, zu dem die Veranstaltung gehört', 'g4rf_eventkrake2')?></th>
-    <td>
-        <?php Eventkrake::getFestivals() ?>
-        <select class="eventkrake_formselect" name="eventkrake_festival">
-            <option value="0">---</option>
-            <?php
-                $postFestival = Eventkrake::getSinglePostMeta($post->ID, 'festival');
-                foreach(Eventkrake::getFestivals() as $f) {
-                    $fStart = new DateTime($f->date_start);
-                    $fEnd = new DateTime($f->date_end);
-                    ?><option value='<?=$f->id?>'<?php
-                        ?><?=$f->id == $postFestival ? ' selected' : '' ?><?php
-                        ?>><?=$f->long_title?> (<?=$fStart->format('d.m.Y')?> - <?=$fEnd->format('d.m.Y')?>)<?php
-                    ?></option><?php
-                } ?>
-        </select><br />
-        <span class="description"><?php
-_e('Wenn die Veranstaltung Teil eines Festivals ist, kannst Du hier das ensprechende
-    Festival auswählen.<br />
-    Nur berechtigte Personen haben Zugriff auf Festivals. Wenn Du selbst ein
-    Festival erstellen willst, frage
-    <a target="_new" href="http://eventkrake.de/support/festival">hier</a> nach.',
-    'g4rf_eventkrake2');
-        ?></span>
+    
+    <th><?=__('Links zur Veranstaltung', 'g4rf_eventkrake2')?></th>
+    <td class="eventkrake-flexcol">
+        <div>
+            <span class="description"><?=
+                __('Gebe Weblinks zur Webseite und sozialen Netzwerken an.',
+                    'g4rf_eventkrake2')
+            ?></span>
+        </div>
+        
+        <div class="eventkrake-links-template eventkrake-hide">
+            <input value="" type="text" name="eventkrake-links-key[]"
+                   class="regular-text" placeholder="Name des Links" />
+            <input type="text" name="eventkrake-links-value[]"
+                   class="regular-text" value="https://" />
+        </div><?php
+
+        $links = json_decode(Eventkrake::getSinglePostMeta($post->ID, 'links'), true);
+        if(empty($links)) { // no links yet ?>
+            <div>
+                <input value="" type="text" name="eventkrake-links-key[]"
+                       class="regular-text" placeholder="Name des Links" />
+                <input type="text" name="eventkrake-links-value[]"
+                       class="regular-text" value="https://" />
+            </div>
+
+        <?php } else {
+            foreach($links as $key => $value) { // show links ?>
+                <div>
+                    <input type="text" name="eventkrake-links-key[]"
+                           class="regular-text"
+                           value="<?=htmlspecialchars($key)?>" />
+                    <input type="text" name="eventkrake-links-value[]"
+                           class="regular-text"
+                           value="<?=htmlspecialchars($value)?>" />
+                </div>
+            <?php }
+        } ?>
+        <div><input type="button" class="eventkrake-add-link"
+            value="<?=__('Weblink hinzufügen', 'g4rf_eventkrake2')?>" /></div>
     </td>
+    
 </tr><tr>
+    
     <th><?=__('Zusatzinfos zur Veranstaltung', 'g4rf_eventkrake2')?></th>
     <td>
         <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>" 
@@ -186,4 +178,5 @@ _e('Wenn die Veranstaltung Teil eines Festivals ist, kannst Du hier das ensprech
                     . ' jedoch nicht angezeigt werden.', 'g4rf_eventkrake2')?>
         </span>
     </td>
+    
 </tr></table>
