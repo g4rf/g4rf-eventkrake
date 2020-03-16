@@ -7,7 +7,7 @@ Author: Jan Kossick
 Version: 3.0beta
 License: CC-BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: http://jankossick.de
-Min WP Version: 3.7
+Min WP Version: 5.3
 Text Domain: g4rf_eventkrake2
 */
 
@@ -15,6 +15,22 @@ Text Domain: g4rf_eventkrake2
 setlocale(LC_TIME, get_locale());
 add_theme_support('post-thumbnails'); // Bilder anlegen
 require_once 'Eventkrake.php';
+
+
+/***** convert from 2 to 3 *****/
+
+// copy locationid_wordpress to locationid
+/*$locationIds = $wpdb->get_results($wpdb->prepare(
+    "SELECT post_id,meta_value FROM $wpdb->postmeta WHERE meta_key = %s",
+        'eventkrake_locationid_wordpress'));
+foreach($locationIds as $l) {
+    $wpdb->insert($wpdb->postmeta, [
+        'post_id' => $l->post_id,
+        'meta_value' => $l->meta_value,
+        'meta_key' => 'eventkrake_locationid'
+    ]);
+}*/
+//print "<pre>"; print_r($locationIds); die();
 
 
 /***** Session-Funktionalität (CAPTCHA etc.) *****/
@@ -165,7 +181,7 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
     $lng = $_POST['eventkrake_lng'];
     $address = $_POST['eventkrake_address'];
     $tags = $_POST['eventkrake_tags'];
-    
+
     // links
     $linksKeys = $_POST['eventkrake-links-key'];
     $linksValues = $_POST['eventkrake-links-value'];
@@ -214,7 +230,7 @@ add_action('init', function () {
             'new_item' => __('Veranstaltung anlegen', 'g4rf_eventkrake2'),
             'view' => __('Veranstaltung ansehen', 'g4rf_eventkrake2'),
             'search_items' => __('Veranstaltung suchen', 'g4rf_eventkrake2'),
-            'not_found' => 
+            'not_found' =>
                 __('Keine Veranstaltungen gefunden', 'g4rf_eventkrake2'),
             'not_found_in_trash' =>
                 __('Keine gelöschten Veranstaltungen', 'g4rf_eventkrake2')
@@ -266,7 +282,7 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
             $_POST['eventkrake_endhour'][$i] . ':' .
             $_POST['eventkrake_endminute'][$i] . ':00';
     }
-    
+
     // links
     $linksKeys = $_POST['eventkrake-links-key'];
     $linksValues = $_POST['eventkrake-links-value'];
@@ -278,7 +294,7 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
         $linksArray[$linksKeys[$i]] = $linksValues[$i];
     }
     $links = json_encode($linksArray);
-    
+
     // categories
     $categories = array();
     if(isset($_POST['eventkrake_categories'])) {
@@ -292,7 +308,7 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     // location id
     $locationId = isset($_POST['eventkrake_locationid']) ?
         $_POST['eventkrake_locationid'] : 0;
-    
+
     // artists
     $artists = is_array($_POST['eventkrake_artists']) ?
             $_POST['eventkrake_artists'] : array();
@@ -302,11 +318,11 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     }
 
     // save fields
-    Eventkrake::setSinglePostMeta($post_id, 'locationid_wordpress', $locationId);
-    
+    Eventkrake::setSinglePostMeta($post_id, 'locationid', $locationId);
+
     Eventkrake::setPostMeta($post_id, 'start', $datesStart);
     Eventkrake::setPostMeta($post_id, 'end', $datesEnd);
-    
+
     Eventkrake::setSinglePostMeta($post_id, 'tags', $tags);
     Eventkrake::setSinglePostMeta($post_id, 'links', $links);
     Eventkrake::setPostMeta($post_id, 'categories', $categories);
@@ -325,7 +341,7 @@ add_action('init', function () {
             'name' => __('Künstler:innen', 'g4rf_eventkrake2'),
             'singular_name' => __('Künstler:in', 'g4rf_eventkrake2'),
             'add_new' => __('Künstler:in hinzufügen', 'g4rf_eventkrake2'),
-            'add_new_item' => 
+            'add_new_item' =>
                     __('Neue Künstler:in hinzufügen', 'g4rf_eventkrake2'),
             'edit' => __('Künstler:in bearbeiten', 'g4rf_eventkrake2'),
             'edit_item' => __('Künstler:in bearbeiten', 'g4rf_eventkrake2'),
@@ -333,13 +349,13 @@ add_action('init', function () {
             'view' => __('Künstler:in ansehen', 'g4rf_eventkrake2'),
             'search_items' => __('Künstler:in suchen', 'g4rf_eventkrake2'),
             'not_found' => __('Keine Künstler:in gefunden', 'g4rf_eventkrake2'),
-            'not_found_in_trash' => 
+            'not_found_in_trash' =>
                     __('Keine gelöschten Künstler:innen', 'g4rf_eventkrake2')
         ),
         'rewrite' => array('slug' => 'artist'),
         'menu_position' => Eventkrake::getNextMenuPosition(),
         'menu_icon' => plugin_dir_url(__FILE__) . '/img/artist.png',
-        'description' => 
+        'description' =>
                 __('Künstler:innen sind Einzelpersonen oder
                          Gruppen.', 'g4rf_eventkrake2'),
         'supports' => array('title', 'excerpt', 'editor', 'thumbnail'),
@@ -374,7 +390,7 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
 
     // check POST fields
     $tags = $_POST['eventkrake_tags'];
-    
+
     // categories
     $categories = array();
     if(isset($_POST['eventkrake_categories'])) {
@@ -572,8 +588,7 @@ function EventkrakeInputAjax() {
         ));
         if($eventId) {
             // location id
-            Eventkrake::setSinglePostMeta($eventId,
-                    'locationid_wordpress', $locationId);
+            Eventkrake::setSinglePostMeta($eventId, 'locationid', $locationId);
             // start
             $start = new DateTime($startDates[$i] . ' ' .
                     $startHours[$i] . ':' . $startMinutes[$i] . ':00');
@@ -618,3 +633,85 @@ function EventkrakeExitAjax($code, $data) {
     print json_encode($data);
 	wp_die();
 }
+
+
+/***** REST API for events, locations and artists *****/
+function eventkrake_restbuild_location($location) {
+    $id = $location->ID;
+    return [
+        'id' => $id,
+        'name' => $location->post_title,
+        'address' =>
+            Eventkrake::getSinglePostMeta($id, 'address'),
+        'lat' => Eventkrake::getSinglePostMeta($id, 'lat'),
+        'lng' => Eventkrake::getSinglePostMeta($id, 'lng'),
+        'text' => apply_filters('the_content',
+                                    $location->post_content),
+        'image' =>  get_the_post_thumbnail_url($id, 'full'),
+        'categories' => Eventkrake::getPostMeta($id, 'categories'),
+        'links' => json_decode(
+                        Eventkrake::getSinglePostMeta($id, 'links')),
+        'tags' => Eventkrake::getSinglePostMeta($id, 'tags')
+    ];
+}
+function eventkrake_restbuild_event($event) {
+    $id = $event->ID;
+    $events = [];
+    $startDates = Eventkrake::getPostMeta($id, 'start');
+    $endDates = Eventkrake::getPostMeta($id, 'end');
+
+    for($i = 0; $i < count($startDates); $i++) {
+        $events[] = [
+            'id' => $id,
+            'name' => $event->post_title,
+            'text' => apply_filters('the_content',
+                                        $event->post_content),
+            'image' =>  get_the_post_thumbnail_url($id, 'full'),
+            'locationid' => Eventkrake::getSinglePostMeta($id, 'locationid'),
+            'start' => $startDates[$i],
+            'end' => $endDates[$i],
+            'artists' => Eventkrake::getPostMeta($id, 'artists'),
+            'categories' => Eventkrake::getPostMeta($id, 'categories'),
+            'links' => json_decode(
+                            Eventkrake::getSinglePostMeta($id, 'links')),
+            'tags' => Eventkrake::getSinglePostMeta($id, 'tags')
+        ];
+    }
+    return $events;
+}
+
+function eventkrake_register_routes() {
+    $base = 'eventkrake/v3';
+
+    // GET locations
+    register_rest_route($base, '/locations', [
+        'methods'  => WP_REST_Server::READABLE,
+        'callback' => function() {
+            $data = [];
+            foreach(Eventkrake::getLocations() as $location) {
+                $data[$location->ID] = eventkrake_restbuild_location($location);
+            }
+            return $data;
+        }
+    ]);
+
+    // GET events
+    register_rest_route($base, '/events', [
+        'methods'  => WP_REST_Server::READABLE,
+        'callback' => function() {
+            $data = [];
+            foreach(Eventkrake::getAllEvents() as $event) {
+                $data = array_merge($data, eventkrake_restbuild_event($event));
+            }
+            usort($data, function($a, $b) {
+                $aDate = new DateTime($a['start']);
+                $bDate = new DateTime($b['start']);
+                if($aDate < $bDate) return -1;
+                if($aDate > $bDate) return 1;
+                return 0;
+            });
+            return $data;
+        }
+    ]);
+}
+add_action('rest_api_init', 'eventkrake_register_routes');

@@ -1,6 +1,6 @@
 /* global Leaflet, google */
 
-jQuery(document).ready(function() {    
+jQuery(document).ready(function() {
     /* Datepicker */
     Eventkrake.Admin.loadDatepicker(".datepicker:visible");
 
@@ -69,8 +69,8 @@ jQuery(document).ready(function() {
     });
 
     // Link bei Events zu "Ort bearbeiten"
-    jQuery("#eventkrake_locationid_wordpress_edit_location").click(function() {
-        var locationId = jQuery("select[name='eventkrake_locationid_wordpress']").val();
+    jQuery("#eventkrake_locationid_edit_location").click(function() {
+        var locationId = jQuery("select[name='eventkrake_locationid']").val();
         if(locationId > 0) {
             window.location.href = jQuery(this).data("url") + locationId;
         }
@@ -97,17 +97,16 @@ jQuery(document).ready(function() {
                 .removeClass("eventkrake-links-template eventkrake-hide")
                 .insertBefore(jQuery(this).parent());
     });
-    
+
     // add new time on events
     jQuery(".eventkrake-add-time").click(function(e) {
         e.preventDefault();
         var dates = jQuery(".eventkrake-template.eventkrake-dates").clone()
                 .removeClass("eventkrake-template")
                 .insertBefore(jQuery(this).parent());
-        console.log(jQuery(".datepicker", dates));
         Eventkrake.Admin.loadDatepicker(jQuery(".datepicker", dates));
     });
-    
+
     // remove time on events
     jQuery("body").on("click", ".eventkrake-remove-date", function(e) {
         e.preventDefault();
@@ -214,7 +213,7 @@ Eventkrake.Admin = {
             });
         });
     }*/
-    
+
     loadDatepicker: function(selector) {
         jQuery(selector).datepicker({
             dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag",
@@ -240,9 +239,9 @@ Eventkrake.Admin = {
                         monthNames: jQuery(this).datepicker("option", "monthNames")
                     }
                 );
-        
+
                 // save date machine readable
-                var machineDate = jQuery(".eventkrake-machine-date", 
+                var machineDate = jQuery(".eventkrake-machine-date",
                                                     jQuery(this).parent());
                 machineDate.val(jQuery.datepicker.formatDate("yy-mm-dd", date));
             }

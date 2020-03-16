@@ -55,7 +55,7 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
                     'g4rf_eventkrake2')
             ?></span>
         </div>
-        
+
         <div class="eventkrake-links-template eventkrake-hide">
             <input value="" type="text" name="eventkrake-links-key[]"
                    class="regular-text" placeholder="Name des Links" />
@@ -63,7 +63,8 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
                    class="regular-text" value="https://" />
         </div><?php
 
-        $links = json_decode(Eventkrake::getSinglePostMeta($post->ID, 'links'), true);
+        $links = json_decode(Eventkrake::getSinglePostMeta(
+                                                $post->ID, 'links'), true);
         if(empty($links)) { // no links yet ?>
             <div>
                 <input value="" type="text" name="eventkrake-links-key[]"

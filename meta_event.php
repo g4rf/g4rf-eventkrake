@@ -9,7 +9,7 @@ global $post;
 
 <table class="form-table">
 <tr>
-    
+
     <th><?=__('Der Ort der Veranstaltung', 'g4rf_eventkrake2')?></th>
     <td>
         <select class="eventkrake_formselect" name="eventkrake_locationid">
@@ -17,7 +17,7 @@ global $post;
             <?php
                 $locations = Eventkrake::getLocations(false);
                 $postLocationId = Eventkrake::getSinglePostMeta(
-                                            $post->ID, 'locationid_wordpress');
+                                            $post->ID, 'locationid');
                 foreach($locations as $l) {
                     ?><option value='<?=$l->ID?>'<?php
                         ?><?=$l->ID == $postLocationId ? ' selected' : '' ?>><?=
@@ -27,7 +27,7 @@ global $post;
                     ?></option><?php
                 } ?>
         </select>
-        <a id="eventkrake_locationid_wordpress_edit_location" href="#" 
+        <a id="eventkrake_locationid_edit_location" href="#"
            data-url="<?=site_url("wp-admin/post.php?action=edit&post=")?>">
             <?=__('Ort bearbeiten', 'g4rf_eventkrake2')?>
         </a><br />
@@ -44,31 +44,31 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter
 <hr />
 
 <table class="form-table"><tr>
-   
+
 <th><?=__('Zeiten', 'g4rf_eventkrake2')?></th>
-    
+
 <td>
 
     <?php // template
     $templateDate = new DateTime();
     $templateDate->setTime(12, 0, 0);
-    
+
     Eventkrake::printDatePeriodPicker($templateDate, $templateDate,
             'eventkrake-template');
     ?>
-        
+
     <?php // dates
     $startDates = Eventkrake::getPostMeta($post->ID, 'start');
     $endDates = Eventkrake::getPostMeta($post->ID, 'end');
-    
+
     for($i = 0; $i < count($startDates); $i++) {
         $startDate = new DateTime($startDates[$i]);
         $endDate = new DateTime($endDates[$i]);
-        
+
         Eventkrake::printDatePeriodPicker($startDate, $endDate);
     }
     ?>
-    
+
     <div>
         <hr />
         <input type="button" class="eventkrake-add-time"
@@ -82,7 +82,7 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter
 <tr>
     <th><?=__('Teilnehmende Künstler:innen', 'g4rf_eventkrake2')?></th>
     <td>
-        <select class="eventkrake_formselect" name="eventkrake_artists[]" 
+        <select class="eventkrake_formselect" name="eventkrake_artists[]"
                 size="5" multiple>
             <option value="0">-- <?=__('keine', 'g4rf_eventkrake2')?> --</option>
             <?php
@@ -92,11 +92,11 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter
                     ?><option value="<?=$a->ID?>"<?php
                     if(in_array($a->ID, $artistIds)) print ' selected';
                     ?>><?=get_the_title($a->ID)?></option><?php
-                } 
+                }
             ?>
         </select><br />
         <span class="description"><?php
-_e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung 
+_e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
     teilnehmen. Du kannst mit [STRG] mehrere Einträge auswählen.',
     'g4rf_eventkrake2');
        ?></span>
@@ -105,7 +105,7 @@ _e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
 
 
 <tr>
-    
+
     <th><?=__('Die Kategorien', 'g4rf_eventkrake2')?></th>
     <td>
         <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
@@ -122,9 +122,9 @@ _e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
             }
         ?></span>
     </td>
-    
+
 </tr><tr>
-    
+
     <th><?=__('Links zur Veranstaltung', 'g4rf_eventkrake2')?></th>
     <td class="eventkrake-flexcol">
         <div>
@@ -133,7 +133,7 @@ _e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
                     'g4rf_eventkrake2')
             ?></span>
         </div>
-        
+
         <div class="eventkrake-links-template eventkrake-hide">
             <input value="" type="text" name="eventkrake-links-key[]"
                    class="regular-text" placeholder="Name des Links" />
@@ -165,12 +165,12 @@ _e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
         <div><input type="button" class="eventkrake-add-link"
             value="<?=__('Weblink hinzufügen', 'g4rf_eventkrake2')?>" /></div>
     </td>
-    
+
 </tr><tr>
-    
+
     <th><?=__('Zusatzinfos zur Veranstaltung', 'g4rf_eventkrake2')?></th>
     <td>
-        <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>" 
+        <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
             type="text" name="eventkrake_tags" class="regular-text" /><br />
         <span class="description">
             <?=__('Ein Feld, das beliebige Infos zur Veranstaltung enthält. Die'
@@ -178,5 +178,5 @@ _e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
                     . ' jedoch nicht angezeigt werden.', 'g4rf_eventkrake2')?>
         </span>
     </td>
-    
+
 </tr></table>
