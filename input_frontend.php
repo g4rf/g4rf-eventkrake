@@ -42,27 +42,9 @@ if(!session_id()) {
                            name="location" size="10">
 <?php
     $locationId = filter_input(INPUT_GET, 'location');
-    $noLocations = true;
-    foreach(Eventkrake::getLocations(false) as $l) {
-        $events = Eventkrake::getEvents($l->ID, false);
-        // test if any events
-        if(! count($events)) continue;
-        // if festival, than show only, if festival events are present
-        $festivalEvents = true;
-        if(! empty($atts['festival'])) {
-            $festivalEvents = false;
-            foreach($events as $e) {
-                if($atts['festival'] ==
-                        Eventkrake::getSinglePostMeta($e->ID, 'festival')) {
-                    $festivalEvents = true;
-                    break;
-                }
-            }
-        }
-        if(! $festivalEvents) continue;
 
-        $noLocations = false;
-        if(! $locationId) $locationId = $l->ID;
+    foreach(Eventkrake::getLocations(false) as $l) {
+        if(! $locationId) $locationId = $l->ID; // if not as param use first location in list
 
         ?><option value="<?=$l->ID?>"
             <?=$l->ID == $locationId ? ' selected' : '' ?>><?=
@@ -71,7 +53,7 @@ if(!session_id()) {
     }
 ?></select></form>
 
-<?php if(! $noLocations) { ?>
+<?php if($locationId) { ?>
 
     <h3><?=__('Ort', 'g4rf_eventkrake2')?></h3>
     <?php // report changes for location
@@ -119,23 +101,32 @@ if(!session_id()) {
         <th>&nbsp;</th>
     </tr><?php
         foreach(Eventkrake::getEvents($locationId, false) as $e) {
-            if(! empty($atts['festival'])) {
-                if($atts['festival'] !=
-                        Eventkrake::getSinglePostMeta($e->ID, 'festival')) {
-                    continue;
-                }
+            try {
+                $attsStart = new DateTime($atts['startdate']);
+                $attsEnd = new DateTime($atts['enddate']);
+            } catch (Exception $ex) {
+                _e('Error: The value for startdate or enddate is wrong.', 'g4rf_eventkrake2');
+                break;
             }
+            $starts = Eventkrake::getPostMeta($e->ID, 'start');
+            $ends = Eventkrake::getPostMeta($e->ID, 'end');
+            $format = 'D,\&\n\b\s\p\;j.n.y,\&\n\b\s\p\;H:i';
+            $dates = [];
+            for($i = 0; $i < count($starts); $i++) {
+                $start = new DateTime($starts[$i]);
+                $end = new DateTime($ends[$i]);
+                if($start < $attsStart) continue;
+                if($start > $attsEnd) continue;
+
+                $dates[] = $start->format($format) . '&nbsp;-<br />' .
+                                                        $end->format($format);
+            }
+            if(count($dates) < 1) continue;
+
             ?><tr>
                 <!-- time -->
                 <td><?php
-                    $start = new DateTime(
-                            Eventkrake::getSinglePostMeta($e->ID, 'start'));
-                    print $start->format('D, j.n., H:i');
-                    print '&nbsp;' . __('Uhr', 'g4rf_eventkrake2') . ' -<br />';
-                    $end = new DateTime(
-                            Eventkrake::getSinglePostMeta($e->ID, 'end'));
-                    print $end->format('D, j.n., H:i');
-                    print '&nbsp;' . __('Uhr', 'g4rf_eventkrake2');
+                    print implode('<br />', $dates);
                 ?></td>
                 <!-- title -->
                 <td class="eventkrake-bold"><?=
@@ -169,7 +160,7 @@ if(!session_id()) {
 
 <?php } ?>
 
-    
+
 
 <!--/// add location and events ///-->
 
@@ -183,10 +174,6 @@ if(!session_id()) {
     </a>
 
     <input type="hidden" name="action" value="EventkrakeInputAjax" />
-    <?php if(! empty($atts['festival'])) { ?>
-        <input type="hidden" name="eventkrake-input-festival"
-               value="<?=$atts['festival']?>" />
-    <?php } ?>
 
     <div id="eventkrake-input-form-elements">
 

@@ -437,10 +437,9 @@ add_shortcode('eventkrake_input', function($attributes) {
     ob_start();
     $atts = shortcode_atts(array(
         'author' => 1,
-        'startdate' => date('Y-m-dTH:i'),
-        'enddate' => date('Y-m-dTH:i'),
+        'startdate' => date('Y-m-dTH:i:00'),
+        'enddate' => date('Y-m-dTH:i:00'),
         'dateformat' => 'd.m.Y H:i', //gibt nur Datum aus: get_option('date_format', 'd.m.Y H:i'),
-        'festival' => '',
         'email' => get_option('admin_email', ''),
         'lat' => '',
         'lng' => '',
@@ -528,8 +527,11 @@ function EventkrakeInputAjax() {
             Eventkrake::setSinglePostMeta($locationId,
                     'address', filter_input(INPUT_POST, 'eventkrake-address'));
             // website
-            Eventkrake::setSinglePostMeta($locationId,
-                    'website', filter_input(INPUT_POST, 'eventkrake-location-website'));
+            Eventkrake::setPostMeta($locationId,
+                    'website', [
+                        __('Webseite', 'g4rf_eventkrake2') =>
+                            filter_input(INPUT_POST, 'eventkrake-location-website')
+                    ]);
             // categories
             $categories = filter_input(INPUT_POST, 'eventkrake_location_categories');
             if($categories) {
@@ -541,11 +543,6 @@ function EventkrakeInputAjax() {
                     unset($c);
                 }
                 Eventkrake::setPostMeta($locationId, 'categories', $categories[$i]);
-            }
-            // festivals
-            if(! empty($_POST['eventkrake-input-festival'])) {
-                Eventkrake::setPostMeta($locationId, 'festivals',
-                        array(filter_input(INPUT_POST, 'eventkrake-input-festival')));
             }
             // tags
             Eventkrake::setSinglePostMeta($locationId,
@@ -596,8 +593,11 @@ function EventkrakeInputAjax() {
             );
             Eventkrake::setSinglePostMeta($eventId, 'end', $end->format('c'));
             // website
-            if(strlen($websites[$i]) > 0)
-                Eventkrake::setSinglePostMeta($eventId, 'website', $websites[$i]);
+            if(strlen($websites[$i]) > 0) {
+                Eventkrake::setPostMeta($eventId, 'website', [
+                    __('Webseite', 'g4rf_eventkrake2') => $websites[$i]
+                ]);
+            }
             // categories
             if(isset($categories[$i])) {
                 if(! is_array($categories[$i])) {
@@ -608,11 +608,6 @@ function EventkrakeInputAjax() {
                     unset($c);
                 }
                 Eventkrake::setPostMeta($eventId, 'categories', $categories[$i]);
-            }
-            // festival
-            if(! empty($_POST['eventkrake-input-festival'])) {
-                Eventkrake::setSinglePostMeta($eventId, 'festival',
-                        filter_input(INPUT_POST, 'eventkrake-input-festival'));
             }
             // tags
             Eventkrake::setSinglePostMeta($eventId,

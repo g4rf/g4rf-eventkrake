@@ -61,10 +61,9 @@ Der Shortcode versteht folgende Attribute:
 * **email** *string* Die E-Mail, an die Änderungsmeldungen geschickt werden. Default ist die im Wordpress hinterlegte Admin-E-Mail-Adresse.
 * **startdate** *ISO8601-Datum* Eine Zeitangabe, die den Defaultwert für den Start von Events angibt. Als Standard wird das aktuelle Datum und Uhrzeit verwendet.
 * **enddate** *ISO8601-Datum* Eine Zeitangabe, die den Defaultwert für das Ende von Events angibt. Als Standard wird das aktuelle Datum und Uhrzeit verwendet.
-* **festival** *string* ID eines Eventkrake-Festivals, auf die die Events und Locations gesetzt werden sollen. Default ist kein Festival.
 * **lat** *float* Eine Längengradangabe, um den Standardort auf der Karte zu ändern.
 * **lng** *float* Eine Breitengradangabe, um den Standardort auf der Karte zu ändern.
 
 **Beispiel**
 
-[eventkrake_input author="2" startdate="2016-06-17T15:00:00" enddate="2016-06-17T15:00:00" festival="brn2016" email="spam@eventkrake.de"]
+[eventkrake_input author="2" startdate="2016-06-17T15:00:00" enddate="2016-06-17T15:00:00" email="spam@eventkrake.de"]
