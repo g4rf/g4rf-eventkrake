@@ -636,6 +636,20 @@ function EventkrakeExitAjax($code, $data) {
 
 
 /***** REST API for events, locations and artists *****/
+
+function eventkrake_restbuild_artist($artist) {
+    $id = $artist->ID;
+    return [
+        'id' => $id,
+        'name' => $artist->post_title,
+        'text' => apply_filters('the_content', $artist->post_content),
+        'image' =>  get_the_post_thumbnail_url($id, 'full'),
+        'categories' => Eventkrake::getPostMeta($id, 'categories'),
+        'links' => json_decode(
+                        Eventkrake::getSinglePostMeta($id, 'links')),
+        'tags' => Eventkrake::getSinglePostMeta($id, 'tags')
+    ];
+}
 function eventkrake_restbuild_location($location) {
     $id = $location->ID;
     return [
@@ -680,6 +694,7 @@ function eventkrake_restbuild_event($event) {
     return $events;
 }
 
+// ROUTES
 function eventkrake_register_routes() {
     $base = 'eventkrake/v3';
 
@@ -699,18 +714,26 @@ function eventkrake_register_routes() {
     register_rest_route($base, '/events', [
         'methods'  => WP_REST_Server::READABLE,
         'callback' => function() {
-            $data = [];
+            $events = [];
+            $locations = [];
             foreach(Eventkrake::getAllEvents() as $event) {
-                $data = array_merge($data, eventkrake_restbuild_event($event));
+                $events = array_merge($events, eventkrake_restbuild_event($event));
+
+                $locationId = Eventkrake::getSinglePostMeta($event->ID, 'locationid');
+                if(! array_key_exists($locationId, $locations)) {
+                    if(!$location = get_post($locationId)) continue;
+                    $locations[$locationId] =
+                            eventkrake_restbuild_location($location);
+                }
             }
-            usort($data, function($a, $b) {
+            usort($events, function($a, $b) {
                 $aDate = new DateTime($a['start']);
                 $bDate = new DateTime($b['start']);
                 if($aDate < $bDate) return -1;
                 if($aDate > $bDate) return 1;
                 return 0;
             });
-            return $data;
+            return ['events' => $events, 'locations' => $locations];
         }
     ]);
 }
