@@ -1,38 +1,35 @@
-# eventkrake2-wp-plugin
-Ein Wordpress-Plugin um Orte und Veranstaltungen mit Wordpress zu verwalten und mit der Eventkrake 
-zu synchronisieren.
+# eventkrake3-wp-plugin
+A wordpress plugin for maintaining events, locations and artists with a REST
+endpoint.
 
-* Autor: Jan Kossick <jankossick@online.de>
-* Webseite: http://www.eventkrake.de
+* author: Jan Kossick <jankossick@online.de>
+* website: https://www.eventkrake.de
 
-In der vorliegenden Form erweitert das Plugin nur den Adminbereich und ergänzt drei 
-[Custom Post Types](https://codex.wordpress.org/Post_Types). Beim Speichern der Posts
-werden die Daten über die [Eventkrake 2 API](http://www.eventkrake.de/api/) mit der 
-Eventkrake synchronisiert, **vorrausgesetzt es liegt eine gültige E-Mail-Adresse samt
-Schlüssel vor**. Der Post Type **Artist** wird nicht mit der Eventkrake synchronisiert.
+In der vorliegenden Form erweitert das Plugin nur den Adminbereich und ergänzt drei
+[Custom Post Types](https://codex.wordpress.org/Post_Types).
 
-Für die Darstellung im Frontend ist das Theme zuständig, das ebenfalls über die 
-[Eventkrake 2 API](http://www.eventkrake.de/api/) die Daten abrufen kann. **Dafür
-ist keine Authentifizierung per E-Mail und Schlüssel notwendig**.
+Für die Darstellung im Frontend ist das Theme zuständig, das die Daten über die
+[REST API](http://www.eventkrake.de/api/) oder direkt aus der Datenbank abrufen
+kann.
 
 Zusätzlich gibt es einen [Shortcode] (https://codex.wordpress.org/Shortcode_API)
-um eine Eingabemaske im Frontend bereitzustellen. Der Shortcode lautet 
+um eine Eingabemaske im Frontend bereitzustellen. Der Shortcode lautet
 [eventkrake_input]. Nähere Infos siehe weiter unten.
 
 ## Struktur
 Die Struktur folgt dem eines [Wordpress Plugins](https://codex.wordpress.org/Writing_a_Plugin).
-Die Dateien müssen im Ordner **/wp-content/plugins/g4rf_eventkrake2** abgelegt werden.
+Die Dateien müssen im Ordner **/wp-content/plugins/g4rf_eventkrake3** abgelegt werden.
 
-### g4rf_eventkrake2.php
+### g4rf_eventkrake3.php
 Der Startpunkt für Wordpress mit Metainfos. Hier werden die benötigten Scripte geladen,
-[Custom Post Types](https://codex.wordpress.org/Post_Types) festgelegt,  die Callbacks 
-zum Speichern der Metainfos für die Custom Post Types definiert und ein rudimentärer 
-[Shortcode](https://codex.wordpress.org/Shortcode_API) angelegt. Zuletzt wird eine Seite
-für Einstellungen dem Admin-Menü hinzugefügt.
+[Custom Post Types](https://codex.wordpress.org/Post_Types) festgelegt,  die Callbacks
+zum Speichern der Metainfos für die Custom Post Types definiert und ein rudimentärer
+[Shortcode](https://codex.wordpress.org/Shortcode_API) angelegt. Zusätzlich
+werden hier die Routen und Endpoints für die REST API angelegt.
 
 ### Eventkrake.php
-Enthält Hilfsfunktionen zum setzen von Post-Meta-Infos, zum Abruf der [Eventkrake 2 API]
-(http://www.eventkrake.de/api/), zur Ausgabe von Admin-Meldungen und weitere Hilfsfunktionen.
+Enthält Hilfsfunktionen zum setzen von Post-Meta-Infos, zur Ausgabe von
+Admin-Meldungen und weitere Hilfsfunktionen.
 
 ### meta_event.php
 Enthält das HTML für die Metabox im Adminbereich "Veranstaltungen".
@@ -40,11 +37,11 @@ Enthält das HTML für die Metabox im Adminbereich "Veranstaltungen".
 ### meta_location.php
 Enthält das HTML für die Metabox im Adminbereich "Orte".
 
-### settings.php
-Enthält die Struktur und Funktionen zum Speichern der Plugin-Einstellungen.
+### meta_artists.php
+Enthält das HTML für die Metabox im Adminbereich "Künstler:innen".
 
 ### input_frontend.php
-Enthält das HTML und die Verarbeitungslogik für die Eingabe von Events und 
+Enthält das HTML und die Verarbeitungslogik für die Eingabe von Events und
 Locations über das Frontend (siehe Shortcode [eventkrake_input]).
 
 ##Shortcodes
