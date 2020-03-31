@@ -261,15 +261,15 @@ class Eventkrake {
      */
     public static function printTimePicker($nameHour, $nameMin, $selHour = 0,
             $selMin = 0) { ?>
-        <select style="min-width:auto" name="<?=$nameHour?>"><?php
+        <select name="<?=$nameHour?>"><?php
             for($i = 0; $i < 24; $i++) {
                 $h = substr("0$i", -2); ?>
                 <option value="<?=$h?>"<?=$selHour == $i ? ' selected' : ''?>>
                     <?=$h?>
                 </option>
             <?php } ?>
-        </select>:<select style="min-width:auto" name="<?=$nameMin?>"><?php
-            for($i = 0; $i < 60; $i+=5) {
+        </select>:<select name="<?=$nameMin?>"><?php
+            for($i = 0; $i < 60; $i+=1) {
                 $m = substr("0$i", -2); ?>
                 <option value="<?=$m?>"<?=$selMin == $i ? ' selected' : ''?>>
                     <?=$m?>

@@ -44,7 +44,7 @@ Enthält das HTML für die Metabox im Adminbereich "Künstler:innen".
 Enthält das HTML und die Verarbeitungslogik für die Eingabe von Events und
 Locations über das Frontend (siehe Shortcode [eventkrake_input]).
 
-##Shortcodes
+## Shortcodes
 Zur Zeit gibt es einen Shortcode.
 
 ### [eventkrake_input]
@@ -65,4 +65,6 @@ Der Shortcode versteht folgende Attribute:
 * **lat** *float* Eine Längengradangabe, um den Standardort auf der Karte zu ändern.
 * **lng** *float* Eine Breitengradangabe, um den Standardort auf der Karte zu ändern.
 
-**Beispiel** [eventkrake_input author="2" startdate="2016-06-17T15:00:00" enddate="2016-06-17T15:00:00" festival="brn2016" email="spam@eventkrake.de"]
+**Beispiel**
+
+[eventkrake_input author="2" startdate="2016-06-17T15:00:00" enddate="2016-06-17T15:00:00" festival="brn2016" email="spam@eventkrake.de"]

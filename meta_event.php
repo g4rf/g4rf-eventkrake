@@ -141,7 +141,7 @@ _e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
                    class="regular-text" value="https://" />
         </div><?php
 
-        $links = json_decode(Eventkrake::getSinglePostMeta($post->ID, 'links'), true);
+        $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
         if(empty($links)) { // no links yet ?>
             <div>
                 <input value="" type="text" name="eventkrake-links-key[]"

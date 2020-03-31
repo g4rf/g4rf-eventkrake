@@ -42,7 +42,7 @@ global $post;
                    class="regular-text" value="https://" />
         </div><?php
 
-        $links = json_decode(Eventkrake::getSinglePostMeta($post->ID, 'links'), true);
+        $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
         if(empty($links)) { // no links yet ?>
             <div>
                 <input value="" type="text" name="eventkrake-links-key[]"
@@ -91,23 +91,26 @@ global $post;
     foreach(array_reverse(Eventkrake::getEventsForArtist($post->ID, false)) as $e) {
         $starts = Eventkrake::getPostMeta($e->ID, 'start');
         $ends = Eventkrake::getPostMeta($e->ID, 'end');
-        $format = '<\b>d.m.Y</\b>\&\n\b\s\p\;G:i';
+        $formatStart = '<\b>d.m.Y</\b>\&\n\b\s\p\;G:i';
+        $formatEnd = 'd.m.Y\&\n\b\s\p\;G:i';
         ?><tr>
             <td><b><?=get_the_title($e->ID)?></b></td>
             <td><?php
                 $location = get_post(Eventkrake::getSinglePostMeta($e->ID, 'locationid'));
-                print $location->post_title;
-            ?></td>
+                ?><a href="<?=
+                    site_url("wp-admin/post.php?action=edit&post={$location->ID}")?>"><?=
+                    $location->post_title?></a>
+            </td>
             <td><?php
                 for($i = 0; $i < count($starts); $i++) {
                     $start = new DateTime($starts[$i]);
                     $end = new DateTime($ends[$i]);
-                    print $start->format($format) . '&nbsp;&ndash;&nbsp;' .
-                            $end->format($format) . '<br />';
+                    print $start->format($formatStart) . '&nbsp;&ndash;&nbsp;' .
+                            $end->format($formatEnd) . '<br />';
                 }
             ?></td>
             <td><?=wp_trim_excerpt($e->post_content)?></td>
-            <td><a href="<?=site_url("wp-admin/post.php?action=edit&post=" . $e->ID)?>">
+            <td><a href="<?=site_url("wp-admin/post.php?action=edit&post={$e->ID}")?>">
                 <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
             </a></td>
         </tr><?php
