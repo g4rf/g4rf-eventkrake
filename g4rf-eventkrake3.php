@@ -821,6 +821,7 @@ function eventkrake_register_routes() {
             $artists = [];
             foreach(Eventkrake::getAllEvents() as $event) {
                 $filteredEvents = eventkrake_restbuild_event($event, $params);
+                if(! is_array($filteredEvents)) return $filteredEvents; // probably a WP_Error
                 if(count($filteredEvents) < 1) continue;
 
                 $events = array_merge($events, $filteredEvents);
