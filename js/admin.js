@@ -1,4 +1,4 @@
-/* global Leaflet, google */
+/* global Leaflet */
 
 jQuery(document).ready(function() {
     /* Datepicker */
@@ -45,11 +45,11 @@ jQuery(document).ready(function() {
             Leaflet.marker([lat, lng]).addTo(Eventkrake.Admin.map));
 
         Eventkrake.Admin.map.on('click', function(e) {
-            var gLatLng = new google.maps.LatLng(e.latlng.lat, e.latlng.lng);
+            var latlng = [e.latlng.lat, e.latlng.lng];
             Eventkrake.Geo.getAddress(
-                gLatLng,
+                latlng,
                 function(notUsed, address) {
-                    Eventkrake.Admin.loadNewAddressForLocation(gLatLng, address);
+                    Eventkrake.Admin.loadNewAddressForLocation(latlng, address);
                 }
             );
         });
@@ -132,25 +132,22 @@ Eventkrake.Admin = {
     imageId: 0,
 
     /** Ändere Karte, Adresstext und LatLng. */
-    loadNewAddressForLocation: function(gLatLng, address) {
-        if(gLatLng === false) {
+    loadNewAddressForLocation: function(latlng, address) {
+        if(latlng === false) {
             jQuery("#" + Eventkrake.Admin.recId).empty().append(address);
             return;
         }
 
-        var lat = gLatLng.lat();
-        var lng = gLatLng.lng();
-
-        Eventkrake.Admin.map.panTo([lat,lng]);
-        Eventkrake.Admin.map.markers[0].setLatLng([lat,lng]);
+        Eventkrake.Admin.map.panTo(latlng);
+        Eventkrake.Admin.map.markers[0].setLatLng(latlng);
 
         jQuery("#" + Eventkrake.Admin.recId).empty().append(address);
         if(jQuery("#" + Eventkrake.Admin.addressId).val().length == 0) {
             jQuery("#" + Eventkrake.Admin.addressId).val(address);
         }
 
-        jQuery("#" + Eventkrake.Admin.latId).val(lat);
-        jQuery("#" + Eventkrake.Admin.lngId).val(lng);
+        jQuery("#" + Eventkrake.Admin.latId).val(latlng[0]);
+        jQuery("#" + Eventkrake.Admin.lngId).val(latlng[1]);
     },
 
     /** Listet Orte anhand eines Suchstrings auf. */
