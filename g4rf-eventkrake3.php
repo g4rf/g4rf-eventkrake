@@ -894,6 +894,8 @@ add_action('rest_api_init', 'eventkrake_register_routes');
 
 
 /*** LINEUPR ***/
+
+// artists
 add_shortcode('lineupr-import-artists', function() {
     ob_start();
 
@@ -928,7 +930,7 @@ add_shortcode('lineupr-import-artists', function() {
         set_time_limit(0);
 
         // check lineupr-id of existing artists
-        foreach(Eventkrake::getArtists() as $a) {
+        foreach(Eventkrake::getArtists(false) as $a) {
             $tags = Eventkrake::getSinglePostMeta($a->ID, 'tags');
             if(strpos($tags, $artist->_id) > 0) continue 2;
         }
@@ -982,7 +984,6 @@ add_shortcode('lineupr-import-artists', function() {
         Eventkrake::setSinglePostMeta($id, 'links', $links);
 
         // image
-        // TODO
         if(isset($artist->teaser) && isset($artist->teaser->original)) {
             $url = 'https://lineupr.com' . $artist->teaser->original;
             $ext = pathinfo($url, PATHINFO_EXTENSION);
@@ -994,6 +995,123 @@ add_shortcode('lineupr-import-artists', function() {
                 // save image
                 $imageId = media_handle_sideload([
                     'name' => $artist->alias . ".$ext",
+                    'tmp_name' => $tmp
+                ], $id);
+
+                set_post_thumbnail($id, $imageId);
+
+                @unlink($tmp);
+            }
+        }
+    }
+
+    return ob_get_clean();
+});
+
+// locations
+add_shortcode('lineupr-import-locations', function() {
+    ob_start();
+
+    // if not loggedin go out
+    if(_wp_get_current_user()->user_login != 'jan') {
+        print 'user jan has to be logged in<br />';
+        return ob_get_clean();
+    }
+
+    // stop manually
+    if(true) {
+        print 'function manually stopped<br />';
+        return ob_get_clean();
+    }
+
+    if (! function_exists('download_url')) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+    }
+    if (! function_exists('media_handle_sideload')) {
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+    }
+    if (! function_exists('wp_read_image_metadata')) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+    }
+
+    $lineupr = json_decode(file_get_contents(
+        'https://neustadt-leben.lineupr.com/api/organizers/neustadt-leben/events/brn19/data'
+    ));
+
+    // import locations
+    foreach($lineupr->venues as $location) {
+        set_time_limit(0);
+
+        // check lineupr-id of existing locations
+        foreach(Eventkrake::getLocations(false) as $l) {
+            $tags = Eventkrake::getSinglePostMeta($l->ID, 'tags');
+            if(strpos($tags, $location->_id) > 0) continue 2;
+        }
+
+        // insert artist
+        $description = '&nbsp;';
+        if(! empty($location->descriptionHtml)) {
+            $description = $location->descriptionHtml;
+        }
+
+        $id = wp_insert_post([
+            'post_author'           => get_current_user_id(),
+            'post_content'          => $description,
+            'post_title'            => wp_strip_all_tags($location->name),
+            'post_status'           => 'publish',
+            'post_type'             => 'eventkrake_location',
+            'post_name'             => $location->alias
+        ]);
+        if($id == 0) continue;
+
+        print 'adding ' . wp_strip_all_tags($location->name) . '<br />';
+
+        // lat lng
+        Eventkrake::setSinglePostMeta($id, 'lat', $location->address->latitude);
+        Eventkrake::setSinglePostMeta($id, 'lng', $location->address->longitude);
+
+        // address
+        $address = $location->address->street . ', '
+            . $location->address->zip . ' '
+            . $location->address->city;
+        Eventkrake::setSinglePostMeta($id, 'address', $address);
+
+        // tags
+        Eventkrake::setSinglePostMeta($id, 'tags', "lineupr-id:{$location->_id}");
+
+        // categories
+        $categories = [];
+        foreach($location->categories as $category) {
+            foreach($lineupr->categories as $c) {
+                if($c->_id == $category) {
+                    $categories[] = $c->name;
+                }
+            }
+        }
+        Eventkrake::setPostMeta($id, 'categories', $categories);
+
+        // links
+        $links = [];
+        foreach($location->attachments as $a) {
+            $links[] = [
+                'name' => $a->name,
+                'url' => $a->link
+            ];
+        }
+        Eventkrake::setSinglePostMeta($id, 'links', $links);
+
+        // image
+        if(isset($location->teaser) && isset($location->teaser->original)) {
+            $url = 'https://lineupr.com' . $location->teaser->original;
+            $ext = pathinfo($url, PATHINFO_EXTENSION);
+            $tmp = download_url($url);
+
+            if (is_wp_error($tmp)) {
+                @unlink($tmp);
+            } else {
+                // save image
+                $imageId = media_handle_sideload([
+                    'name' => $location->alias . ".$ext",
                     'tmp_name' => $tmp
                 ], $id);
 
