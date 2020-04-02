@@ -170,7 +170,7 @@ class Eventkrake {
 
         natsort($categories);
 
-        return array_reverse(array_keys($categories));
+        return array_slice(array_reverse(array_keys($categories)), 0, 40);
     }
 
     /**

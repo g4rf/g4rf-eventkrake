@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Eventkrake 3 WP Plugin
-Plugin URI: http://eventkrake.de/code/
-Description: Eine Veranstaltungsverwaltung, die Veranstaltungen mit Orten samt Geokoordinaten verknüpft. Die Darstellung ist über Templates flexibel anpassbar.
+Plugin URI: http://eventkrake.de/
+Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
 Author: Jan Kossick
 Version: 3.0beta
 License: CC-BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -46,10 +46,6 @@ add_action('wp_login', 'session_destroy');
 add_action('admin_enqueue_scripts', function() {
     $path = plugin_dir_url(__FILE__);
 
-    // Geolokalisation
-    wp_register_script('eventkrake_googlemaps',
-        'https://maps.google.com/maps/api/js?region=DE&key=AIzaSyClvezOaz9z-nZKjMmYRe0cvvWEiCnWjmE');
-    wp_enqueue_script('eventkrake_googlemaps');
     // Leaflet
     wp_register_script('eventkrake_leaflet',  $path.'leaflet/leaflet.js',
         array('jquery'));
@@ -83,10 +79,6 @@ add_action('admin_enqueue_scripts', function() {
 add_action('wp_enqueue_scripts', function() {
     $path = plugin_dir_url(__FILE__);
 
-    // Geolokalisation
-    wp_register_script('eventkrake_googlemaps',
-        'https://maps.google.com/maps/api/js?region=DE&key=AIzaSyClvezOaz9z-nZKjMmYRe0cvvWEiCnWjmE');
-    wp_enqueue_script('eventkrake_googlemaps');
     // Leaflet-JS
     wp_register_script('eventkrake_leaflet',  $path.'leaflet/leaflet.js',
         array('jquery'));
@@ -190,7 +182,10 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
         if(empty($linksKeys[$i])) continue;
         if(empty($linksValues[$i])) continue;
 
-        $links[$linksKeys[$i]] = $linksValues[$i];
+        $links[] = [
+            'name' => $linksKeys[$i],
+            'url' => $linksValues[$i]
+        ];
     }
 
     // categories
@@ -290,7 +285,10 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
         if(empty($linksKeys[$i])) continue;
         if(empty($linksValues[$i])) continue;
 
-        $links[$linksKeys[$i]] = $linksValues[$i];
+        $links[] = [
+            'name' => $linksKeys[$i],
+            'url' => $linksValues[$i]
+        ];
     }
 
     // categories
@@ -326,7 +324,6 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     Eventkrake::setPostMeta($post_id, 'categories', $categories);
 
     Eventkrake::setPostMeta($post_id, 'artists', $artists);
-
 }, 1, 2);
 
 
@@ -407,7 +404,10 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
         if(empty($linksKeys[$i])) continue;
         if(empty($linksValues[$i])) continue;
 
-        $links[$linksKeys[$i]] = $linksValues[$i];
+        $links[] = [
+            'name' => $linksKeys[$i],
+            'url' => $linksValues[$i]
+        ];
     }
 
     // save fields
@@ -529,8 +529,8 @@ function EventkrakeInputAjax() {
             // website
             Eventkrake::setPostMeta($locationId,
                     'website', [
-                        __('Webseite', 'g4rf_eventkrake2') =>
-                            filter_input(INPUT_POST, 'eventkrake-location-website')
+                        'name' => __('Webseite', 'g4rf_eventkrake2'),
+                        'url' => filter_input(INPUT_POST, 'eventkrake-location-website')
                     ]);
             // categories
             $categories = filter_input(INPUT_POST, 'eventkrake_location_categories');
@@ -595,7 +595,8 @@ function EventkrakeInputAjax() {
             // website
             if(strlen($websites[$i]) > 0) {
                 Eventkrake::setPostMeta($eventId, 'website', [
-                    __('Webseite', 'g4rf_eventkrake2') => $websites[$i]
+                    'name' => __('Webseite', 'g4rf_eventkrake2'),
+                    'url' => $websites[$i]
                 ]);
             }
             // categories
@@ -889,3 +890,119 @@ function eventkrake_register_routes() {
     ]);
 }
 add_action('rest_api_init', 'eventkrake_register_routes');
+
+
+
+/*** LINEUPR ***/
+add_shortcode('lineupr-import-artists', function() {
+    ob_start();
+
+    // if not loggedin go out
+    if(_wp_get_current_user()->user_login != 'jan') {
+        print 'user jan has to be logged in<br />';
+        return ob_get_clean();
+    }
+
+    // stop manually
+    if(true) {
+        print 'function manually stopped<br />';
+        return ob_get_clean();
+    }
+
+    if (! function_exists('download_url')) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+    }
+    if (! function_exists('media_handle_sideload')) {
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+    }
+    if (! function_exists('wp_read_image_metadata')) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+    }
+
+    $lineupr = json_decode(file_get_contents(
+        'https://neustadt-leben.lineupr.com/api/organizers/neustadt-leben/events/brn19/data'
+    ));
+
+    // import artists
+    foreach($lineupr->contributors as $artist) {
+        set_time_limit(0);
+
+        // check lineupr-id of existing artists
+        foreach(Eventkrake::getArtists() as $a) {
+            $tags = Eventkrake::getSinglePostMeta($a->ID, 'tags');
+            if(strpos($tags, $artist->_id) > 0) continue 2;
+        }
+
+        // insert artist
+        $description = '&nbsp;';
+        if(! empty($artist->subtitle)) {
+            if(! empty($artist->descriptionHtml)) {
+                $description = "{$artist->subtitle} - {$artist->descriptionHtml}";
+            } else {
+                $description = $artist->subtitle;
+            }
+        } elseif(! empty($artist->descriptionHtml)) {
+            $description = $artist->descriptionHtml;
+        }
+
+        $id = wp_insert_post([
+            'post_author'           => get_current_user_id(),
+            'post_content'          => $description,
+            'post_title'            => wp_strip_all_tags($artist->name),
+            'post_status'           => 'publish',
+            'post_type'             => 'eventkrake_artist',
+            'post_name'             => $artist->alias
+        ]);
+        if($id == 0) continue;
+
+        print 'adding ' . wp_strip_all_tags($artist->name) . '<br />';
+
+        // tags
+        Eventkrake::setSinglePostMeta($id, 'tags', "lineupr-id:{$artist->_id}");
+
+        // categories
+        $categories = [];
+        foreach($artist->categories as $category) {
+            foreach($lineupr->categories as $c) {
+                if($c->_id == $category) {
+                    $categories[] = $c->name;
+                }
+            }
+        }
+        Eventkrake::setPostMeta($id, 'categories', $categories);
+
+        // links
+        $links = [];
+        foreach($artist->attachments as $a) {
+            $links[] = [
+                'name' => $a->name,
+                'url' => $a->link
+            ];
+        }
+        Eventkrake::setSinglePostMeta($id, 'links', $links);
+
+        // image
+        // TODO
+        if(isset($artist->teaser) && isset($artist->teaser->original)) {
+            $url = 'https://lineupr.com' . $artist->teaser->original;
+            $ext = pathinfo($url, PATHINFO_EXTENSION);
+            $tmp = download_url($url);
+
+            if (is_wp_error($tmp)) {
+                @unlink($tmp);
+            } else {
+                // save image
+                $imageId = media_handle_sideload([
+                    'name' => $artist->alias . ".$ext",
+                    'tmp_name' => $tmp
+                ], $id);
+
+                set_post_thumbnail($id, $imageId);
+
+                @unlink($tmp);
+            }
+        }
+    }
+
+    return ob_get_clean();
+});

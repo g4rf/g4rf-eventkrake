@@ -3,7 +3,7 @@ A wordpress plugin for maintaining events, locations and artists with a REST
 endpoint.
 
 * author: Jan Kossick <jankossick@online.de>
-* website: https://www.eventkrake.de
+* doc: https://www.eventkrake.de
 
 In der vorliegenden Form erweitert das Plugin nur den Adminbereich und ergänzt drei
 [Custom Post Types](https://codex.wordpress.org/Post_Types).

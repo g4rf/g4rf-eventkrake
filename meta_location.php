@@ -73,14 +73,14 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
             </div>
 
         <?php } else {
-            foreach($links as $key => $value) { // show links ?>
+            foreach($links as $link) { // show links ?>
                 <div>
                     <input type="text" name="eventkrake-links-key[]"
                            class="regular-text"
-                           value="<?=htmlspecialchars($key)?>" />
+                           value="<?=htmlspecialchars($link['name'])?>" />
                     <input type="text" name="eventkrake-links-value[]"
                            class="regular-text"
-                           value="<?=htmlspecialchars($value)?>" />
+                           value="<?=htmlspecialchars($link['url'])?>" />
                 </div>
             <?php }
         } ?>
