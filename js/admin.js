@@ -1,6 +1,6 @@
-/* global Leaflet, google */
+/* global Leaflet */
 
-jQuery(document).ready(function() {    
+jQuery(document).ready(function() {
     /* Datepicker */
     Eventkrake.Admin.loadDatepicker(".datepicker:visible");
 
@@ -45,11 +45,11 @@ jQuery(document).ready(function() {
             Leaflet.marker([lat, lng]).addTo(Eventkrake.Admin.map));
 
         Eventkrake.Admin.map.on('click', function(e) {
-            var gLatLng = new google.maps.LatLng(e.latlng.lat, e.latlng.lng);
+            var latlng = [e.latlng.lat, e.latlng.lng];
             Eventkrake.Geo.getAddress(
-                gLatLng,
+                latlng,
                 function(notUsed, address) {
-                    Eventkrake.Admin.loadNewAddressForLocation(gLatLng, address);
+                    Eventkrake.Admin.loadNewAddressForLocation(latlng, address);
                 }
             );
         });
@@ -69,8 +69,8 @@ jQuery(document).ready(function() {
     });
 
     // Link bei Events zu "Ort bearbeiten"
-    jQuery("#eventkrake_locationid_wordpress_edit_location").click(function() {
-        var locationId = jQuery("select[name='eventkrake_locationid_wordpress']").val();
+    jQuery("#eventkrake_locationid_edit_location").click(function() {
+        var locationId = jQuery("select[name='eventkrake_locationid']").val();
         if(locationId > 0) {
             window.location.href = jQuery(this).data("url") + locationId;
         }
@@ -97,17 +97,16 @@ jQuery(document).ready(function() {
                 .removeClass("eventkrake-links-template eventkrake-hide")
                 .insertBefore(jQuery(this).parent());
     });
-    
+
     // add new time on events
     jQuery(".eventkrake-add-time").click(function(e) {
         e.preventDefault();
         var dates = jQuery(".eventkrake-template.eventkrake-dates").clone()
                 .removeClass("eventkrake-template")
                 .insertBefore(jQuery(this).parent());
-        console.log(jQuery(".datepicker", dates));
         Eventkrake.Admin.loadDatepicker(jQuery(".datepicker", dates));
     });
-    
+
     // remove time on events
     jQuery("body").on("click", ".eventkrake-remove-date", function(e) {
         e.preventDefault();
@@ -133,25 +132,22 @@ Eventkrake.Admin = {
     imageId: 0,
 
     /** Ändere Karte, Adresstext und LatLng. */
-    loadNewAddressForLocation: function(gLatLng, address) {
-        if(gLatLng === false) {
+    loadNewAddressForLocation: function(latlng, address) {
+        if(latlng === false) {
             jQuery("#" + Eventkrake.Admin.recId).empty().append(address);
             return;
         }
 
-        var lat = gLatLng.lat();
-        var lng = gLatLng.lng();
-
-        Eventkrake.Admin.map.panTo([lat,lng]);
-        Eventkrake.Admin.map.markers[0].setLatLng([lat,lng]);
+        Eventkrake.Admin.map.panTo(latlng);
+        Eventkrake.Admin.map.markers[0].setLatLng(latlng);
 
         jQuery("#" + Eventkrake.Admin.recId).empty().append(address);
         if(jQuery("#" + Eventkrake.Admin.addressId).val().length == 0) {
             jQuery("#" + Eventkrake.Admin.addressId).val(address);
         }
 
-        jQuery("#" + Eventkrake.Admin.latId).val(lat);
-        jQuery("#" + Eventkrake.Admin.lngId).val(lng);
+        jQuery("#" + Eventkrake.Admin.latId).val(latlng[0]);
+        jQuery("#" + Eventkrake.Admin.lngId).val(latlng[1]);
     },
 
     /** Listet Orte anhand eines Suchstrings auf. */
@@ -214,7 +210,7 @@ Eventkrake.Admin = {
             });
         });
     }*/
-    
+
     loadDatepicker: function(selector) {
         jQuery(selector).datepicker({
             dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag",
@@ -240,9 +236,9 @@ Eventkrake.Admin = {
                         monthNames: jQuery(this).datepicker("option", "monthNames")
                     }
                 );
-        
+
                 // save date machine readable
-                var machineDate = jQuery(".eventkrake-machine-date", 
+                var machineDate = jQuery(".eventkrake-machine-date",
                                                     jQuery(this).parent());
                 machineDate.val(jQuery.datepicker.formatDate("yy-mm-dd", date));
             }

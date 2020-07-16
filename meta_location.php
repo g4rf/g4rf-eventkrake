@@ -55,7 +55,7 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
                     'g4rf_eventkrake2')
             ?></span>
         </div>
-        
+
         <div class="eventkrake-links-template eventkrake-hide">
             <input value="" type="text" name="eventkrake-links-key[]"
                    class="regular-text" placeholder="Name des Links" />
@@ -63,7 +63,7 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
                    class="regular-text" value="https://" />
         </div><?php
 
-        $links = json_decode(Eventkrake::getSinglePostMeta($post->ID, 'links'), true);
+        $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
         if(empty($links)) { // no links yet ?>
             <div>
                 <input value="" type="text" name="eventkrake-links-key[]"
@@ -73,14 +73,14 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
             </div>
 
         <?php } else {
-            foreach($links as $key => $value) { // show links ?>
+            foreach($links as $link) { // show links ?>
                 <div>
                     <input type="text" name="eventkrake-links-key[]"
                            class="regular-text"
-                           value="<?=htmlspecialchars($key)?>" />
+                           value="<?=htmlspecialchars($link['name'])?>" />
                     <input type="text" name="eventkrake-links-value[]"
                            class="regular-text"
-                           value="<?=htmlspecialchars($value)?>" />
+                           value="<?=htmlspecialchars($link['url'])?>" />
                 </div>
             <?php }
         } ?>
@@ -127,19 +127,20 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
     </tr><?php
     $events = array_reverse(Eventkrake::getEvents($post->ID, false));
     foreach($events as $e) {
-        $start = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'start'));
-        $end = new DateTime(Eventkrake::getSinglePostMeta($e->ID, 'end'));
+        $starts = Eventkrake::getPostMeta($e->ID, 'start');
+        $ends = Eventkrake::getPostMeta($e->ID, 'end');
+        $formatStart = '<\b>d.m.Y</\b>\&\n\b\s\p\;G:i';
+        $formatEnd = 'd.m.Y\&\n\b\s\p\;G:i';
         ?><tr>
             <td><b><?=get_the_title($e->ID)?></b></td>
-            <td>
-                <?=$start->format('<\b>d.m.Y</\b><\b\r />G:i') . '&nbsp;' .
-                    __('Uhr', 'g4rf_eventkrake2')?>
-            </td>
-            <td>&ndash;</td>
-            <td>
-                <?=$end->format('d.m.Y<\b\r />G:i') . '&nbsp;' .
-                    __('Uhr', 'g4rf_eventkrake2')?>
-            </td>
+            <td><?php
+                for($i = 0; $i < count($starts); $i++) {
+                    $start = new DateTime($starts[$i]);
+                    $end = new DateTime($ends[$i]);
+                    print $start->format($formatStart) . '&nbsp;&ndash;&nbsp;' .
+                            $end->format($formatEnd) . '<br />';
+                }
+            ?></td>
             <td><?=wp_trim_excerpt($e->post_content)?></td>
             <td><a href="<?=site_url("wp-admin/post.php?action=edit&post=" . $e->ID)?>">
                 <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
