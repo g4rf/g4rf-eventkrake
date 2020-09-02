@@ -119,6 +119,7 @@ add_action('init', function () {
     register_post_type('eventkrake_location', array(
         'public' => true,
         'has_archive' => true,
+        'taxonomies' => array('category'),
         'labels' => array(
             'name' => __('Orte', 'g4rf_eventkrake2'),
             'singular_name' => __('Ort', 'g4rf_eventkrake2'),
@@ -213,6 +214,7 @@ add_action('init', function () {
     register_post_type('eventkrake_event', array(
         'public' => true,
         'has_archive' => true,
+        'taxonomies' => array('category'),
         'labels' => array(
             'name' => __('Veranstaltungen', 'g4rf_eventkrake2'),
             'singular_name' => __('Veranstaltung', 'g4rf_eventkrake2'),
@@ -332,6 +334,7 @@ add_action('init', function () {
     register_post_type('eventkrake_artist', array(
         'public' => true,
         'has_archive' => true,
+        'taxonomies' => array('category'),
         'labels' => array(
             'name' => __('Künstler:innen', 'g4rf_eventkrake2'),
             'singular_name' => __('Künstler:in', 'g4rf_eventkrake2'),
