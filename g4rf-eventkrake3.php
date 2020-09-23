@@ -119,6 +119,7 @@ add_action('init', function () {
     register_post_type('eventkrake_location', array(
         'public' => true,
         'has_archive' => true,
+        'taxonomies' => array('category'),
         'labels' => array(
             'name' => __('Orte', 'g4rf_eventkrake2'),
             'singular_name' => __('Ort', 'g4rf_eventkrake2'),
@@ -213,6 +214,7 @@ add_action('init', function () {
     register_post_type('eventkrake_event', array(
         'public' => true,
         'has_archive' => true,
+        'taxonomies' => array('category'),
         'labels' => array(
             'name' => __('Veranstaltungen', 'g4rf_eventkrake2'),
             'singular_name' => __('Veranstaltung', 'g4rf_eventkrake2'),
@@ -332,6 +334,7 @@ add_action('init', function () {
     register_post_type('eventkrake_artist', array(
         'public' => true,
         'has_archive' => true,
+        'taxonomies' => array('category'),
         'labels' => array(
             'name' => __('Künstler:innen', 'g4rf_eventkrake2'),
             'singular_name' => __('Künstler:in', 'g4rf_eventkrake2'),
@@ -742,7 +745,7 @@ function eventkrake_restbuild_event($event, $params = []) {
     return $events;
 }
 
-// sort events for date ASC
+// sort events by date ASC
 function eventkrake_sortevents($a, $b) {
     $aDate = new DateTime($a['start']);
     $bDate = new DateTime($b['start']);
@@ -772,8 +775,10 @@ function eventkrake_register_routes() {
                     // artists
                     foreach(Eventkrake::getPostMeta($event->ID, 'artists') as $artistId) {
                         if(! array_key_exists($artistId, $artists)) {
-                            $artists[$artistId] =
-                                    eventkrake_restbuild_artist(get_post($artistId));
+                            $a = get_post($artistId);
+                            if($a) {
+                                $artists[$artistId] = eventkrake_restbuild_artist($a);
+                            }
                         }
                     }
                 }
@@ -833,8 +838,10 @@ function eventkrake_register_routes() {
                 // artists
                 foreach(Eventkrake::getPostMeta($event->ID, 'artists') as $artistId) {
                     if(! array_key_exists($artistId, $artists)) {
-                        $artists[$artistId] =
-                                eventkrake_restbuild_artist(get_post($artistId));
+                        $a = get_post($artistId);
+                        if($a) {
+                            $artists[$artistId] = eventkrake_restbuild_artist($a);
+                        }
                     }
                 }
             }
