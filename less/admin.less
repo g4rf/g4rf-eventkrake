@@ -42,3 +42,36 @@
         text-decoration: none;
     }
 }
+
+.eventkrake-select-search {
+    width: 100%;
+    max-width: 50em;
+    border: solid 1px #ccc;
+    padding: 5px;
+    margin: 5px;
+}
+.eventkrake-select-multiple {
+    display: flex;
+    flex-direction: column;
+    
+    height: 200px;
+    max-width: 50em;
+    padding: 5px;
+    margin: 5px;
+    
+    overflow: auto;
+    
+    border: solid 1px #ccc;
+    
+    label {
+        display: block;
+        white-space: nowrap;
+        margin-right: 10px;
+        vertical-align: middle;
+        cursor: pointer;
+        
+        &:hover {
+            color: #0073aa;
+        }
+    }
+}
