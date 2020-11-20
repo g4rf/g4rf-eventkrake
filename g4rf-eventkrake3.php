@@ -29,8 +29,8 @@ foreach($locationIds as $l) {
         'meta_value' => $l->meta_value,
         'meta_key' => 'eventkrake_locationid'
     ]);
-}*/
-//print "<pre>"; print_r($locationIds); die();
+}
+print "<pre>"; print_r($locationIds); die();/**/
 
 
 /***** Session-Funktionalität (CAPTCHA etc.) *****/
