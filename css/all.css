@@ -1,0 +1,38 @@
+.eventkrake-flexcol {
+  display: flex;
+  flex-direction: column;
+}
+.eventkrake-flexcol div {
+  margin-bottom: 10px;
+}
+.datepicker {
+  cursor: pointer;
+}
+.eventkrake_map {
+  width: 100%;
+  background-color: #eee;
+  font-style: italic;
+  cursor: pointer;
+  text-align: center;
+  line-height: 300%;
+}
+.eventkrake_h250 {
+  height: 250px;
+}
+.eventkrake_hide,
+.eventkrake-hide,
+.eventkrake-template {
+  display: none !important;
+}
+.eventkrake_center {
+  text-align: center;
+}
+.eventkrake_right {
+  text-align: right;
+}
+.eventkrake-bold {
+  font-weight: bold;
+}
+.eventkrake-nowrap {
+  white-space: nowrap;
+}
