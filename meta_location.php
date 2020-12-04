@@ -21,6 +21,12 @@ global $post;
 
 </div>
 
+<!-- sets the correct Leaflet imagePath -->
+<script>
+    Leaflet.Icon.Default.prototype.options.imagePath = 
+            "<?=plugins_url('/leaflet/images/', __FILE__)?>";
+</script>
+
 <div id="eventkrake_map" class="eventkrake_map eventkrake_h250">
     <?=__('Bitte aktiviere JavaScript um die Karte zu benutzen.', 'g4rf_eventkrake2')?>
 </div>
