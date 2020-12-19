@@ -172,6 +172,28 @@ class Eventkrake {
 
         return array_slice(array_reverse(array_keys($categories)), 0, 40);
     }
+    
+    /**
+     * Sorts an array of events ascending by start date.
+     * @param array $events Events with index 'start'.
+     * @return array The sorted events array.
+     */
+    public static function sortEvents($events) {
+        // sort events
+        usort($events, function($a, $b) {
+            $aDate = $a['start'];
+            $bDate = $b['start'];
+
+            if(is_string($aDate)) $aDate = new DateTime($aDate);
+            if(is_string($bDate)) $bDate = new DateTime($bDate);
+
+            if($aDate < $bDate) return -1;
+            if($aDate > $bDate) return 1;
+            return 0;
+        });
+        
+        return $events;
+    }
 
     /**
      * Gibt Fragen für ein CAPTCHA zurück bzw. prüft ein Captcha.
@@ -212,6 +234,14 @@ class Eventkrake {
         return false;
     }
 
+    /**
+     * @deprecated since version 3.0beta
+     * Date display should be done on client side.
+     * @param type $startDate
+     * @param type $endDate
+     * @param type $classes
+     * @param type $removable
+     */
     public static function printDatePeriodPicker($startDate, $endDate,
             $classes = '', $removable = true) {
         ?>
@@ -253,6 +283,8 @@ class Eventkrake {
     }
 
     /**
+     * @deprecated since version 3.0beta
+     * Date display should be done on client side.
      * Erzeugt einen Timepicker.
      * @param string $nameHour Der Formular-Name der Stundenauswahl.
      * @param string $nameMin Der Formular-Name der Minutenauswahl.
@@ -279,6 +311,8 @@ class Eventkrake {
     <?php }
 
     /**
+     * @deprecated since version 3.0beta
+     * We don't use datetime anymore.
      * Vergleicht zwei Arrays nach Datums- und Zeitangaben. Beide Arrays müssen
      * den assoziativen Index 'datetime' besitzen.
      * @param array $a Ein Array.

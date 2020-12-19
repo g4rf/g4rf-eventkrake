@@ -112,6 +112,27 @@ jQuery(document).ready(function() {
         e.preventDefault();
         jQuery(this).parent().remove();
     });
+    
+    // search for select
+    jQuery(".eventkrake-select-search").on("keyup", function() {
+        var select = jQuery(this).next(".eventkrake-select-multiple");
+        var search = jQuery(this).val().toLowerCase();
+        
+        if(search.length > 0) { // search something
+            
+            jQuery("label", select).each(function(i, label) {                
+                if(jQuery(label).text().toLowerCase().indexOf(search) > -1) {
+                    jQuery(label).show();
+                } else {
+                    jQuery(label).hide();
+                }
+            });
+            return;
+        } 
+        
+        // show all
+        jQuery("label", select).show();
+    });
 });
 
 var Eventkrake = Eventkrake || {};

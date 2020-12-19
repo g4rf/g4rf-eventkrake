@@ -82,22 +82,26 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter
 <tr>
     <th><?=__('Teilnehmende Künstler:innen', 'g4rf_eventkrake2')?></th>
     <td>
-        <select class="eventkrake_formselect" name="eventkrake_artists[]"
-                size="5" multiple>
-            <option value="0">-- <?=__('keine', 'g4rf_eventkrake2')?> --</option>
+        <input type="text" class="eventkrake-select-search"
+               placeholder="<?=__('Suche', 'g4rf_eventkrake2')?>">
+        <div class="eventkrake-select-multiple">
             <?php
                 $artists = Eventkrake::getArtists(false);
                 $artistIds = Eventkrake::getPostMeta($post->ID, 'artists');
-                foreach($artists as $a) {
-                    ?><option value="<?=$a->ID?>"<?php
-                    if(in_array($a->ID, $artistIds)) print ' selected';
-                    ?>><?=get_the_title($a->ID)?></option><?php
-                }
+                foreach($artists as $a) { 
+                    $selected = in_array($a->ID, $artistIds); ?>
+                    <label style="<?= $selected ? 'order:-1;' : '' ?>">
+                        <input type="checkbox" name="eventkrake_artists[]"
+                            value="<?= $a->ID ?>" <?=
+                            $selected ? 'checked' : ''
+                        ?> />
+                        <?= get_the_title($a->ID) ?>
+                    </label>
+                <?php }
             ?>
-        </select><br />
+        </div>
         <span class="description"><?php
-_e('Wähle hier die Künstlerinnen und Künstler aus, die an der Veranstaltung
-    teilnehmen. Du kannst mit [STRG] mehrere Einträge auswählen.',
+_e('Wähle hier die Künstler·innen aus, die an der Veranstaltung teilnehmen.',
     'g4rf_eventkrake2');
        ?></span>
     </td>
