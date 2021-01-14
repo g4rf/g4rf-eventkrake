@@ -34,7 +34,7 @@ foreach($locationIds as $l) {
 
 
 /***** Session-Funktionalität (CAPTCHA etc.) *****/
-add_action('init', function() {
+add_action('plugins_loaded', function() {
     if(!session_id()) session_start();
 }, 1);
 add_action('wp_logout', 'session_destroy');
