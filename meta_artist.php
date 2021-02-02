@@ -109,7 +109,7 @@ global $post;
                             $end->format($formatEnd) . '<br />';
                 }
             ?></td>
-            <td><?=wp_trim_excerpt($e->post_content)?></td>
+            <td><?=wp_trim_excerpt('', $e->ID)?></td>
             <td><a href="<?=site_url("wp-admin/post.php?action=edit&post={$e->ID}")?>">
                 <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
             </a></td>

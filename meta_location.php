@@ -21,6 +21,12 @@ global $post;
 
 </div>
 
+<!-- sets the correct Leaflet imagePath -->
+<script>
+    Leaflet.Icon.Default.prototype.options.imagePath = 
+            "<?=plugins_url('/leaflet/images/', __FILE__)?>";
+</script>
+
 <div id="eventkrake_map" class="eventkrake_map eventkrake_h250">
     <?=__('Bitte aktiviere JavaScript um die Karte zu benutzen.', 'g4rf_eventkrake2')?>
 </div>
@@ -141,7 +147,7 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
                             $end->format($formatEnd) . '<br />';
                 }
             ?></td>
-            <td><?=wp_trim_excerpt($e->post_content)?></td>
+            <td><?=wp_trim_excerpt('', $e->ID)?></td>
             <td><a href="<?=site_url("wp-admin/post.php?action=edit&post=" . $e->ID)?>">
                 <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
             </a></td>
