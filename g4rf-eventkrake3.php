@@ -4,7 +4,7 @@ Plugin Name: Eventkrake 3 WP Plugin
 Plugin URI: http://eventkrake.de/
 Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
 Author: Jan Kossick
-Version: 3.3beta
+Version: 3.5beta
 License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: http://jankossick.de
 Min WP Version: 5.3
@@ -34,7 +34,7 @@ foreach($locationIds as $l) {
 
 
 /***** Session-Funktionalität (CAPTCHA etc.) *****/
-add_action('init', function() {
+add_action('plugins_loaded', function() {
     if(!session_id()) session_start();
 }, 1);
 add_action('wp_logout', 'session_destroy');
@@ -761,6 +761,7 @@ function eventkrake_register_routes() {
     // GET locations
     register_rest_route($base, '/locations', [
         'methods'  => WP_REST_Server::READABLE,
+        'permission_callback' => '__return_true',
         'callback' => function() {
             $locations = [];
             $events = [];
@@ -797,7 +798,8 @@ function eventkrake_register_routes() {
 
     // GET events
     register_rest_route($base, '/events', [
-        'methods'  => WP_REST_Server::READABLE,
+        'methods'  => WP_REST_Server::READABLE,        
+        'permission_callback' => '__return_true',
         'args' => [
             'earliestStart' => [
                 'type' => 'DateTime',
@@ -860,6 +862,7 @@ function eventkrake_register_routes() {
     // GET artists
     register_rest_route($base, '/artists', [
         'methods'  => WP_REST_Server::READABLE,
+        'permission_callback' => '__return_true',
         'callback' => function() {
             $events = []; $eventsCollection = [];
             $locations = [];
