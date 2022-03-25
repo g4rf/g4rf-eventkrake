@@ -303,6 +303,20 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
         if(! empty($new_instance['count'])) {
             $instance['count'] = sanitize_text_field($new_instance['count']);
         }
+        
+        // dateFormatStart
+        $instance['date_format_start'] = '';
+        if(! empty($new_instance['date_format_start'])) {
+            $instance['date_format_start'] = 
+                sanitize_text_field($new_instance['date_format_start']);
+        }
+        
+        // dateFormatEnd
+        $instance['date_format_end'] = '';
+        if(! empty($new_instance['date_format_end'])) {
+            $instance['date_format_end'] = 
+                sanitize_text_field($new_instance['date_format_end']);
+        }
 
 		return $instance;
 	}
