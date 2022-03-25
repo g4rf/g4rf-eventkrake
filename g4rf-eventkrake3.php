@@ -147,7 +147,7 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
         
         // events
         $data = json_decode( file_get_contents( get_site_url(null, 
-            '/wp-json/eventkrake/v3/events?earliestEnd=' . date('c'),
+            '/wp-json/eventkrake/v3/events?earliestEnd=now',
             is_ssl() ? 'https' : 'http')));
         
         ?><events class="eventkrake"><?php
