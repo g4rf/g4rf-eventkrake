@@ -136,6 +136,10 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget($args, $instance) {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+        
         print $args['before_widget'];
         
         // title
