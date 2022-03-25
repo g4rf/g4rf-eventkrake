@@ -238,7 +238,7 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
 	 */
 	public function form($instance) {
 		$title = $instance['title'];
-        $count = $instance['count'];
+        $count = empty($instance['count']) ? '0' : $instance['count'];
         $dateFormatStart = $instance['date_format_start'];
         $dateFormatEnd = $instance['date_format_end'];
 		?>
