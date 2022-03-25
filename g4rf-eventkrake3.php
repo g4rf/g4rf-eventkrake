@@ -136,16 +136,24 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget($args, $instance) {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
+        $title = $instance['title'];
+
+        $count = $instance['count'];
+        if(empty($count)) $count = 0;
+
+        $dateFormatStart = $instance['date_format_start'];
+        if(empty($dateFormatStart)) $dateFormatStart = 'c';
+
+        $dateFormatEnd = $instance['date_format_end'];
+        if(empty($dateFormatEnd)) $dateFormatEnd = 'c';
+        
         
         print $args['before_widget'];
         
         // title
-		if(! empty($instance['title'])) {
+		if(! empty($title)) {
 			print $args['before_title'];
-            print apply_filters('widget_title', $instance['title']);
+            print apply_filters('widget_title', $title);
             print $args['after_title'];
 		}
         
@@ -161,28 +169,26 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
                 <name><?=$event->name ?></name>
                 <text><?=$event->text ?></text>
                 <picture>
-                    <img src="<?=$event->image?>" alt="<?=$event->name?>" />
+                    <img src="<?=$event->image ?>" alt="<?=$event->name ?>" />
                 </picture>
                 <start><?=
-                    (new DateTime($event->start))
-                        ->format($instance['date_format_start']) 
+                    (new DateTime($event->start))->format($dateFormatStart) 
                 ?></start>
                 <end><?=
-                    (new DateTime($event->end))
-                        ->format($instance['date_format_end']) 
+                    (new DateTime($event->end))->format($dateFormatEnd) 
                 ?></end>
                 <categories><?=
                     implode(', ', $event->categories);
                 ?></categories>
                 <links><?php
-                    foreach($events->links as $link) { ?>
-                        <a href="<?=$link['url']?>"><?=$link['name']?></a>
+                    foreach($event->links as $link) { ?>
+                        <a href="<?=$link->url ?>"><?=$link->name ?></a>
                     <?php } ?>
                 ?></links>
                 <tags><?=$event->tags ?></tags>
                 
                 <?php // location 
-                    $location = $data->locations[$event->locationid];
+                    $location = $data->locations->{$event->locationid};
                     ?><location class="<?=implode('  ', $location->categories);?>">
                         <name><?=$location->name ?></name>
                         <address><?=$location->address ?></address>
@@ -198,7 +204,7 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
                         ?></categories>
                         <links><?php
                             foreach($location->links as $link) { ?>
-                                <a href="<?=$link['url']?>"><?=$link['name']?></a>
+                                <a href="<?=$link->url ?>"><?=$link->name ?></a>
                             <?php } ?>
                         ?></links>
                         <tags><?=$location->tags ?></tags>
@@ -206,7 +212,7 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
                 
                 <?php // artist
                     foreach($event->artists as $artistId) {
-                        $artist = $data->artists[$artistId];
+                        $artist = $data->artists->{$artistId};
                         ?><artist class="<?=implode('  ', $artist->categories);?>">
                             <name><?=$artist->name ?></name>
                             <text><?=$artist->text ?></text>
@@ -219,7 +225,7 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
                             ?></categories>
                             <links><?php
                                 foreach($artist->links as $link) { ?>
-                                    <a href="<?=$link['url']?>"><?=$link['name']?></a>
+                                    <a href="<?=$link->url ?>"><?=$link->name ?></a>
                                 <?php } ?>
                             ?></links>
                             <tags><?=$artist->tags ?></tags>
@@ -242,9 +248,15 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
 	 */
 	public function form($instance) {
 		$title = $instance['title'];
-        $count = empty($instance['count']) ? '0' : $instance['count'];
+
+        $count = $instance['count'];
+        if(empty($count)) $count = 0;
+
         $dateFormatStart = $instance['date_format_start'];
+        if(empty($dateFormatStart)) $dateFormatStart = 'c';
+
         $dateFormatEnd = $instance['date_format_end'];
+        if(empty($dateFormatEnd)) $dateFormatEnd = 'c';
 		?>
         <!-- title -->
 		<p>
@@ -309,14 +321,14 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
         }
         
         // dateFormatStart
-        $instance['date_format_start'] = '';
+        $instance['date_format_start'] = 'c';
         if(! empty($new_instance['date_format_start'])) {
             $instance['date_format_start'] = 
                 sanitize_text_field($new_instance['date_format_start']);
         }
         
         // dateFormatEnd
-        $instance['date_format_end'] = '';
+        $instance['date_format_end'] = 'c';
         if(! empty($new_instance['date_format_end'])) {
             $instance['date_format_end'] = 
                 sanitize_text_field($new_instance['date_format_end']);

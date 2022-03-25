@@ -36,3 +36,6 @@
 .eventkrake-nowrap {
   white-space: nowrap;
 }
+.eventkrake_formselect {
+  width: 25em;
+}
