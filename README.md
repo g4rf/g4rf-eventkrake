@@ -2,7 +2,7 @@
 A wordpress plugin for maintaining events, locations and artists with a REST
 endpoint.
 
-* author: Jan Kossick <jankossick@online.de>
+* author: Jan Kossick <admin@g4rf.net>
 * doc: https://www.eventkrake.de
 
 In der vorliegenden Form erweitert das Plugin nur den Adminbereich und ergänzt drei
