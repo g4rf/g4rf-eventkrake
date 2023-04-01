@@ -6,7 +6,7 @@ Description: A wordpress plugin to manage events, locations and artists. It has 
 Author: Jan Kossick
 Version: 3.7beta
 License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
-Author URI: http://jankossick.de
+Author URI: https://jankossick.de
 Min WP Version: 5.3
 Text Domain: g4rf_eventkrake2
 */
