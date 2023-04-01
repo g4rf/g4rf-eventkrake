@@ -21,7 +21,7 @@ var Eventkrake = {
     },
 
     /**
-    * @requires http://maps.google.com/maps/api/js
+    * @requires https://nominatim.openstreetmap.org
     */
     Geo: {
         /**

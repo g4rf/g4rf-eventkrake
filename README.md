@@ -40,30 +40,9 @@ Enthält das HTML für die Metabox im Adminbereich "Orte".
 ### meta_artists.php
 Enthält das HTML für die Metabox im Adminbereich "Künstler:innen".
 
-### input_frontend.php
-Enthält das HTML und die Verarbeitungslogik für die Eingabe von Events und
-Locations über das Frontend (siehe Shortcode [eventkrake_input]).
-
 ## Shortcodes
 Zur Zeit gibt es einen Shortcode.
 
-### [eventkrake_input]
-Damit wird ein komplexes Eingabefeld geschaffen um Events und Locations
-anzulegen.
-
-**Achtung** Die Bearbeitung der angelegten Events und Locations ist darüber
-nicht möglich. Dafür gibt es einen Link, über den Änderungen per E-Mail
-gemeldet werden können.
-
-Der Shortcode versteht folgende Attribute:
-
-* **author** *int* Die Author-ID, unter der die Posts abgelegt werden. Default ist 1.
-* **email** *string* Die E-Mail, an die Änderungsmeldungen geschickt werden. Default ist die im Wordpress hinterlegte Admin-E-Mail-Adresse.
-* **startdate** *ISO8601-Datum* Eine Zeitangabe, die den Defaultwert für den Start von Events angibt. Als Standard wird das aktuelle Datum und Uhrzeit verwendet.
-* **enddate** *ISO8601-Datum* Eine Zeitangabe, die den Defaultwert für das Ende von Events angibt. Als Standard wird das aktuelle Datum und Uhrzeit verwendet.
-* **lat** *float* Eine Längengradangabe, um den Standardort auf der Karte zu ändern.
-* **lng** *float* Eine Breitengradangabe, um den Standardort auf der Karte zu ändern.
-
-**Beispiel**
-
-[eventkrake_input author="2" startdate="2016-06-17T15:00:00" enddate="2016-06-17T15:00:00" email="spam@eventkrake.de"]
+### [eventkrake]
+Lädt anhand von Attributen eine Anzahl von Events in den DOM als data-Attribute.
+Sollte nur genutzt werden, wenn ein REST-Abruf der Daten nicht möglich ist.
