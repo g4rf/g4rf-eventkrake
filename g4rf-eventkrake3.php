@@ -79,20 +79,10 @@ add_action('wp_enqueue_scripts', function() {
     wp_register_script('eventkrake',  $path.'js/plugin.js',
         array('eventkrake_leaflet'));
     wp_enqueue_script('eventkrake');
-    // Input JS
-    wp_register_script('eventkrake_input',  $path.'js/input.js',
-        array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'eventkrake'));
-    wp_enqueue_script('eventkrake_input');
-    wp_localize_script('eventkrake_input', 'EventkrakeInputAjax', array(
-        'url' => admin_url('admin-ajax.php')
-    ));
 
     // allgemeines CSS
     wp_register_style('eventkrake_all', $path.'css/all.css');
     wp_enqueue_style('eventkrake_all');
-    // Input CSS
-    wp_register_style('eventkrake_input', $path.'css/input.css');
-    wp_enqueue_style('eventkrake_input');
     // jQuery-UI
     wp_register_style('eventkrake_jquery-ui',
         'https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
