@@ -196,6 +196,7 @@ class Eventkrake {
     }
 
     /**
+     * @deprecated since version 3.7beta
      * Gibt Fragen für ein CAPTCHA zurück bzw. prüft ein Captcha.
      * @param string $challenge Die Frage.
      * @param string $response Die Antwort.
