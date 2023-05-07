@@ -4,7 +4,7 @@ Plugin Name: Eventkrake 3 WP Plugin
 Plugin URI: http://eventkrake.de/
 Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
 Author: Jan Kossick
-Version: 3.8beta
+Version: 3.9beta
 License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: https://jankossick.de
 Min WP Version: 5.3
@@ -351,6 +351,7 @@ add_action('init', function () {
         'description' =>
             __('An Orten finden Veranstaltungen statt.', 'g4rf_eventkrake2'),
         'supports' => array('title', 'editor', 'thumbnail'),
+        'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
             add_meta_box(
@@ -448,6 +449,7 @@ add_action('init', function () {
         'description' => __('Veranstaltungen sind zeitlich begrenzte Ereignisse'
                 . ' an einem Ort.', 'g4rf_eventkrake2'),
         'supports' => array('title', 'excerpt', 'editor', 'thumbnail'),
+        'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
             add_meta_box(
@@ -568,6 +570,7 @@ add_action('init', function () {
                 __('Künstler:innen sind Einzelpersonen oder
                          Gruppen.', 'g4rf_eventkrake2'),
         'supports' => array('title', 'excerpt', 'editor', 'thumbnail'),
+        'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
             add_meta_box(
