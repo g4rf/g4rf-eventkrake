@@ -1,0 +1,7 @@
+{
+    "post_types": {
+        "eventkrake_location": {},
+        "eventkrake_event": {},
+        "eventkrake_artist": {}
+    }
+}
