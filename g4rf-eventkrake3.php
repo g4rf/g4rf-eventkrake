@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Eventkrake 3 WP Plugin
-Plugin URI: http://eventkrake.de/
+Plugin URI: https://github.com/g4rf/g4rf-eventkrake3
 Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
 Author: Jan Kossick
-Version: 3.10beta
+Version: 3.11beta
 License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: https://jankossick.de
 Min WP Version: 5.3
