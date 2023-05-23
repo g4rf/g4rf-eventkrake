@@ -21,9 +21,9 @@ class Location {
         $this->title = $p->post_title;
         $this->content = $p->post_content;
         $this->slug = $p->post_name;
-        $this->lat = Eventkrake::getSinglePostMeta($post->ID, 'lat');
-        $this->lng = Eventkrake::getSinglePostMeta($post->ID, 'lng');
-        $this->address = Eventkrake::getSinglePostMeta($post->ID, 'address');
+        $this->lat = Eventkrake::getSinglePostMeta($p->ID, 'lat');
+        $this->lng = Eventkrake::getSinglePostMeta($p->ID, 'lng');
+        $this->address = Eventkrake::getSinglePostMeta($p->ID, 'address');
         $this->links = Eventkrake::getSinglePostMeta($p->ID, 'links');
         $this->categories = Eventkrake::getPostMeta($p->ID, 'categories');
         $this->tags = Eventkrake::getSinglePostMeta($p->ID, 'tags');
