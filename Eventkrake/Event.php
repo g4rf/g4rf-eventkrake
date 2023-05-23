@@ -22,7 +22,7 @@ class Event {
         $starts = Eventkrake::getPostMeta($p->ID, 'start');
         $ends = Eventkrake::getPostMeta($p->ID, 'end');
         
-        for($i = 0; $i < count($startDates); $i++) {
+        for($i = 0; $i < count($starts); $i++) {
             $start = new DateTime($starts[$i]);
             $end = new DateTime($ends[$i]);
             
