@@ -1,14 +1,14 @@
 <?php
 /*
-Plugin Name: Eventkrake 3 WP Plugin
+Plugin Name: Eventkrake WP Plugin
 Plugin URI: https://github.com/g4rf/g4rf-eventkrake3
 Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
 Author: Jan Kossick
-Version: 3.11beta
+Version: 4.0beta
 License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: https://jankossick.de
 Min WP Version: 5.3
-Text Domain: g4rf_eventkrake2
+Text Domain: eventkrake
 */
 
 /***** Needs & needles *****/
@@ -111,10 +111,10 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
 	public function __construct() {
         parent::__construct(
 			'eventkrake_shownextevents', // id
-			esc_html__('Eventkrake :: Next Events', 'g4rf_eventkrake2'), // name
+			esc_html__('Eventkrake :: Next Events', 'eventkrake'), // name
 			array( 
                 'description' => 
-                    esc_html__('Shows the upcoming events.', 'g4rf_eventkrake2')
+                    esc_html__('Shows the upcoming events.', 'eventkrake')
             ) // args
 		);
 	}
@@ -251,7 +251,7 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
         <!-- title -->
 		<p>
             <label for="<?php echo esc_attr($this->get_field_id('title')); ?>">
-                <?php esc_attr_e('Title:', 'g4rf_eventkrake2'); ?></label> 
+                <?php esc_attr_e('Title:', 'eventkrake'); ?></label> 
             <input 
                 class="widefat" 
                 id="<?php echo esc_attr($this->get_field_id('title')); ?>" 
@@ -261,7 +261,7 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
         <!-- count -->
         <p>
             <label for="<?php echo esc_attr($this->get_field_id('count')); ?>">
-                <?php esc_attr_e('Number of events:', 'g4rf_eventkrake2'); ?></label> 
+                <?php esc_attr_e('Number of events:', 'eventkrake'); ?></label> 
             <input 
                 id="<?php echo esc_attr($this->get_field_id('count')); ?>" 
                 name="<?php echo esc_attr($this->get_field_name('count')); ?>" 
@@ -270,7 +270,7 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
         <!-- dateFormatStart -->
         <p>
             <label for="<?php echo esc_attr($this->get_field_id('date_format_start')); ?>">
-                <?php esc_attr_e('Date format for start date:', 'g4rf_eventkrake2'); ?></label> 
+                <?php esc_attr_e('Date format for start date:', 'eventkrake'); ?></label> 
             <input 
                 id="<?php echo esc_attr($this->get_field_id('date_format_start')); ?>" 
                 name="<?php echo esc_attr($this->get_field_name('date_format_start')); ?>" 
@@ -279,7 +279,7 @@ class Eventkrake_ShowNextEvents extends WP_Widget {
         <!-- dateFormatEnd -->
         <p>
             <label for="<?php echo esc_attr($this->get_field_id('date_format_end')); ?>">
-                <?php esc_attr_e('Date format for end date:', 'g4rf_eventkrake2'); ?></label> 
+                <?php esc_attr_e('Date format for end date:', 'eventkrake'); ?></label> 
             <input 
                 id="<?php echo esc_attr($this->get_field_id('date_format_end')); ?>" 
                 name="<?php echo esc_attr($this->get_field_name('date_format_end')); ?>" 
@@ -340,31 +340,31 @@ add_action('init', function () {
         'has_archive' => true,
         'taxonomies' => array('category'),
         'labels' => array(
-            'name' => __('Orte', 'g4rf_eventkrake2'),
-            'singular_name' => __('Ort', 'g4rf_eventkrake2'),
-            'add_new' => __('Ort hinzufügen', 'g4rf_eventkrake2'),
-            'add_new_item' => __('Neuen Ort hinzufügen', 'g4rf_eventkrake2'),
-            'edit' => __('Ort bearbeiten', 'g4rf_eventkrake2'),
-            'edit_item' => __('Ort bearbeiten', 'g4rf_eventkrake2'),
-            'new_item' => __('Ort hinzufügen', 'g4rf_eventkrake2'),
-            'view' => __('Ort anschauen', 'g4rf_eventkrake2'),
-            'search_items' => __('Ort suchen', 'g4rf_eventkrake2'),
-            'not_found' => __('Keine Orte gefunden', 'g4rf_eventkrake2'),
+            'name' => __('Orte', 'eventkrake'),
+            'singular_name' => __('Ort', 'eventkrake'),
+            'add_new' => __('Ort hinzufügen', 'eventkrake'),
+            'add_new_item' => __('Neuen Ort hinzufügen', 'eventkrake'),
+            'edit' => __('Ort bearbeiten', 'eventkrake'),
+            'edit_item' => __('Ort bearbeiten', 'eventkrake'),
+            'new_item' => __('Ort hinzufügen', 'eventkrake'),
+            'view' => __('Ort anschauen', 'eventkrake'),
+            'search_items' => __('Ort suchen', 'eventkrake'),
+            'not_found' => __('Keine Orte gefunden', 'eventkrake'),
             'not_found_in_trash' =>
-                __('Keine gelöschten Orte', 'g4rf_eventkrake2')
+                __('Keine gelöschten Orte', 'eventkrake')
         ),
         'rewrite' => array('slug' => 'location'),
         'menu_position' => Eventkrake::getNextMenuPosition(),
         'menu_icon' => plugin_dir_url(__FILE__) . '/img/location.png',
         'description' =>
-            __('An Orten finden Veranstaltungen statt.', 'g4rf_eventkrake2'),
+            __('An Orten finden Veranstaltungen statt.', 'eventkrake'),
         'supports' => array('title', 'editor', 'thumbnail'),
         'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
             add_meta_box(
                 'eventkrake_location',
-                __('Weitere Angaben zum Ort', 'g4rf_eventkrake2'),
+                __('Weitere Angaben zum Ort', 'eventkrake'),
                 function($args = null) {
                     // Inhalt der Metabox
                     include 'meta_location.php';
@@ -436,33 +436,33 @@ add_action('init', function () {
         'has_archive' => true,
         'taxonomies' => array('category'),
         'labels' => array(
-            'name' => __('Veranstaltungen', 'g4rf_eventkrake2'),
-            'singular_name' => __('Veranstaltung', 'g4rf_eventkrake2'),
-            'add_new' => __('Veranstaltung anlegen', 'g4rf_eventkrake2'),
+            'name' => __('Veranstaltungen', 'eventkrake'),
+            'singular_name' => __('Veranstaltung', 'eventkrake'),
+            'add_new' => __('Veranstaltung anlegen', 'eventkrake'),
             'add_new_item' =>
-                __('Neue Veranstaltung anlegen', 'g4rf_eventkrake2'),
-            'edit' => __('Veranstaltung ändern', 'g4rf_eventkrake2'),
-            'edit_item' => __('Veranstaltung ändern', 'g4rf_eventkrake2'),
-            'new_item' => __('Veranstaltung anlegen', 'g4rf_eventkrake2'),
-            'view' => __('Veranstaltung ansehen', 'g4rf_eventkrake2'),
-            'search_items' => __('Veranstaltung suchen', 'g4rf_eventkrake2'),
+                __('Neue Veranstaltung anlegen', 'eventkrake'),
+            'edit' => __('Veranstaltung ändern', 'eventkrake'),
+            'edit_item' => __('Veranstaltung ändern', 'eventkrake'),
+            'new_item' => __('Veranstaltung anlegen', 'eventkrake'),
+            'view' => __('Veranstaltung ansehen', 'eventkrake'),
+            'search_items' => __('Veranstaltung suchen', 'eventkrake'),
             'not_found' =>
-                __('Keine Veranstaltungen gefunden', 'g4rf_eventkrake2'),
+                __('Keine Veranstaltungen gefunden', 'eventkrake'),
             'not_found_in_trash' =>
-                __('Keine gelöschten Veranstaltungen', 'g4rf_eventkrake2')
+                __('Keine gelöschten Veranstaltungen', 'eventkrake')
         ),
         'rewrite' => array('slug' => 'event'),
         'menu_position' => Eventkrake::getNextMenuPosition(),
         'menu_icon' => plugin_dir_url(__FILE__) . '/img/event.png',
         'description' => __('Veranstaltungen sind zeitlich begrenzte Ereignisse'
-                . ' an einem Ort.', 'g4rf_eventkrake2'),
+                . ' an einem Ort.', 'eventkrake'),
         'supports' => array('title', 'excerpt', 'editor', 'thumbnail'),
         'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
             add_meta_box(
                 'eventkrake_event',
-                __('Weitere Angaben zur Veranstaltung', 'g4rf_eventkrake2'),
+                __('Weitere Angaben zur Veranstaltung', 'eventkrake'),
                 function($args = null) {
                     // Inhalt der Metabox
                     include 'meta_event.php';
@@ -557,33 +557,33 @@ add_action('init', function () {
         'has_archive' => true,
         'taxonomies' => array('category'),
         'labels' => array(
-            'name' => __('Künstler:innen', 'g4rf_eventkrake2'),
-            'singular_name' => __('Künstler:in', 'g4rf_eventkrake2'),
-            'add_new' => __('Künstler:in hinzufügen', 'g4rf_eventkrake2'),
+            'name' => __('Künstler:innen', 'eventkrake'),
+            'singular_name' => __('Künstler:in', 'eventkrake'),
+            'add_new' => __('Künstler:in hinzufügen', 'eventkrake'),
             'add_new_item' =>
-                    __('Neue Künstler:in hinzufügen', 'g4rf_eventkrake2'),
-            'edit' => __('Künstler:in bearbeiten', 'g4rf_eventkrake2'),
-            'edit_item' => __('Künstler:in bearbeiten', 'g4rf_eventkrake2'),
-            'new_item' => __('Künstler:in hinzufügen', 'g4rf_eventkrake2'),
-            'view' => __('Künstler:in ansehen', 'g4rf_eventkrake2'),
-            'search_items' => __('Künstler:in suchen', 'g4rf_eventkrake2'),
-            'not_found' => __('Keine Künstler:in gefunden', 'g4rf_eventkrake2'),
+                    __('Neue Künstler:in hinzufügen', 'eventkrake'),
+            'edit' => __('Künstler:in bearbeiten', 'eventkrake'),
+            'edit_item' => __('Künstler:in bearbeiten', 'eventkrake'),
+            'new_item' => __('Künstler:in hinzufügen', 'eventkrake'),
+            'view' => __('Künstler:in ansehen', 'eventkrake'),
+            'search_items' => __('Künstler:in suchen', 'eventkrake'),
+            'not_found' => __('Keine Künstler:in gefunden', 'eventkrake'),
             'not_found_in_trash' =>
-                    __('Keine gelöschten Künstler:innen', 'g4rf_eventkrake2')
+                    __('Keine gelöschten Künstler:innen', 'eventkrake')
         ),
         'rewrite' => array('slug' => 'artist'),
         'menu_position' => Eventkrake::getNextMenuPosition(),
         'menu_icon' => plugin_dir_url(__FILE__) . '/img/artist.png',
         'description' =>
                 __('Künstler:innen sind Einzelpersonen oder
-                         Gruppen.', 'g4rf_eventkrake2'),
+                         Gruppen.', 'eventkrake'),
         'supports' => array('title', 'excerpt', 'editor', 'thumbnail'),
         'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
             add_meta_box(
                 'eventkrake_artist',
-                __('Weitere Angaben', 'g4rf_eventkrake2'),
+                __('Weitere Angaben', 'eventkrake'),
                 function($args = null) {
                     // Inhalt der Metabox
                     include 'meta_artist.php';
@@ -701,7 +701,7 @@ function eventkrake_restbuild_event($event, $params = []) {
         } catch (Exception $ex) {
             return new WP_Error(
                 'rest_invalid_param',
-                __('The parameter earliestStart is invalid.', 'g4rf_eventkrake2'),
+                __('The parameter earliestStart is invalid.', 'eventkrake'),
                 ['status' => 400]);
         }
     }
@@ -712,7 +712,7 @@ function eventkrake_restbuild_event($event, $params = []) {
         } catch (Exception $ex) {
             return new WP_Error(
                 'rest_invalid_param',
-                __('The parameter earliestEnd is invalid.', 'g4rf_eventkrake2'),
+                __('The parameter earliestEnd is invalid.', 'eventkrake'),
                 ['status' => 400]);
         }
     }
@@ -723,7 +723,7 @@ function eventkrake_restbuild_event($event, $params = []) {
         } catch (Exception $ex) {
             return new WP_Error(
                 'rest_invalid_param',
-                __('The parameter latestStart is invalid.', 'g4rf_eventkrake2'),
+                __('The parameter latestStart is invalid.', 'eventkrake'),
                 ['status' => 400]);
         }
     }
@@ -734,7 +734,7 @@ function eventkrake_restbuild_event($event, $params = []) {
         } catch (Exception $ex) {
             return new WP_Error(
                 'rest_invalid_param',
-                __('The parameter latestEnd is invalid.', 'g4rf_eventkrake2'),
+                __('The parameter latestEnd is invalid.', 'eventkrake'),
                 ['status' => 400]);
         }
     }
@@ -827,19 +827,19 @@ function eventkrake_register_routes() {
         'args' => [
             'earliestStart' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a minimal date for the events. This parameter is checked against the start of an event.', 'g4rf_eventkrake2')
+                'description' => __('Gives a minimal date for the events. This parameter is checked against the start of an event.', 'eventkrake')
             ],
             'earliestEnd' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a minimal date for the events. This parameter is checked against the end of an event.', 'g4rf_eventkrake2')
+                'description' => __('Gives a minimal date for the events. This parameter is checked against the end of an event.', 'eventkrake')
             ],
             'latestStart' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a maximal date for the events. This parameter is checked against the start of an event.', 'g4rf_eventkrake2')
+                'description' => __('Gives a maximal date for the events. This parameter is checked against the start of an event.', 'eventkrake')
             ],
             'latestEnd' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a maximal date for the events. This parameter is checked against the end of an event.', 'g4rf_eventkrake2')
+                'description' => __('Gives a maximal date for the events. This parameter is checked against the end of an event.', 'eventkrake')
             ]
         ],
         'callback' => function($params) {

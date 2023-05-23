@@ -1,4 +1,6 @@
 <?php
+namespace Eventkrake;
+
 class Eventkrake {
     const COLOR_ERROR = '#F6CECE';
     const COLOR_NOERROR = '#D0F5A9';
@@ -250,7 +252,7 @@ class Eventkrake {
 
             <?php if($removable) { ?>
                 <a class="eventkrake-remove-date"
-                   title="<?=__('Zeit entfernen', 'g4rf_eventkrake2')?>">❌</a>
+                   title="<?=__('Zeit entfernen', 'eventkrake')?>">❌</a>
             <?php } ?>
 
             <div class="eventkrake-date-start">
@@ -267,7 +269,7 @@ class Eventkrake {
 
             <div class="eventkrake-date-end">
                 <span class="eventkrake-bold"><?=
-                        __('bis', 'g4rf_eventkrake2')?></span>
+                        __('bis', 'eventkrake')?></span>
                 <input class="eventkrake-machine-date" name="eventkrake_enddate[]"
                     value="<?=$endDate->format('Y-m-d')?>" type="hidden" />
                 <input type="text"

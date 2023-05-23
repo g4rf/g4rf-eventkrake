@@ -28,17 +28,17 @@ global $post;
 </script>
 
 <div id="eventkrake_map" class="eventkrake_map eventkrake_h250">
-    <?=__('Bitte aktiviere JavaScript um die Karte zu benutzen.', 'g4rf_eventkrake2')?>
+    <?=__('Bitte aktiviere Javascript um die Karte zu benutzen.', 'eventkrake')?>
 </div>
 
 <br />
 <span class="description">Vorschlag: </span>
-<span id="eventkrake_rec" title="<?=__('Vorschlag übernehmen', 'g4rf_eventkrake2')?>"></span><br />
-<span class="description"><?=__('Adresse:', 'g4rf_eventkrake2')?>&nbsp;</span>
+<span id="eventkrake_rec" title="<?=__('Vorschlag übernehmen', 'eventkrake')?>"></span><br />
+<span class="description"><?=__('Adresse:', 'eventkrake')?>&nbsp;</span>
 <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'address')?>"
     class="regular-text" type="text" name="eventkrake_address" maxlength="255"
     id="eventkrake_address" />
-<input value="<?=__('Adresse suchen', 'g4rf_eventkrake2')?>" type="button"
+<input value="<?=__('Adresse suchen', 'eventkrake')?>" type="button"
     class="eventkrake_lookforaddress button button-secondary" /><br />
 <span class="description"><?php
 _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
@@ -46,19 +46,19 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
     Klicken in der oberen Karte kannst du den Ort verändern.<br />
     <b>Für den Ort sind die Geokoordinaten maßgebend.</b> Der Text im
     Adressfeld wird aber von vielen Templates ebenfalls ausgegeben. Achte also
-    darauf, dass dieser keine verwirrenden Angaben enthält.', 'g4rf_eventkrake2');
+    darauf, dass dieser keine verwirrenden Angaben enthält.', 'eventkrake');
 ?></span>
 
 <hr />
 
 <table class="form-table">
 <tr>
-    <th><?=__('Links zum Ort', 'g4rf_eventkrake2')?></th>
+    <th><?=__('Links zum Ort', 'eventkrake')?></th>
     <td class="eventkrake-flexcol">
         <div>
             <span class="description"><?=
                 __('Gebe Weblinks zur Webseite und sozialen Netzwerken an.',
-                    'g4rf_eventkrake2')
+                    'eventkrake')
             ?></span>
         </div>
 
@@ -91,17 +91,17 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
             <?php }
         } ?>
         <div><input type="button" class="eventkrake-add-link"
-            value="<?=__('Weblink hinzufügen', 'g4rf_eventkrake2')?>" /></div>
+            value="<?=__('Weblink hinzufügen', 'eventkrake')?>" /></div>
     </td>
 </tr><tr>
-    <th><?=__('Die Kategorien', 'g4rf_eventkrake2')?></th>
+    <th><?=__('Die Kategorien', 'eventkrake')?></th>
     <td>
         <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
             implode(', ', Eventkrake::getPostMeta($post->ID, 'categories'));
         ?></textarea><br />
         <span class="description"><?php
             _e('Notiere hier mit Komma getrennt Kategorien, z.B.:',
-                'g4rf_eventkrake2');
+                'eventkrake');
             ?><br /><?php
             foreach(Eventkrake::getCategories() as $c) {
                 ?><span class="eventkrake-cat-suggestion"><?=
@@ -111,14 +111,14 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
         ?></span>
     </td>
 </tr><tr>
-    <th><?=__('Zusatzinfos zum Ort', 'g4rf_eventkrake2')?></th>
+    <th><?=__('Zusatzinfos zum Ort', 'eventkrake')?></th>
     <td>
         <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
             type="text" name="eventkrake_tags" class="regular-text" /><br />
         <span class="description">
             <?=__('Ein Feld, das beliebige Infos über den Ort enthält. Die
                    Infos lassen sich für die Suche nutzen. müssen
-                   jedoch nicht angezeigt werden.', 'g4rf_eventkrake2')?>
+                   jedoch nicht angezeigt werden.', 'eventkrake')?>
         </span>
     </td>
 </tr></table>
@@ -129,7 +129,7 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
 <table class="form-table">
     <tr>
         <th colspan="6"><?=
-            __('Veranstaltungen am Ort', 'g4rf_eventkrake2')?></th>
+            __('Veranstaltungen am Ort', 'eventkrake')?></th>
     </tr><?php
     $events = array_reverse(Eventkrake::getEvents($post->ID, false));
     foreach($events as $e) {
@@ -149,7 +149,7 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
             ?></td>
             <td><?=wp_trim_excerpt('', $e->ID)?></td>
             <td><a href="<?=site_url("wp-admin/post.php?action=edit&post=" . $e->ID)?>">
-                <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
+                <?=__('Veranstaltung bearbeiten', 'eventkrake')?>
             </a></td>
         </tr><?php
     }

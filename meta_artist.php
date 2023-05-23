@@ -7,14 +7,14 @@ global $post;
 
 <table class="form-table"><tr>
 
-    <th><?=__('Die Kategorien', 'g4rf_eventkrake2')?></th>
+    <th><?=__('Die Kategorien', 'eventkrake')?></th>
     <td>
         <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
             implode(', ', Eventkrake::getPostMeta($post->ID, 'categories'));
         ?></textarea><br />
         <span class="description"><?php
             _e('Notiere hier mit Komma getrennt Kategorien, z.B.:',
-                'g4rf_eventkrake2');
+                'eventkrake');
             ?><br /><?php
             foreach(Eventkrake::getCategories() as $c) {
                 ?><span class="eventkrake-cat-suggestion"><?=
@@ -26,12 +26,12 @@ global $post;
 
 </tr><tr>
 
-    <th><?=__('Links zur Künstler:in', 'g4rf_eventkrake2')?></th>
+    <th><?=__('Links zur Künstler:in', 'eventkrake')?></th>
     <td class="eventkrake-flexcol">
         <div>
             <span class="description"><?=
                 __('Gebe Weblinks zur Webseite und sozialen Netzwerken an.',
-                    'g4rf_eventkrake2')
+                    'eventkrake')
             ?></span>
         </div>
 
@@ -64,19 +64,19 @@ global $post;
             <?php }
         } ?>
         <div><input type="button" class="eventkrake-add-link"
-            value="<?=__('Weblink hinzufügen', 'g4rf_eventkrake2')?>" /></div>
+            value="<?=__('Weblink hinzufügen', 'eventkrake')?>" /></div>
     </td>
 
 </tr><tr>
 
-    <th><?=__('Zusatzinfos zur Künstler:in', 'g4rf_eventkrake2')?></th>
+    <th><?=__('Zusatzinfos zur Künstler:in', 'eventkrake')?></th>
     <td>
         <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
             type="text" name="eventkrake_tags" class="regular-text" /><br />
         <span class="description">
             <?=__('Ein Feld, das beliebige Infos zur Künstler:in enthält. Die
                    Infos lassen sich für die Suche nutzen. müssen
-                   jedoch nicht angezeigt werden.', 'g4rf_eventkrake2')?>
+                   jedoch nicht angezeigt werden.', 'eventkrake')?>
         </span>
     </td>
 
@@ -86,7 +86,7 @@ global $post;
 
 <table class="form-table">
     <tr>
-        <th colspan="3"><?=__('Veranstaltungen', 'g4rf_eventkrake2')?></th>
+        <th colspan="3"><?=__('Veranstaltungen', 'eventkrake')?></th>
     </tr><?php
     foreach(array_reverse(Eventkrake::getEventsForArtist($post->ID, false)) as $e) {
         $starts = Eventkrake::getPostMeta($e->ID, 'start');
@@ -111,7 +111,7 @@ global $post;
             ?></td>
             <td><?=wp_trim_excerpt('', $e->ID)?></td>
             <td><a href="<?=site_url("wp-admin/post.php?action=edit&post={$e->ID}")?>">
-                <?=__('Veranstaltung bearbeiten', 'g4rf_eventkrake2')?>
+                <?=__('Veranstaltung bearbeiten', 'eventkrake')?>
             </a></td>
         </tr><?php
     }
