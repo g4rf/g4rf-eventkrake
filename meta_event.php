@@ -1,6 +1,7 @@
 <?php
 
 global $post;
+use Eventkrake\Eventkrake as Eventkrake;
 
 ?>
 

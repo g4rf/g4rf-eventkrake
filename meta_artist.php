@@ -1,5 +1,6 @@
 <?php
 global $post;
+use Eventkrake\Eventkrake as Eventkrake;
 ?>
 
 <?php // damit WP nur Änderungen vom Edit-Screen durchführt ?>

@@ -21,9 +21,6 @@ require_once 'Eventkrake/Artist.php';
 require_once 'Eventkrake/Location.php';
 
 use Eventkrake\Eventkrake as Eventkrake;
-use Eventkrake\Event as Event;
-use Eventkrake\Location as Location;
-use Eventkrake\Artist as Artist;
 
 /***** convert from 2 to 3 *****/
 
