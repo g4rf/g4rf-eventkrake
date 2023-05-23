@@ -177,14 +177,26 @@ class Eventkrake {
     
     /**
      * Sorts an array of events ascending by start date.
-     * @param array $events Events with index 'start'.
+     * @param array $events Events with property 'start'.
      * @return array The sorted events array.
      */
     public static function sortEvents($events) {
         // sort events
         usort($events, function($a, $b) {
-            $aDate = $a['start'];
-            $bDate = $b['start'];
+            
+            $aDate = null;
+            if(is_array($a)) {
+                $aDate = $a['start'];
+            } else {
+                $aDate = $a->start;
+            }
+            
+            $bDate = null;
+            if(is_array($b)) {
+                $bDate = $b['start'];
+            } else {
+                $bDate = $b->start;
+            }
 
             if(is_string($aDate)) $aDate = new DateTime($aDate);
             if(is_string($bDate)) $bDate = new DateTime($bDate);
