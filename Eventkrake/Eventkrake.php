@@ -204,6 +204,7 @@ class Eventkrake {
             if($aDate < $bDate) return -1;
             if($aDate > $bDate) return 1;
             return 0;
+            
         });
         
         return $events;
