@@ -232,6 +232,8 @@ class Eventkrake {
             $aDate = null;
             if(is_array($a)) {
                 $aDate = $a['start'];
+            } elseif(is_string($aDate)) {
+                $aDate = new DateTime($aDate);
             } else {
                 $aDate = $a->start;
             }
@@ -239,12 +241,11 @@ class Eventkrake {
             $bDate = null;
             if(is_array($b)) {
                 $bDate = $b['start'];
+            } elseif(is_string($bDate)) {
+                $bDate = new DateTime($bDate);
             } else {
                 $bDate = $b->start;
             }
-
-            if(is_string($aDate)) $aDate = new DateTime($aDate);
-            if(is_string($bDate)) $bDate = new DateTime($bDate);
 
             if($aDate < $bDate) return -1;
             if($aDate > $bDate) return 1;
