@@ -34,6 +34,51 @@ class Eventkrake {
             add_post_meta($postId, "eventkrake_$key", $v);
         }
     }
+    
+    /**
+     * Returns list of all events.
+     * @param boolean [$private=false] If set to true, also non-public posts 
+     *          are returned.  
+     * @return array Array of all events.
+     */
+    public static function events($private = false) {
+        $posts = self::getAllEvents(! $private);
+        $events = [];
+        foreach($posts as $post) {
+            $events = array_merge($events, Event::Factory($post));
+        }
+        return self::sortEvents($events);
+    }
+    
+    /**
+     * Returns list of all locations.
+     * @param boolean [$private=false] If set to true, also non-public posts 
+     *          are returned.  
+     * @return array Array of all locations.
+     */
+    public static function locations($private = false) {
+        $posts = self::getLocations(! $private);
+        $locations = [];
+        foreach($posts as $post) {
+            $locations[] = new Location($post);
+        }
+        return $locations;
+    }
+    
+    /**
+     * Returns list of all artists.
+     * @param boolean [$private=false] If set to true, also non-public posts 
+     *          are returned.  
+     * @return array Array of all artists.
+     */
+    public static function artists($private = false) {
+        $posts = self::getArtists(! $private);
+        $artists = [];
+        foreach($posts as $post) {
+            $artists[] = new Artist($post);
+        }
+        return $artists;
+    }
 
     /**
      * Gibt verfügbare Posts vom Typ Location aus (angelegte Orte).

@@ -12,7 +12,6 @@ Text Domain: eventkrake
 */
 
 /***** Needs & needles *****/
-setlocale(LC_TIME, get_locale());
 add_theme_support('post-thumbnails');
 
 require_once 'Eventkrake/Eventkrake.php';
