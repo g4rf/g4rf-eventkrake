@@ -18,6 +18,10 @@ class Event {
     public static function Factory($post) {
         $p = get_post($post);
         
+        if($p == null) throw new \Exception('Post does not exist.');
+        if($p->post_type != 'eventkrake_event') 
+            throw new \Exception('Post type is not `eventkrake_event`.');
+        
         $events = [];
         $starts = Eventkrake::getPostMeta($p->ID, 'start');
         $ends = Eventkrake::getPostMeta($p->ID, 'end');
@@ -34,6 +38,10 @@ class Event {
     
     public function __construct($post, $start, $end) {
         $p = get_post($post);
+        
+        if($p == null) throw new \Exception('Post does not exist.');
+        if($p->post_type != 'eventkrake_event') 
+            throw new \Exception('Post type is not `eventkrake_event`.');
         
         $this->ID = $p->ID;
         $this->title = $p->post_title;

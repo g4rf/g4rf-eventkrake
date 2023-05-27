@@ -14,6 +14,10 @@ class Artist {
     public function __construct($post) {
         $p = get_post($post);
         
+        if($p == null) throw new \Exception('Post does not exist.');
+        if($p->post_type != 'eventkrake_artist') 
+            throw new \Exception('Post type is not `eventkrake_artist`.');
+        
         $this->ID = $p->ID;
         $this->title = $p->post_title;
         $this->content = $p->post_content;
