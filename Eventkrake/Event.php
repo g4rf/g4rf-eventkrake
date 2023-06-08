@@ -7,9 +7,10 @@ class Event {
     var $title;
     var $content;
     var $slug;
-    var $location;
+    var $index; // counts the occurences of this event
     var $start;
-    var $end;
+    var $end;    
+    var $location;
     var $artists;
     var $links;
     var $categories;
@@ -30,13 +31,13 @@ class Event {
             $start = new \DateTime($starts[$i]);
             $end = new \DateTime($ends[$i]);
             
-            $events[] = new self($post, $start, $end);
+            $events[] = new self($post, $start, $end, $i);
         }
         
         return $events;
     }
     
-    public function __construct($post, $start, $end) {
+    public function __construct($post, $start, $end, $index = 0) {
         $p = get_post($post);
         
         if($p == null) throw new \Exception('Post does not exist.');
@@ -51,6 +52,7 @@ class Event {
             Eventkrake::getSinglePostMeta($p->ID, 'locationid');
         $this->start = $start;
         $this->end = $end;
+        $this->index = $index;
         $this->artists = Eventkrake::getPostMeta($p->ID, 'artists');
         $this->links = Eventkrake::getSinglePostMeta($p->ID, 'links');
         $this->categories = Eventkrake::getPostMeta($p->ID, 'categories');
