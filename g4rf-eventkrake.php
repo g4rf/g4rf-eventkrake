@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Eventkrake
-Plugin URI: https://github.com/g4rf/g4rf-eventkrake3
+Plugin URI: https://github.com/g4rf/g4rf-eventkrake
 Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
 Author: Jan Kossick
-Version: 4.01beta
+Version: 4.02beta
 License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: https://jankossick.de
 Min WP Version: 5.3
@@ -20,21 +20,6 @@ require_once 'Eventkrake/Artist.php';
 require_once 'Eventkrake/Location.php';
 
 use Eventkrake\Eventkrake as Eventkrake;
-
-/***** convert from 2 to 3 *****/
-
-// copy locationid_wordpress to locationid
-/*$locationIds = $wpdb->get_results($wpdb->prepare(
-    "SELECT post_id,meta_value FROM $wpdb->postmeta WHERE meta_key = %s",
-        'eventkrake_locationid_wordpress'));
-foreach($locationIds as $l) {
-    $wpdb->insert($wpdb->postmeta, [
-        'post_id' => $l->post_id,
-        'meta_value' => $l->meta_value,
-        'meta_key' => 'eventkrake_locationid'
-    ]);
-}*/
-//print "<pre>"; print_r($locationIds); die();
 
 
 /***** Scripte & CSS hinzufügen *****/
@@ -52,7 +37,7 @@ add_action('admin_enqueue_scripts', function() {
     wp_enqueue_script('eventkrake');
     // Adminscripte
     wp_register_script('eventkrake_admin', $path.'js/admin.js',
-        array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'eventkrake'));
+        array('jquery', 'eventkrake'));
     wp_enqueue_script('eventkrake_admin');
 
     // allgemeines CSS
@@ -62,10 +47,6 @@ add_action('admin_enqueue_scripts', function() {
     wp_register_style('eventkrake_admin', $path.'css/admin.css',
         array('eventkrake_all'));
     wp_enqueue_style('eventkrake_admin');
-    // jQuery-UI
-    wp_register_style('eventkrake_jquery-ui',
-        'https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
-    wp_enqueue_style('eventkrake_jquery-ui');
     // Leaflet CSS
     wp_register_style('eventkrake_leaflet', $path.'leaflet/leaflet.css');
     wp_enqueue_style('eventkrake_leaflet');
@@ -87,10 +68,6 @@ add_action('wp_enqueue_scripts', function() {
     // allgemeines CSS
     wp_register_style('eventkrake_all', $path.'css/all.css');
     wp_enqueue_style('eventkrake_all');
-    // jQuery-UI
-    wp_register_style('eventkrake_jquery-ui',
-        'https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
-    wp_enqueue_style('eventkrake_jquery-ui');
     // Leaflet-CSS
     wp_register_style('eventkrake_leaflet', $path.'leaflet/leaflet.css');
     wp_enqueue_style('eventkrake_leaflet');

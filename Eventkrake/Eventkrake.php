@@ -297,8 +297,7 @@ class Eventkrake {
     }
 
     /**
-     * @deprecated since version 3.0beta
-     * Date display should be done on client side.
+     * Date display on client side.
      * @param type $startDate
      * @param type $endDate
      * @param type $classes
@@ -309,31 +308,35 @@ class Eventkrake {
         ?>
         <div class="eventkrake-dates <?=$classes?>">
 
+            <!-- remove date period picker -->
             <?php if($removable) { ?>
                 <a class="eventkrake-remove-date"
                    title="<?=__('Zeit entfernen', 'eventkrake')?>">❌</a>
             <?php } ?>
 
+            <!-- date start -->
             <div class="eventkrake-date-start">
-                <input class="eventkrake-machine-date" name="eventkrake_startdate[]"
-                    value="<?=$startDate->format('Y-m-d')?>" type="hidden" />
-                <input type="text"
-                    value="<?=strftime('%A, %d. %B %Y', $startDate->format('U'))?>"
-                    class="datepicker" readonly="readonly" /><?php
+                
+                <input type="date" name="eventkrake_startdate[]"
+                    value="<?=$startDate->format('Y-m-d')?>" />
+                
+                <?php
                 Eventkrake::printTimePicker(
                     'eventkrake_starthour[]', 'eventkrake_startminute[]',
                     $startDate->format('H'), $startDate->format('i'));
                 ?>
             </div>
 
+            <!-- date end -->
             <div class="eventkrake-date-end">
+                
                 <span class="eventkrake-bold"><?=
                         __('bis', 'eventkrake')?></span>
-                <input class="eventkrake-machine-date" name="eventkrake_enddate[]"
-                    value="<?=$endDate->format('Y-m-d')?>" type="hidden" />
-                <input type="text"
-                    value="<?=strftime('%A, %d. %B %Y', $endDate->format('U'))?>"
-                    class="datepicker" readonly="readonly" /><?php
+                
+                <input type="date" name="eventkrake_enddate[]"
+                    value="<?=$endDate->format('Y-m-d')?>" />
+                        
+                <?php
                 Eventkrake::printTimePicker(
                     'eventkrake_endhour[]', 'eventkrake_endminute[]',
                     $endDate->format('H'), $endDate->format('i'));
@@ -345,7 +348,6 @@ class Eventkrake {
     }
 
     /**
-     * @deprecated since version 3.0beta
      * Date display should be done on client side.
      * Erzeugt einen Timepicker.
      * @param string $nameHour Der Formular-Name der Stundenauswahl.

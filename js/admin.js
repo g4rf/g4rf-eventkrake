@@ -1,30 +1,6 @@
 /* global Leaflet */
 
 jQuery(document).ready(function() {
-    /* Datepicker */
-    Eventkrake.Admin.loadDatepicker(".datepicker:visible");
-
-    /* Ort suchen */
-    /*jQuery('input[name="addressfinder"]').keydown(function(event) {
-            window.clearTimeout(Eventkrake.Admin.keyTimeout);
-    });
-    jQuery('input[name="addressfinder"]').keyup(function() {
-            var words = jQuery(this).val();
-            var url = jQuery(this).data("url");
-            var id = jQuery(this).data("id");
-            Eventkrake.Admin.keyTimeout = window.setTimeout(function() {
-                    Eventkrake.Admin.findLocation(url, id, words);
-            }, 500);
-    });
-    /* Ort auswählen */
-    /*jQuery('select[name="locationid"]').change(function() {
-        Eventkrake.Admin.showLocationInfo(
-            jQuery(this).data("url"),
-            jQuery(this).val(),
-            "#" + jQuery(this).attr("id") + "_info"
-        );
-    });
-
     /* Map für die Auswahl des Ortes */
     if(document.getElementById(Eventkrake.Admin.mapId)) {
         var lat = parseFloat(jQuery("#" + Eventkrake.Admin.latId).val());
@@ -104,7 +80,6 @@ jQuery(document).ready(function() {
         var dates = jQuery(".eventkrake-template.eventkrake-dates").clone()
                 .removeClass("eventkrake-template")
                 .insertBefore(jQuery(this).parent());
-        Eventkrake.Admin.loadDatepicker(jQuery(".datepicker", dates));
     });
 
     // remove time on events
@@ -169,100 +144,5 @@ Eventkrake.Admin = {
 
         jQuery("#" + Eventkrake.Admin.latId).val(latlng[0]);
         jQuery("#" + Eventkrake.Admin.lngId).val(latlng[1]);
-    },
-
-    /** Listet Orte anhand eines Suchstrings auf. */
-    /*findLocation: function(url, id, words) {
-        var params = {
-            action: 'getlocations',
-            location_search: words,
-            limit: 100
-        };
-        jQuery.getJSON(url, params, function(data) {
-            var sel = "#location_" + id;
-            jQuery(sel).find("option").not(".fixed").remove();
-            for(var key in data) {
-                jQuery(sel).append("<option value='" + data[key].id + "'>" +
-                    data[key].name + " (" + data[key].address + ")</option>");
-            }
-        });
-    },*/
-
-    /** Findet Adressen.
-     */
-    /*findAddress : function() {
-            var id = jQuery(e).parents('.yourbash').attr('id');
-            var a = '#'+id+' input[name="address[]"]';
-            var lat =  '#'+id+' input[name="lat[]"]';
-            var lng =  '#'+id+' input[name="lng[]"]';
-
-            Geo.getLatLng(jQuery(a).val(), function(latlng, address) {
-                    jQuery(a).val(address);
-                    if(latlng === false) {
-                            jQuery(lat).val('');
-                            jQuery(lng).val('');
-                    } else {
-                            jQuery(lat).val(latlng.lat());
-                            jQuery(lng).val(latlng.lng());
-                    }
-            });
-    },*/
-
-    /** Gibt Infos zu einem Ort in einem DIV aus
-     * @param {String} url Die Webservice-URL.
-     * @param {Number} locationId Die Id des Ortes.
-     * @param {Object} div Das Element, wo die Daten abgelegt werden. Dazu wird
-     *      jedes Element mit dem Attribut data-info="{Wert}" mit dem
-     *      entsprechenden {Wert} befüllt.
-     */
-    /*showLocationInfo : function(url, locationId, elem) {
-        var params = {
-            action: 'getlocation',
-            location_id: locationId
-        };
-        jQuery.getJSON(url, params, function(location) {
-            if(typeof location !== "object") return;
-            jQuery(elem).find("[data-info]").each(function() {
-                var text = location[jQuery(this).data("info")];
-                if(jQuery.isArray(text)) {
-                    text = text.join(", ");
-                }
-                jQuery(this).html(text);
-            });
-        });
-    }*/
-
-    loadDatepicker: function(selector) {
-        jQuery(selector).datepicker({
-            dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag",
-                "Freitag", "Samstag"],
-            dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-            dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-            monthNames: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
-                "August", "September", "Oktober", "November", "Dezember"],
-            monthNamesShort: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul",
-                "Aug", "Sep", "Okt", "Nov", "Dez"],
-
-            dateFormat: "DD, d. M yy",
-
-            onSelect: function(dateText, inst)  {
-                var date = jQuery.datepicker.parseDate(
-                    jQuery(this).datepicker("option", "dateFormat"),
-                    dateText,
-                    {
-                        dayNamesMin: jQuery(this).datepicker("option", "dayNamesMin"),
-                        dayNamesShort: jQuery(this).datepicker("option", "dayNamesShort"),
-                        dayNames: jQuery(this).datepicker("option", "dayNames"),
-                        monthNamesShort: jQuery(this).datepicker("option", "monthNamesShort"),
-                        monthNames: jQuery(this).datepicker("option", "monthNames")
-                    }
-                );
-
-                // save date machine readable
-                var machineDate = jQuery(".eventkrake-machine-date",
-                                                    jQuery(this).parent());
-                machineDate.val(jQuery.datepicker.formatDate("yy-mm-dd", date));
-            }
-        });
     }
 };
