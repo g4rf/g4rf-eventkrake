@@ -5,59 +5,60 @@ endpoint.
 * author: Jan Kossick <admin@g4rf.net>
 * doc: https://www.eventkrake.de
 
-In der vorliegenden Form erweitert das Plugin nur den Adminbereich und ergänzt drei
+In its present form, the plugin only extends the admin area and adds three
 [Custom Post Types](https://codex.wordpress.org/Post_Types).
 
-Für die Darstellung im Frontend ist das Theme zuständig, das die Daten über die
-[REST API](http://www.eventkrake.de/api/) oder direkt durch Aufruf der 
-Eventkrake-Klassen abrufen kann.
+The theme is responsible for the presentation in the frontend, which receives 
+the data via the [REST API](http://www.eventkrake.de/api/) or directly by 
+calling the Eventkrake classes.
 
 
-## Struktur
-Die Struktur folgt dem eines [Wordpress Plugins](https://codex.wordpress.org/Writing_a_Plugin).
-Die Dateien müssen im Ordner **/wp-content/plugins/g4rf-eventkrake** abgelegt werden.
+## Structure
+The structure follows that of a [wordpress plugin](https://codex.wordpress.org/Writing_a_Plugin).
+The files must be placed in the folder `/wp-content/plugins/g4rf-eventkrake`.
 
 ### g4rf-eventkrake.php
-Der Startpunkt für Wordpress mit Metainfos. Hier werden die benötigten Scripte geladen,
-[Custom Post Types](https://codex.wordpress.org/Post_Types) festgelegt,  die Callbacks
-zum Speichern der Metainfos für die Custom Post Types definiert und ein rudimentärer
-[Shortcode](https://codex.wordpress.org/Shortcode_API) angelegt. Zusätzlich
-werden hier die Routen und Endpoints für die REST API angelegt.
+The starting point for Wordpress with meta infos. This is where the required 
+scripts are loaded, [Custom Post Types](https://codex.wordpress.org/Post_Types) 
+are specified, the callbacks to save the meta info for the custom post types and 
+a rudimentary [shortcode](https://codex.wordpress.org/Shortcode_API) is created. 
+In addition the routes and endpoints for the REST API are created here.
 
 ### meta_event.php
-Enthält das HTML für die Metabox im Adminbereich "Veranstaltungen".
+Contains the HTML for the metabox in the admin area "Events".
 
 ### meta_location.php
-Enthält das HTML für die Metabox im Adminbereich "Orte".
+Contains the HTML for the metabox in the "Locations" admin area.
 
 ### meta_artists.php
-Enthält das HTML für die Metabox im Adminbereich "Künstler:innen".
+Contains the HTML for the metabox in the admin area "Artists".
 
 
-## Klassen
+## Classes
 
 ### \Eventkrake\Eventkrake
-Die statische Klasse `Eventkrake` enthält statische Hilfsfunktionen zum Setzen 
-von Post-Meta-Infos, zur Ausgabe von Admin-Meldungen und weitere Hilfsfunktionen.
+The static class `Eventkrake` contains static auxiliary functions for setting 
+of post meta-infos, for the output of admin messages and other auxiliary 
+functions.
 
 ### \Eventkrake\Event
 
-Stellt einzelne Events dar. Zum Erstellen sollte die statische Funktion
-`Event::Factory($id)` genutzt werden, da somit pro Termin ein Event erzeugt
-und alle Termine als Array zurückgegeben werden.
+Represents individual events. To create them, the static function
+`Event::Factory($id)` should be used, as this creates one event per date and 
+returns all events as an array.
 
 ### \Eventkrake\Location
 
-Erzeugt ein Location-Objekt.
+Creates a location object.
 
-### \Eventkrake\Artist
+### \EventKrake\Artist
 
-Erzeugt ein Artist-Objekt.
+Creates an Artist object.
 
 
 ## Shortcodes
-Zur Zeit gibt es einen Shortcode.
+There is currently one shortcode.
 
 ### [eventkrake]
-Lädt anhand von Attributen eine Anzahl von Events in den DOM als data-Attribute.
-Sollte nur genutzt werden, wenn ein REST-Abruf der Daten nicht möglich ist.
+Loads a number of events into the DOM as data attributes. Should only be used 
+if a REST retrieval of the data is not possible.
