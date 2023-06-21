@@ -36,6 +36,11 @@
   margin-right: 10px;
   text-decoration: none;
 }
+.eventkrake-dates .eventkrake-date-warning {
+  display: none;
+  color: darkred;
+  padding: 3px 30px;
+}
 .eventkrake-select-search {
   width: 100%;
   max-width: 50em;

@@ -88,6 +88,40 @@ jQuery(document).ready(function() {
         jQuery(this).parent().remove();
     });
     
+    // compare start and end times and show warning if end < start
+    jQuery(document).on("change",
+            ".eventkrake-dates input, .eventkrake-dates select",
+    function() {
+        let parent = jQuery(this).parents(".eventkrake-dates");
+
+        // start date
+        let startDate = 
+                jQuery(".eventkrake-date-start input[type='date']", parent);
+        let startTimeHour = 
+                jQuery(".eventkrake-date-start .eventkrake-hour", parent);
+        let startTimeMinute = 
+                jQuery(".eventkrake-date-start .eventkrake-minute", parent);
+        
+        // end date
+        let endDate = 
+                jQuery(".eventkrake-date-end input[type='date']", parent);
+        let endTimeHour = 
+                jQuery(".eventkrake-date-end .eventkrake-hour", parent);
+        let endTimeMinute = 
+                jQuery(".eventkrake-date-end .eventkrake-minute", parent);
+        
+        let start = new Date(startDate.val() + "T" + 
+                startTimeHour.val() + ":" + startTimeMinute.val() + ":00");
+        let end = new Date(endDate.val() + "T" + 
+                endTimeHour.val() + ":" + endTimeMinute.val() + ":00");
+ 
+        if(end <= start) {
+            jQuery(".eventkrake-date-warning", parent).show();
+        } else {
+            jQuery(".eventkrake-date-warning", parent).hide();
+        }
+    });    
+    
     // search for select
     jQuery(".eventkrake-select-search").on("keyup", function() {
         var select = jQuery(this).next(".eventkrake-select-multiple");

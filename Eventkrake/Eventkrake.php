@@ -342,6 +342,10 @@ class Eventkrake {
                     $endDate->format('H'), $endDate->format('i'));
                 ?>
             </div>
+            
+            <div class="eventkrake-date-warning">⚠️ <?=
+                __('Das Ende liegt vor dem Anfang.', 'eventkrake');
+            ?></div>
 
         </div>
         <?php
@@ -357,14 +361,14 @@ class Eventkrake {
      */
     public static function printTimePicker($nameHour, $nameMin, $selHour = 0,
             $selMin = 0) { ?>
-        <select name="<?=$nameHour?>"><?php
+        <select name="<?=$nameHour?>" class="eventkrake-hour"><?php
             for($i = 0; $i < 24; $i++) {
                 $h = substr("0$i", -2); ?>
                 <option value="<?=$h?>"<?=$selHour == $i ? ' selected' : ''?>>
                     <?=$h?>
                 </option>
             <?php } ?>
-        </select>:<select name="<?=$nameMin?>"><?php
+        </select>:<select name="<?=$nameMin?>" class="eventkrake-minute"><?php
             for($i = 0; $i < 60; $i+=1) {
                 $m = substr("0$i", -2); ?>
                 <option value="<?=$m?>"<?=$selMin == $i ? ' selected' : ''?>>
