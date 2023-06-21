@@ -100,7 +100,7 @@ use Eventkrake\Eventkrake as Eventkrake;
                 $location = get_post(Eventkrake::getSinglePostMeta($e->ID, 'locationid'));
                 ?><a href="<?=
                     site_url("wp-admin/post.php?action=edit&post={$location->ID}")?>"><?=
-                    $location->post_title?></a>
+                    get_the_title($location->ID)?></a>
             </td>
             <td><?php
                 for($i = 0; $i < count($starts); $i++) {
