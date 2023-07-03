@@ -4,7 +4,7 @@ Plugin Name: Eventkrake
 Plugin URI: https://github.com/g4rf/g4rf-eventkrake
 Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
 Author: Jan Kossick
-Version: 4.02beta
+Version: 4.03beta
 License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: https://jankossick.de
 Min WP Version: 5.3
@@ -14,13 +14,16 @@ Text Domain: eventkrake
 /***** Needs & needles *****/
 add_theme_support('post-thumbnails');
 
+require_once 'Eventkrake/Config.php';
 require_once 'Eventkrake/Eventkrake.php';
 require_once 'Eventkrake/Event.php';
 require_once 'Eventkrake/Artist.php';
 require_once 'Eventkrake/Location.php';
 
+use Eventkrake\Config as Config;
 use Eventkrake\Eventkrake as Eventkrake;
-
+use Eventkrake\Event as Event;
+use Eventkrake\Location as Location;
 
 /***** Scripte & CSS hinzufügen *****/
 // Backend JS und CSS
@@ -401,6 +404,31 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
     Eventkrake::setPostMeta($post_id, 'categories', $categories);
 }, 1, 2);
 
+// add location address and date to event page
+add_filter('the_content', function($content) {
+    
+    if (!(is_single() && in_the_loop() && is_main_query() &&
+                                get_post_type() == 'eventkrake_location')) {
+        return $content;
+    }
+    
+    $location = new Location(get_the_ID());
+
+    ob_start(); ?>
+
+    <div class="eventkrake-location-meta">
+
+        <div class="eventkrake-location-address"><?=
+            $location->address
+        ?></div>
+
+    </div><?php
+
+    // TODO: add other meta like events, links, categories, tags
+    
+    return ob_get_clean() . $content;
+});
+
 
 /* EVENTS */
 add_action('init', function () {
@@ -521,6 +549,78 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
 
     Eventkrake::setPostMeta($post_id, 'artists', $artists);
 }, 1, 2);
+
+// add event location and date to event page
+add_filter('the_content', function($content) {
+    
+    if (!(is_single() && in_the_loop() && is_main_query() &&
+                                    get_post_type() == 'eventkrake_event')) {
+        return $content;
+    }
+    
+    $times = Event::Factory(get_the_ID());
+    if(count($times) == 0) return $content;
+
+    ob_start(); ?>
+
+    <div class="eventkrake-event-meta">
+
+        <!-- location --><?php
+        $location = new Location($times[0]->location); ?>
+        <div class="eventkrake-event-location">
+            <div class="eventkrake-event-location-title">
+                <a href="<?=get_the_permalink($location->ID)?>"><?=
+                    get_the_title($location->ID)
+                ?></a>
+            </div>
+            <div class="eventkrake-event-location-address"><?=
+                $location->address
+            ?></div>
+        </div>
+
+        <!-- times --><?php
+        $locale = 'de'; //setlocale(LC_TIME, 0);
+        
+        $dateFormatter = new IntlDateFormatter($locale);
+        $dateFormatter->setPattern(Config::dateFormat());
+        
+        $timeFormatter = new IntlDateFormatter($locale);
+        $timeFormatter->setPattern(Config::timeFormat());
+
+        ?><div class="eventkrake-event-times"><?php
+            foreach($times as $time) { ?>
+            
+                <div class="eventkrake-event-time">
+                    
+                    <div class="eventkrake-event-start">
+                        <div class="eventkrake-event-start-date"><?=
+                            $dateFormatter->format($time->start)
+                        ?></div>
+                        <div class="eventkrake-event-start-time"><?=
+                            $timeFormatter->format($time->start)
+                        ?></div>
+                    </div>
+                    
+                    <div class="eventkrake-event-end">
+                        <div class="eventkrake-event-end-date"><?=
+                            $dateFormatter->format($time->end)
+                        ?></div>
+                        <div class="eventkrake-event-end-time"><?=
+                            $timeFormatter->format($time->end)
+                        ?></div>
+                    </div>
+                
+                </div>
+            
+            <?php }
+        ?></div>
+
+    </div><?php
+    
+    // TODO: add other meta like artists, links, categories, tags
+
+    return ob_get_clean() . $content;
+});
 
 
 /* ARTISTS */
