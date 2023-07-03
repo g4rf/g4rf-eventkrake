@@ -111,7 +111,7 @@ add_action('init', function () {
         'menu_icon' => plugin_dir_url(__FILE__) . '/img/location.png',
         'description' =>
             __('An Orten finden Veranstaltungen statt.', 'eventkrake'),
-        'supports' => array('title', 'editor', 'thumbnail'),
+        'supports' => array('title', 'editor', 'thumbnail', 'comments'),
         'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
@@ -234,7 +234,8 @@ add_action('init', function () {
         'menu_icon' => plugin_dir_url(__FILE__) . '/img/event.png',
         'description' => __('Veranstaltungen sind zeitlich begrenzte Ereignisse'
                 . ' an einem Ort.', 'eventkrake'),
-        'supports' => array('title', 'excerpt', 'editor', 'thumbnail'),
+        'supports' => array('title', 'excerpt', 'editor', 'thumbnail', 
+            'comments'),
         'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
@@ -427,7 +428,8 @@ add_action('init', function () {
         'description' =>
                 __('Künstler:innen sind Einzelpersonen oder
                          Gruppen.', 'eventkrake'),
-        'supports' => array('title', 'excerpt', 'editor', 'thumbnail'),
+        'supports' => array('title', 'excerpt', 'editor', 'thumbnail', 
+            'comments'),
         'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
