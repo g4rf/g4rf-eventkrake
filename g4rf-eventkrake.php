@@ -4,7 +4,7 @@ Plugin Name: Eventkrake
 Plugin URI: https://github.com/g4rf/g4rf-eventkrake
 Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
 Author: Jan Kossick
-Version: 4.03beta
+Version: 4.04beta
 License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: https://jankossick.de
 Min WP Version: 5.3
@@ -357,7 +357,11 @@ add_filter('the_content', function($content) {
         </div>
 
         <!-- times --><?php
-        $locale = 'de'; //setlocale(LC_TIME, 0);
+        $locale = substr(get_locale(), 0, 2);
+        // if WP MultiLang is installed
+        if(function_exists('wpm_get_language')) {
+            $locale = wpm_get_language();
+        }
         
         $dateFormatter = new IntlDateFormatter($locale);
         $dateFormatter->setPattern(Config::dateFormat());
@@ -387,7 +391,12 @@ add_filter('the_content', function($content) {
                             $timeFormatter->format($time->end)
                         ?></div>
                     </div>
-                
+                    
+                    <div class="eventkrake-event-ics">
+                        <a href="/<?=$time->icsParameter()?>"><?=
+                            __('ics', 'eventkrake')
+                        ?></a>
+                    </div>
                 </div>
             
             <?php }
@@ -398,6 +407,55 @@ add_filter('the_content', function($content) {
     // TODO: add other meta like artists, links, categories, tags
 
     return ob_get_clean() . $content;
+});
+
+// redirect to ics output
+add_action('template_redirect', function() {    
+    $ics = filter_input(INPUT_GET, 'eventkrake_ics');
+    $id = filter_input(INPUT_GET, 'eventkrake_ics_id', FILTER_VALIDATE_INT);
+    $index = filter_input(INPUT_GET, 'eventkrake_ics_index', 
+        FILTER_VALIDATE_INT);
+    $categories = filter_input(INPUT_GET, 'eventkrake_ics_categories',
+        FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $url = filter_input(INPUT_GET, 'eventkrake_ics_url');
+    
+    // check if ics request
+    if($ics != '1') return;
+    // check parameters
+    if(! $id) return;
+    if($index === NULL) return;
+    
+    // check if event
+    try {
+        $events = Event::Factory($id);
+    } catch (Exception $ex) {
+        return;
+    }
+    
+    // select index
+    $event = null;
+    foreach($events as $e) {
+        if($e->index == $index) {
+            $event = $e;
+            break;
+        }
+    }
+    // index not found
+    if ($event == null) return;
+    
+    // categories & url
+    if(empty($categories)) $categories = [];
+    if(empty($url)) $url = '';
+    
+    // header
+    $filename = preg_replace('/[^a-z0-9]/i', '', get_the_title($event->ID))
+        . '-' . $event->ID . '-' . $event->index;
+    header('Content-Type: text/calendar; charset=utf-8');
+    header("Content-Disposition: attachment; filename=$filename.ics");
+
+    print $event->ics($categories, $url);
+    
+    exit;
 });
 
 
@@ -539,12 +597,7 @@ function eventkrake_restbuild_location($location) {
         'tags' => Eventkrake::getSinglePostMeta($id, 'tags')
     ];
 }
-function eventkrake_restbuild_event($event, $params = []) {
-    $id = $event->ID;
-    $events = [];
-    $startDates = Eventkrake::getPostMeta($id, 'start');
-    $endDates = Eventkrake::getPostMeta($id, 'end');
-
+function eventkrake_restbuild_event($post, $params = []) {
     // params
     $earliestStart = false;
     if(isset($params['earliestStart'])) {
@@ -592,29 +645,31 @@ function eventkrake_restbuild_event($event, $params = []) {
     }
 
     // go through dates
-    for($i = 0; $i < count($startDates); $i++) {
+    $dates = Event::Factory($post);
+    $dateFormat = 'Y-m-d\TH:i:s';
+    $events = [];
+    foreach($dates as $date) {
         // check dates
-        $eventStart = new DateTime($startDates[$i]);
-        $eventEnd = new DateTime($endDates[$i]);
-        if($earliestStart != false && $eventStart < $earliestStart) continue;
-        if($earliestEnd != false && $eventEnd < $earliestEnd) continue;
-        if($latestStart != false && $eventStart > $latestStart) continue;
-        if($latestEnd != false && $eventEnd > $latestEnd) continue;
+        if($earliestStart != false && $date->start < $earliestStart) continue;
+        if($earliestEnd != false && $date->end < $earliestEnd) continue;
+        if($latestStart != false && $date->start > $latestStart) continue;
+        if($latestEnd != false && $date->end > $latestEnd) continue;
 
         // add event
         $events[] = [
-            'id' => $id,
-            'name' => $event->post_title,
-            'text' => apply_filters('the_content',
-                                        $event->post_content),
-            'image' =>  get_the_post_thumbnail_url($id, 'full'),
-            'locationid' => Eventkrake::getSinglePostMeta($id, 'locationid'),
-            'start' => $startDates[$i],
-            'end' => $endDates[$i],
-            'artists' => Eventkrake::getPostMeta($id, 'artists'),
-            'categories' => Eventkrake::getPostMeta($id, 'categories'),
-            'links' => Eventkrake::getSinglePostMeta($id, 'links'),
-            'tags' => Eventkrake::getSinglePostMeta($id, 'tags')
+            'id' => $date->ID,
+            'name' => get_the_title($date->ID),
+            'text' => apply_filters('the_content', $date->content),
+            'image' =>  get_the_post_thumbnail_url($date->ID, 'full'),
+            'locationid' => $date->location,
+            'start' => $date->start->format($dateFormat),
+            'end' => $date->end->format($dateFormat),
+            'artists' => Eventkrake::getPostMeta($date->ID, 'artists'),
+            'categories' => Eventkrake::getPostMeta($date->ID, 'categories'),
+            'links' => Eventkrake::getSinglePostMeta($date->ID, 'links'),
+            'tags' => Eventkrake::getSinglePostMeta($date->ID, 'tags'),
+            'icsUrl' => get_site_url(
+                            null, '/' . $date->icsParameter(), 'https')
         ];
     }
 

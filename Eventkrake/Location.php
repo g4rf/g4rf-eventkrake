@@ -6,6 +6,7 @@ class Location {
     var $ID;
     var $title;
     var $content;
+    var $excerpt;
     var $slug;
     var $lat;
     var $lng;
@@ -24,6 +25,7 @@ class Location {
         $this->ID = $p->ID;
         $this->title = $p->post_title;
         $this->content = $p->post_content;
+        $this->excerpt = $p->post_excerpt;
         $this->slug = $p->post_name;
         $this->lat = Eventkrake::getSinglePostMeta($p->ID, 'lat');
         $this->lng = Eventkrake::getSinglePostMeta($p->ID, 'lng');

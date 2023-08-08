@@ -6,6 +6,7 @@ class Artist {
     var $ID;
     var $title;
     var $content;
+    var $excerpt;
     var $slug;
     var $links;
     var $categories;
@@ -21,6 +22,7 @@ class Artist {
         $this->ID = $p->ID;
         $this->title = $p->post_title;
         $this->content = $p->post_content;
+        $this->excerpt = $p->post_excerpt;
         $this->slug = $p->post_name;
         $this->links = Eventkrake::getSinglePostMeta($p->ID, 'links');
         $this->categories = Eventkrake::getPostMeta($p->ID, 'categories');
