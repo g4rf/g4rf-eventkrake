@@ -121,7 +121,28 @@ class Event {
         }
         
         $location = new Location($this->location);
-                
+        
+        // excerpt
+        $excerpt = '';
+        if(strlen($this->excerpt) > 0) {
+            
+            // Elementor causes problems, so we do some magic advised here:
+            // @see https://github.com/elementor/elementor/issues/18722
+            if (is_plugin_active( 'elementor/elementor.php' )) {
+                \Elementor\Plugin::instance()
+                    ->frontend->remove_content_filter();
+            }
+            
+            // do the excerpt filtering
+            $excerpt = html_entity_decode(
+                wp_strip_all_tags(
+                    apply_filters('the_content', $this->excerpt),
+                true),
+                ENT_HTML5,
+                'UTF-8'
+            );
+        }
+        
         $ics = [ 
             'BEGIN:VEVENT',
                 'CLASS:PUBLIC',
@@ -152,14 +173,7 @@ class Event {
                         'UTF-8'
                     )
                 ),
-                self::icsEscapeKeyValue(
-                    'DESCRIPTION',
-                    html_entity_decode(
-                        wp_strip_all_tags($this->excerpt, true),
-                        ENT_HTML5,
-                        'UTF-8'
-                    )
-                ),
+                self::icsEscapeKeyValue('DESCRIPTION', $excerpt),
                 self::icsEscapeKeyValue('URL', $url),
                 'DTSTART:' . $this->start->format($dateFormat),
                 'DTEND:' . $this->end->format($dateFormat),
