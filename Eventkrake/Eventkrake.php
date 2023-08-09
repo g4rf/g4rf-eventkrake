@@ -39,7 +39,7 @@ class Eventkrake {
      * Returns list of all events.
      * @param boolean [$private=false] If set to true, also non-public posts 
      *          are returned.  
-     * @return array Array of all events.
+     * @return array Array of all events, sorted.
      */
     public static function events($private = false) {
         $posts = self::getAllEvents(! $private);

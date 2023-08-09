@@ -70,65 +70,104 @@ class Event {
     }
     
     public function ics($categories = [], $url = '') {
+        $ics = [
+            'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                self::icsEscapeKeyValue(
+                    'PRODID',
+                    'Eventkrake Wordpress Plugin @ ' . get_bloginfo('name')
+                ),
+                'METHOD:PUBLISH',
+
+                $this->icsEvent($categories, $url),
+            
+            'END:VCALENDAR'
+        ];
+        
+        return implode("\r\n", $ics);
+    }
+    
+    public static function icsAll($categories = []) {
+        $ics = ['BEGIN:VCALENDAR', 
+            'VERSION:2.0',
+            self::icsEscapeKeyValue(
+                'PRODID',
+                'Eventkrake Wordpress Plugin @ ' . get_bloginfo('name')
+            ),
+            'METHOD:PUBLISH'];
+
+        $now = new \DateTime();
+        foreach(Eventkrake::events() as $event) {
+            if($event->end < $now) continue;
+            
+            $ics[] = $event->icsEvent($categories);
+        }
+            
+        $ics[] = 'END:VCALENDAR';
+        
+        return implode("\r\n", $ics);
+    }
+    
+    public function icsEvent($categories = [], $url = '') {
         $dateFormat = 'Ymd\THis'; // no time zone set
         
         if(empty($url)) {
             $url = get_permalink($this->ID);
         }
         
+        $cats = [];
+        foreach($categories as $c) {
+            $cats[] = $this->icsEscapeString($c);
+        }
+        
         $location = new Location($this->location);
-                
-        $ics = [ 'BEGIN:VCALENDAR',
-            'VERSION:2.0',
-            $this->icsEscapeString(
-                'PRODID',
-                'Eventkrake Wordpress Plugin @ ' . get_bloginfo('name')
-            ),
-            'METHOD:PUBLISH',
-            
+        
+        $ics = [ 
             'BEGIN:VEVENT',
-                'UID:' .
-                    'ID' . $this->ID . '-' . $this->index .
-                    '@' . parse_url(get_site_url(), PHP_URL_HOST),
+                'CLASS:PUBLIC',
                 'TRANSP:OPAQUE', // busy
-                $this->icsEscapeString(
-                    'CATEGORIES',
-                    implode(',', $categories)
+                self::icsEscapeKeyValue(
+                    'UID',
+                    'ID' . $this->ID . '-' . $this->index .
+                    '@' . parse_url(get_site_url(), PHP_URL_HOST)
                 ),
-                $this->icsEscapeString(
+                'CATEGORIES:' . implode(',', $cats),
+                self::icsEscapeKeyValue(
                     'LOCATION',
                     html_entity_decode(
-                        get_the_title($location->ID) . 
-                                ' (' . $location->address . ')',
+                        wp_strip_all_tags(
+                            get_the_title($location->ID) . 
+                            ' (' . $location->address . ')'
+                            , true),
                         ENT_HTML5,
                         'UTF-8'
                     )
                 ),
                 'GEO:' . $location->lat . ';' . $location->lng,
-                $this->icsEscapeString(
+                self::icsEscapeKeyValue(
                     'SUMMARY',
                     html_entity_decode(
-                        get_the_title($this->ID),
+                        wp_strip_all_tags(get_the_title($this->ID), true),
                         ENT_HTML5,
                         'UTF-8'
                     )
                 ),
-                $this->icsEscapeString(
+                self::icsEscapeKeyValue(
                     'DESCRIPTION',
                     html_entity_decode(
-                        apply_filters('the_content', $this->excerpt),
+                        wp_strip_all_tags(
+                            apply_filters('the_content', $this->excerpt)
+                            , true),
                         ENT_HTML5,
                         'UTF-8'
                     )
                 ),
-                "URL:$url",
-                'CLASS:PUBLIC',
+                self::icsEscapeKeyValue('URL', $url),
                 'DTSTART:' . $this->start->format($dateFormat),
                 'DTEND:' . $this->end->format($dateFormat),
                 'DTSTAMP:' . (new \DateTime())->format($dateFormat),
-            'END:VEVENT',
-            
-        'END:VCALENDAR'];
+            'END:VEVENT'
+        ];
         
         return implode("\r\n", $ics);
     }
@@ -143,12 +182,13 @@ class Event {
         ]);
     }
     
-    private function icsEscapeString($key, $value, $folding = true) {
-        $sanitized = "$key:" . preg_replace('/([\,;])/', '\\\$1', 
-            wp_strip_all_tags($value, true));
-        if(! $folding) return $sanitized;
-        
+    private static function icsEscapeKeyValue($key, $value) {
+        $sanitized = "$key:" . self::icsEscapeString($value);
         $chunks = mb_str_split($sanitized, 73, 'UTF-8');
         return  implode("\r\n ", $chunks);
+    }
+    
+    private static function icsEscapeString($value) {
+        return preg_replace('/([\,;])/', '\\\$1', $value);
     }
 }

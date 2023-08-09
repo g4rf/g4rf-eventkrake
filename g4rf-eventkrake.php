@@ -412,15 +412,33 @@ add_filter('the_content', function($content) {
 // redirect to ics output
 add_action('template_redirect', function() {    
     $ics = filter_input(INPUT_GET, 'eventkrake_ics');
+    $list = filter_input(INPUT_GET, 'eventkrake_ics_list');
     $id = filter_input(INPUT_GET, 'eventkrake_ics_id', FILTER_VALIDATE_INT);
     $index = filter_input(INPUT_GET, 'eventkrake_ics_index', 
         FILTER_VALIDATE_INT);
+    
     $categories = filter_input(INPUT_GET, 'eventkrake_ics_categories',
         FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    if(empty($categories)) $categories = [];
+    
     $url = filter_input(INPUT_GET, 'eventkrake_ics_url');
+    if(empty($url)) $url = '';
     
     // check if ics request
     if($ics != '1') return;
+    
+    // check if events list or single event
+    if($list == '1') {
+        $file = preg_replace('/[^a-z0-9]/i', '', get_bloginfo('name'));
+        header('Content-Type: text/calendar; charset=utf-8');
+        header("Content-Disposition: attachment; filename=$file-events.ics");
+        
+        print Event::icsAll($categories);
+        
+        exit;
+    }
+    
+    /*** single event ***/
     // check parameters
     if(! $id) return;
     if($index === NULL) return;
@@ -442,10 +460,6 @@ add_action('template_redirect', function() {
     }
     // index not found
     if ($event == null) return;
-    
-    // categories & url
-    if(empty($categories)) $categories = [];
-    if(empty($url)) $url = '';
     
     // header
     $filename = preg_replace('/[^a-z0-9]/i', '', get_the_title($event->ID))
