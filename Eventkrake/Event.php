@@ -87,7 +87,7 @@ class Event {
         return implode("\r\n", $ics);
     }
     
-    public static function icsAll($categories = []) {
+    public static function icsAll($categories = [], $url = '') {
         $ics = ['BEGIN:VCALENDAR', 
             'VERSION:2.0',
             self::icsEscapeKeyValue(
@@ -100,7 +100,7 @@ class Event {
         foreach(Eventkrake::events() as $event) {
             if($event->end < $now) continue;
             
-            $ics[] = $event->icsEvent($categories);
+            $ics[] = $event->icsEvent($categories, $url);
         }
             
         $ics[] = 'END:VCALENDAR';
@@ -121,7 +121,7 @@ class Event {
         }
         
         $location = new Location($this->location);
-        
+                
         $ics = [ 
             'BEGIN:VEVENT',
                 'CLASS:PUBLIC',
@@ -155,9 +155,7 @@ class Event {
                 self::icsEscapeKeyValue(
                     'DESCRIPTION',
                     html_entity_decode(
-                        wp_strip_all_tags(
-                            apply_filters('the_content', $this->excerpt)
-                            , true),
+                        wp_strip_all_tags($this->excerpt, true),
                         ENT_HTML5,
                         'UTF-8'
                     )
