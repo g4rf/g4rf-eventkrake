@@ -68,8 +68,9 @@ var Eventkrake = {
                 return;
             }
 
-            jQuery.getJSON("https://nominatim.openstreetmap.org/search/"
-                    + address + "?format=json&addressdetails=1&limit=1",
+            jQuery.getJSON("https://nominatim.openstreetmap.org/search"
+                    + "?q=" + address
+                    + "&format=json&addressdetails=1&limit=1",
                 function(data) {
                     callback([data[0].lat, data[0].lon],
                         Eventkrake.Geo.formatAdress(data[0].address));
@@ -93,8 +94,9 @@ var Eventkrake = {
                 return;
             }
 
-            jQuery.getJSON("https://nominatim.openstreetmap.org/reverse?format=json&"
-                + "lat=" + latlng[0] + "&lon=" + latlng[1]
+            jQuery.getJSON("https://nominatim.openstreetmap.org/reverse"
+                + "?format=json"
+                + "&lat=" + latlng[0] + "&lon=" + latlng[1]
                 + "&zoom=18&addressdetails=1",
                 function(data) {
                     callback([data.lat, data.lon],

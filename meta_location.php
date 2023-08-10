@@ -10,7 +10,9 @@ use Eventkrake\Eventkrake as Eventkrake;
 
 <?php // Adresse ?>
 <div class="eventkrake_right">
-
+    <input type="button" id="eventkrake-reload-map" 
+           value="<?=__('Lade Karte neu', 'eventkrake')?>" />
+   
     <span class="description">Lat:&nbsp;</span>
     <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'lat')?>"
         class="eventkrake_latlng" type="text" name="eventkrake_lat" readonly
@@ -28,8 +30,8 @@ use Eventkrake\Eventkrake as Eventkrake;
             "<?=plugins_url('/leaflet/images/', __FILE__)?>";
 </script>
 
-<div id="eventkrake_map" class="eventkrake_map eventkrake_h250">
-    <?=__('Bitte aktiviere Javascript um die Karte zu benutzen.', 'eventkrake')?>
+<div id="eventkrake_map" class="eventkrake_map">
+    <noscript><?=__('Bitte aktiviere Javascript um die Karte zu benutzen.', 'eventkrake')?></noscript>
 </div>
 
 <br />
@@ -47,7 +49,9 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
     Klicken in der oberen Karte kannst du den Ort verändern.<br />
     <b>Für den Ort sind die Geokoordinaten maßgebend.</b> Der Text im
     Adressfeld wird aber von vielen Templates ebenfalls ausgegeben. Achte also
-    darauf, dass dieser keine verwirrenden Angaben enthält.', 'eventkrake');
+    darauf, dass dieser keine verwirrenden Angaben enthält.<br />
+    <b>Wenn du statt der Karte nur einen grauen Block siehst, dann klicke auf
+    "Lade Karte neu".</b>', 'eventkrake');
 ?></span>
 
 <hr />

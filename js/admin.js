@@ -1,6 +1,6 @@
 /* global Leaflet */
 
-jQuery(document).ready(function() {
+jQuery(window).load(function() {
     /* Map für die Auswahl des Ortes */
     if(document.getElementById(Eventkrake.Admin.mapId)) {
         var lat = parseFloat(jQuery("#" + Eventkrake.Admin.latId).val());
@@ -29,7 +29,17 @@ jQuery(document).ready(function() {
                 }
             );
         });
+        
+        // set timeout for drawing the map as Wordpress do some crazy things
+        // rendering the admin screens
+        window.setTimeout(function() {
+            Eventkrake.Admin.map.invalidateSize({'pan': false});
+        }, 1000);
     }
+    
+    jQuery('#eventkrake-reload-map').on("click", function() {
+        Eventkrake.Admin.map.invalidateSize({'pan': false});
+    });
 
     jQuery('.eventkrake_lookforaddress').click(function() {
         Eventkrake.Geo.getLatLng(
