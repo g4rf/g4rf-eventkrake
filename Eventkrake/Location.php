@@ -13,6 +13,8 @@ class Location {
     var $address;
     var $links;
     var $categories;
+    var $accessibility;
+    var $accessibilityInfo;
     var $tags;
         
     public function __construct($post) {
@@ -32,6 +34,40 @@ class Location {
         $this->address = Eventkrake::getSinglePostMeta($p->ID, 'address');
         $this->links = Eventkrake::getSinglePostMeta($p->ID, 'links');
         $this->categories = Eventkrake::getPostMeta($p->ID, 'categories');
+        $this->accessibility = 
+            Eventkrake::getSinglePostMeta($p->ID, 'accessibility');
+        $this->accessibilityInfo = 
+            Eventkrake::getSinglePostMeta($p->ID, 'accessibility-info');
         $this->tags = Eventkrake::getSinglePostMeta($p->ID, 'tags');
+    }
+    
+    /**
+     * Returns a Location for an event post or Event, or null if none.
+     * @param mixed $event post of type eventkrake_event or Eventkrake\Event
+     * @return Eventkrake\Location? Location object or null
+     */
+    public static function getLocationOfEvent($event)
+    {
+        // check if object of type Eventkrake\Event
+        if(gettype($event) == 'object' 
+            && get_class($event) == 'Eventkrake\Event')
+        {
+            try {
+                return new Location($event->locationId);
+            } catch (Exception $ex) {
+                return null;
+            }
+        }
+        
+        // if not consider post (id or post object)
+        try {
+            $events = Event::Factory($event);
+            if(count($events) == 0) return null;
+            return new Location($events[0]->locationId);
+        } catch (Exception $ex) {
+            return null;
+        }
+        
+        return null;
     }
 }

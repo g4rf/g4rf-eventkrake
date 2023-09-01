@@ -11,7 +11,8 @@ class Event {
     var $index; // counts the occurences of this event
     var $start;
     var $end;    
-    var $location; // only ID
+    var $location; // fallback for compatibility, only ID
+    var $locationId;
     var $artists;
     var $links;
     var $categories;
@@ -58,8 +59,9 @@ class Event {
         $this->content = $p->post_content;
         $this->excerpt = $p->post_excerpt;
         $this->slug = $p->post_name;
-        $this->location = 
+        $this->locationId = 
             Eventkrake::getSinglePostMeta($p->ID, 'locationid');
+        $this->location = $this->locationId;
         $this->start = $start;
         $this->end = $end;
         $this->index = $index;

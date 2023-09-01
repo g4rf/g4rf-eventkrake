@@ -4,7 +4,7 @@ Plugin Name: Eventkrake
 Plugin URI: https://github.com/g4rf/g4rf-eventkrake
 Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
 Author: Jan Kossick
-Version: 4.08beta
+Version: 4.09beta
 License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
 Author URI: https://jankossick.de
 Min WP Version: 5.3
@@ -141,13 +141,16 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
 
     // If this is just a revision, do nothing.
     if (wp_is_post_revision($post_id)) return;
-
+    
     // check POST-fields
-    $lat = $_POST['eventkrake_lat'];
-    $lng = $_POST['eventkrake_lng'];
-    $address = $_POST['eventkrake_address'];
-    $tags = $_POST['eventkrake_tags'];
-
+    $lat = filter_input(INPUT_POST, 'eventkrake_lat');
+    $lng = filter_input(INPUT_POST, 'eventkrake_lng');
+    $address = filter_input(INPUT_POST, 'eventkrake_address');
+    $accessibility = filter_input(INPUT_POST, 'eventkrake-accessibility');
+    $accessibilityInfo = 
+        filter_input(INPUT_POST, 'eventkrake-accessibility-info');
+    $tags = filter_input(INPUT_POST, 'eventkrake_tags');
+    
     // links
     $linksKeys = $_POST['eventkrake-links-key'];
     $linksValues = $_POST['eventkrake-links-value'];
@@ -177,6 +180,10 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
     Eventkrake::setSinglePostMeta($post_id, 'lng', $lng);
     Eventkrake::setSinglePostMeta($post_id, 'address', $address);
     Eventkrake::setSinglePostMeta($post_id, 'links', $links);
+    Eventkrake::setSinglePostMeta(
+        $post_id, 'accessibility', $accessibility);
+    Eventkrake::setSinglePostMeta(
+        $post_id, 'accessibility-info', $accessibilityInfo);
     Eventkrake::setSinglePostMeta($post_id, 'tags', $tags);
     Eventkrake::setPostMeta($post_id, 'categories', $categories);
 }, 1, 2);
@@ -198,6 +205,10 @@ add_filter('the_content', function($content) {
         <div class="eventkrake-location-address"><?=
             $location->address
         ?></div>
+        
+        <div class="eventkrake-accessibility-info"><?=
+            $location->accessibilityInfo
+        ?></div>
 
     </div><?php
 
@@ -205,6 +216,21 @@ add_filter('the_content', function($content) {
     
     return ob_get_clean() . $content;
 });
+// add accessibility information to the post
+add_filter('post_class', function($classes, $class, $post_id) {
+    if(is_admin()) return $classes;
+    
+    if (get_post_type() != 'eventkrake_location') {
+        return $classes;
+    }
+    
+    $accessibility = 
+            Eventkrake::getSinglePostMeta($post_id, 'accessibility');
+    
+    $classes[] = "eventkrake-accessibility-{$accessibility}";
+
+    return $classes;
+}, 10, 3);
 
 
 /* EVENTS */
@@ -328,6 +354,21 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     Eventkrake::setPostMeta($post_id, 'artists', $artists);
 }, 1, 2);
 
+// add accessibility information to the event post classes
+add_filter('post_class', function($classes, $class, $post_id) {
+    if(is_admin()) return $classes;
+    
+    if (get_post_type() != 'eventkrake_event') {
+        return $classes;
+    }
+    
+    $location = Location::getLocationOfEvent($post_id);
+    if($location != null) {
+        $classes[] = "eventkrake-accessibility-{$location->accessibility}";
+    }
+    
+    return $classes;
+}, 10, 3);
 // add event location and date to event page
 add_filter('the_content', function($content) {
     
@@ -353,6 +394,9 @@ add_filter('the_content', function($content) {
             </div>
             <div class="eventkrake-event-location-address"><?=
                 $location->address
+            ?></div>
+            <div class="eventkrake-accessibility-info"><?=
+                $location->accessibilityInfo
             ?></div>
         </div>
 

@@ -1,3 +1,18 @@
+.eventkrake-accessibility-x,
+.eventkrake-accessibility-0,
+.eventkrake-accessibility-1,
+.eventkrake-accessibility-2 {
+  font-weight: bold;
+}
+.eventkrake-accessibility-0 {
+  background-color: #ef9a9a;
+}
+.eventkrake-accessibility-1 {
+  background-color: #fff59d;
+}
+.eventkrake-accessibility-2 {
+  background-color: #aed581;
+}
 .eventkrake-textarea {
   width: 25em;
   max-width: 100%;
@@ -20,8 +35,11 @@
 .eventkrake-cat-suggestion:hover {
   text-decoration: underline;
 }
-#eventkrake_artist label {
+#eventkrake_artist label,
+.eventkrake-label {
+  display: inline-block;
   margin: 10px;
+  padding: 5px 10px;
 }
 .eventkrake-dates {
   margin: 10px 0;

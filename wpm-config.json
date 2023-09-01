@@ -3,5 +3,8 @@
         "eventkrake_location": {},
         "eventkrake_event": {},
         "eventkrake_artist": {}
+    },
+    "post_fields": {
+        "eventkrake_accessibility-info": {}
     }
 }

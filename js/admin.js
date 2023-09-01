@@ -34,13 +34,15 @@ jQuery(window).load(function() {
         // rendering the admin screens
         window.setTimeout(function() {
             Eventkrake.Admin.map.invalidateSize({'pan': false});
+            Eventkrake.Admin.map.setView([lat, lng], 17);
         }, 1000);
+        
+        jQuery('#eventkrake-reload-map').on("click", function() {
+            Eventkrake.Admin.map.invalidateSize({'pan': false});
+            Eventkrake.Admin.map.setView([lat, lng], 17);
+        });
     }
     
-    jQuery('#eventkrake-reload-map').on("click", function() {
-        Eventkrake.Admin.map.invalidateSize({'pan': false});
-    });
-
     jQuery('.eventkrake_lookforaddress').click(function() {
         Eventkrake.Geo.getLatLng(
             jQuery("#" + Eventkrake.Admin.addressId).val(),

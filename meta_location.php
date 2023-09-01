@@ -99,6 +99,7 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
             value="<?=__('Weblink hinzufügen', 'eventkrake')?>" /></div>
     </td>
 </tr><tr>
+    
     <th><?=__('Die Kategorien', 'eventkrake')?></th>
     <td>
         <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
@@ -115,6 +116,60 @@ _e('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
             }
         ?></span>
     </td>
+    
+</tr><tr>
+    <th><?=__('Barrierefreiheit', 'eventkrake')?></th>
+    <td><?php
+        $accessibility = 
+            Eventkrake::getSinglePostMeta($post->ID, 'accessibility');
+        $accessibilityInfo = 
+            Eventkrake::getSinglePostMeta($post->ID, 'accessibility-info'); ?>
+
+        <div>
+            <label class="eventkrake-label eventkrake-accessibility-x">
+                <input type="radio" name="eventkrake-accessibility" value=""
+                       <?=$accessibility == '' ? 'checked' : ''?>/>
+                <?=__('unbekannt', 'eventkrake')?>
+            </label>
+            <label class="eventkrake-label eventkrake-accessibility-0">
+                <input type="radio" name="eventkrake-accessibility" value="0"
+                       <?=$accessibility == '0' ? 'checked' : ''?>/>
+                <?=__('rot', 'eventkrake')?>
+            </label>
+            <label class="eventkrake-label eventkrake-accessibility-1">
+                <input type="radio" name="eventkrake-accessibility" value="1"
+                       <?=$accessibility == '1' ? 'checked' : ''?>/>
+                <?=__('gelb', 'eventkrake')?>
+            </label>
+            <label class="eventkrake-label eventkrake-accessibility-2">
+                <input type="radio" name="eventkrake-accessibility" value="2"
+                       <?=$accessibility == '2' ? 'checked' : ''?>/>
+                <?=__('grün', 'eventkrake')?>
+            </label>
+        </div>
+        
+        <input type="text" name="eventkrake-accessibility-info"
+            class="regular-text wpm-accessibility-info" placeholder="<?=
+                __('Zusätzliche Infos zur Barrierefreiheit', 'eventkrake')?>"
+            value="<?=$accessibilityInfo?>"
+        /><br />
+        
+        <span class="description"><?=
+            sprintf(
+                __('Die Barrierefreiheit wird mit einem Ampelsystem
+ wiedergegeben. Dabei bedeutet %2$srot%1$s keinerlei Barrierefreiheit, 
+ %3$sgelb%1$s das bspw. eine Rampe vorhanden ist und %4$sgrün%1$s, dass neben 
+ der Rampe auch ein rollstuhlgerechtes WC am Ort ist.%5$s
+ Nähere Informationen können im Textfeld vermerkt werden.', 'eventkrake'),
+                '</span>', 
+                '<span class="eventkrake-accessibility-0">',
+                '<span class="eventkrake-accessibility-1">',
+                '<span class="eventkrake-accessibility-2">',
+                '<br />'
+            );
+        ?></span>
+    </td>
+    
 </tr><tr>
     <th><?=__('Zusatzinfos zum Ort', 'eventkrake')?></th>
     <td>
