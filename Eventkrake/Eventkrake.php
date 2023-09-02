@@ -37,12 +37,18 @@ class Eventkrake {
     
     /**
      * Returns list of all events.
-     * @param boolean [$private=false] If set to true, also non-public posts 
-     *          are returned.  
+     * @param array [$filter=[]] More filter, @see https://developer.wordpress.org/reference/functions/get_posts/
      * @return array Array of all events, sorted.
      */
-    public static function events($private = false) {
-        $posts = self::getAllEvents(! $private);
+    public static function events($filter = []) {
+        $options = [
+            'numberposts' => -1,
+            'offset' => 0,
+            'post_type' => 'eventkrake_event',
+            'post_status' => 'publish'
+        ];
+        $posts = get_posts(array_merge($options, $filter));
+
         $events = [];
         foreach($posts as $post) {
             $events = array_merge($events, Event::Factory($post));
@@ -56,12 +62,22 @@ class Eventkrake {
      *          are returned.  
      * @return array Array of all locations.
      */
-    public static function locations($private = false) {
-        $posts = self::getLocations(! $private);
+    public static function locations($filter = []) {
+        $options = [
+            'numberposts' => -1,
+            'offset' => 0,
+            'orderby' => 'title',
+            'order' => 'ASC',
+            'post_type' => 'eventkrake_location',
+            'post_status' => 'publish'
+        ];
+        $posts = get_posts(array_merge($options, $filter));
+        
         $locations = [];
         foreach($posts as $post) {
             $locations[] = new Location($post);
         }
+        
         return $locations;
     }
     
@@ -71,8 +87,17 @@ class Eventkrake {
      *          are returned.  
      * @return array Array of all artists.
      */
-    public static function artists($private = false) {
-        $posts = self::getArtists(! $private);
+    public static function artists($filter = []) {
+        $options = [
+            'numberposts' => -1,
+            'offset' => 0,
+            'orderby' => 'title',
+            'order' => 'ASC',
+            'post_type' => 'eventkrake_artist',
+            'post_status' => 'publish'
+        ];
+        $posts = get_posts(array_merge($options, $filter));
+        
         $artists = [];
         foreach($posts as $post) {
             $artists[] = new Artist($post);
