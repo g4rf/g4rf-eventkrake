@@ -407,10 +407,12 @@ add_filter('the_content', function($content) {
             $locale = wpm_get_language();
         }
         
-        $dateFormatter = new IntlDateFormatter($locale);
+        $dateFormatter = new IntlDateFormatter(
+            $locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL);
         $dateFormatter->setPattern(Config::dateFormat());
         
-        $timeFormatter = new IntlDateFormatter($locale);
+        $timeFormatter = new IntlDateFormatter(
+            $locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL);
         $timeFormatter->setPattern(Config::timeFormat());
 
         ?><div class="eventkrake-event-times"><?php
