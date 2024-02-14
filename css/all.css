@@ -1,32 +1,9 @@
-.eventkrake-event-ics {
-  font-style: italic;
-  font-size: small;
-}
 .eventkrake-flexcol {
   display: flex;
   flex-direction: column;
 }
 .eventkrake-flexcol div {
   margin-bottom: 10px;
-}
-.datepicker {
-  cursor: pointer;
-}
-.eventkrake_map {
-  width: 100%;
-  height: 50vh;
-  cursor: pointer;
-}
-.eventkrake_map noscript {
-  background-color: #eee;
-  font-style: italic;
-  cursor: auto;
-  text-align: center;
-  line-height: 300%;
-}
-#eventkrake-reload-map {
-  position: absolute;
-  left: 0;
 }
 .eventkrake_hide,
 .eventkrake-hide,
@@ -48,4 +25,27 @@
 }
 .eventkrake_formselect {
   width: 25em;
+}
+.eventkrake_map {
+  width: 100%;
+  height: 50vh;
+  cursor: pointer;
+}
+.eventkrake_map noscript {
+  background-color: #eee;
+  font-style: italic;
+  cursor: auto;
+  text-align: center;
+  line-height: 300%;
+}
+#eventkrake-reload-map {
+  position: absolute;
+  left: 0;
+}
+.eventkrake-event-start:after {
+  content: " – ";
+}
+.eventkrake-event-ics {
+  font-style: italic;
+  font-size: small;
 }
