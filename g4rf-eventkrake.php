@@ -1,15 +1,22 @@
 <?php
-/*
-Plugin Name: Eventkrake
-Plugin URI: https://github.com/g4rf/g4rf-eventkrake
-Description: A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
-Author: Jan Kossick
-Version: 5.00beta
-License: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
-Author URI: https://jankossick.de
-Min WP Version: 6.1
-Text Domain: eventkrake
-*/
+/**
+ * Plugin Name:     Eventkrake
+ * Plugin URI:      https://github.com/g4rf/g4rf-eventkrake
+ * Description:     A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
+ * Author:          Jan Kossick
+ * Version:         5.00beta
+ * License:         CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
+ * Author URI:      https://jankossick.de
+ * Min WP Version:  6.1
+ * Text Domain:     eventkrake
+ * 
+ * @package         g4rf
+ */
+
+// exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; 
+}
 
 /***** Needs & needles *****/
 add_theme_support('post-thumbnails');
@@ -81,6 +88,14 @@ add_action('wp_enqueue_scripts', function() {
     // Leaflet-CSS
     wp_register_style('eventkrake_leaflet', $path.'leaflet/leaflet.css');
     wp_enqueue_style('eventkrake_leaflet');
+});
+
+
+/***** Blocks *****/
+
+add_action( 'init', function() {
+    // extend the query loop
+    register_block_type( __DIR__ . '/blocks/build/loop-events' );
 });
 
 
