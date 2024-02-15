@@ -20,6 +20,8 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#view-script
  */
 
-/* eslint-disable no-console */
-console.log( 'Hello World! (from create-block-g4rf-block-tile block)' );
-/* eslint-enable no-console */
+import * as loader from './list-events';
+
+document.addEventListener('DOMContentLoaded', () => {
+    loader.load();
+});

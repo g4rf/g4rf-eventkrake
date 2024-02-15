@@ -4,15 +4,15 @@
   "name": "g4rf-eventkrake/events-list",
   "version": "0.1.0",
   "title": "Eventkrake Events list",
-  "category": "design",
   "description": "Shows events in a list.",
   "example": {},
+  "category": "design",
   "attributes": {},
   "supports": {
     "html": false
   },
   "textdomain": "g4rf-eventkrake",
   "editorScript": "file:./index.js",
-  "style": "file:./style-index.css",
-  "script": "file:./frontend.js"
+  "viewScript": "file:./view.js",
+  "style": "file:./style-index.css"
 }

@@ -95,7 +95,7 @@ add_action('wp_enqueue_scripts', function() {
 
 add_action( 'init', function() {
     // extend the query loop
-    register_block_type( __DIR__ . '/blocks/build/loop-events' );
+    register_block_type( __DIR__ . '/blocks/build/events-list' );
 });
 
 
@@ -126,7 +126,8 @@ add_action('init', function () {
         'menu_icon' => plugin_dir_url(__FILE__) . '/img/location.png',
         'description' =>
             __('An Orten finden Veranstaltungen statt.', 'eventkrake'),
-        'supports' => array('title', 'editor', 'thumbnail', 'comments'),
+        'supports' => array('title', 'excerpt', 'editor', 'thumbnail', 
+            'comments'),
         'show_in_rest' => true,
         'register_meta_box_cb' => function() {
             // Metaboxen laden
@@ -365,8 +366,12 @@ function eventkrake_restbuild_artist($artist) {
     $id = $artist->ID;
     return [
         'id' => $id,
-        'name' => $artist->post_title,
+        'url' => get_permalink($id),
+        'name' => get_the_title($id),
+        'title' => get_the_title($id),
         'text' => apply_filters('the_content', $artist->post_content),
+        'content' => apply_filters('the_content', $artist->post_content),
+        'excerpt' => get_the_excerpt($id),
         'image' =>  get_the_post_thumbnail_url($id, 'full'),
         'categories' => Eventkrake::getPostMeta($id, 'categories'),
         'links' => Eventkrake::getSinglePostMeta($id, 'links'),
@@ -377,13 +382,16 @@ function eventkrake_restbuild_location($location) {
     $id = $location->ID;
     return [
         'id' => $id,
-        'name' => $location->post_title,
+        'url' => get_permalink($id),
+        'name' => get_the_title($id),
+        'title' => get_the_title($id),
         'address' =>
             Eventkrake::getSinglePostMeta($id, 'address'),
         'lat' => Eventkrake::getSinglePostMeta($id, 'lat'),
         'lng' => Eventkrake::getSinglePostMeta($id, 'lng'),
-        'text' => apply_filters('the_content',
-                                    $location->post_content),
+        'text' => apply_filters('the_content', $location->post_content),
+        'content' => apply_filters('the_content', $location->post_content),
+        'excerpt' => get_the_excerpt($id),
         'image' =>  get_the_post_thumbnail_url($id, 'full'),
         'categories' => Eventkrake::getPostMeta($id, 'categories'),
         'links' => Eventkrake::getSinglePostMeta($id, 'links'),
@@ -451,10 +459,15 @@ function eventkrake_restbuild_event($post, $params = []) {
         // add event
         $events[] = [
             'id' => $date->ID,
+            'url' => get_permalink($date->ID),
             'name' => get_the_title($date->ID),
+            'title' => get_the_title($date->ID),
             'text' => apply_filters('the_content', $date->content),
+            'content' => apply_filters('the_content', $date->content),
+            'excerpt' => get_the_excerpt($date->ID),
             'image' =>  get_the_post_thumbnail_url($date->ID, 'full'),
             'locationid' => $date->location,
+            'locationId' => $date->location,
             'start' => $date->start->format($dateFormat),
             'end' => $date->end->format($dateFormat),
             'artists' => Eventkrake::getPostMeta($date->ID, 'artists'),

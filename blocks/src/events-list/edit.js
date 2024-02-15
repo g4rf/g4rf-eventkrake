@@ -6,10 +6,10 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 
-import getHTML from './loop-events';
+import * as loader from './list-events';
 
 export default function Edit({ attributes, setAttributes, isSelected, clientId, 
         context: { postType, postId, queryId } }) 
 {
-    return getHTML(useBlockProps());
+    return loader.html(useBlockProps(), true);
 }

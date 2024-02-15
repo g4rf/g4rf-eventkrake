@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	
+    "name": "g4rf-eventkrake/events-list",
+	"version": "0.1.0",
+	
+    "title": "Eventkrake Events list",
+	"description": "Shows events in a list.",
+	"example": {},
+    
+    "category": "design",
+    
+    "attributes": {		
+    
+    },
+	
+    "supports": {
+        "html": false		
+	},
+	
+    "textdomain": "g4rf-eventkrake",
+    
+	"editorScript": "file:./index.js",
+    "viewScript": "file:./view.js",
+	"style": "file:./style-index.css"
+}

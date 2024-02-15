@@ -2,9 +2,9 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/loop-events/edit.js":
+/***/ "./src/events-list/edit.js":
 /*!*********************************!*\
-  !*** ./src/loop-events/edit.js ***!
+  !*** ./src/events-list/edit.js ***!
   \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -18,7 +18,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _list_events__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./list-events */ "./src/loop-events/list-events.js");
+/* harmony import */ var _list_events__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./list-events */ "./src/events-list/list-events.js");
 
 
 
@@ -34,14 +34,14 @@ function Edit({
     queryId
   }
 }) {
-  return _list_events__WEBPACK_IMPORTED_MODULE_3__.HTML((0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)());
+  return _list_events__WEBPACK_IMPORTED_MODULE_3__.html((0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)(), true);
 }
 
 /***/ }),
 
-/***/ "./src/loop-events/index.js":
+/***/ "./src/events-list/index.js":
 /*!**********************************!*\
-  !*** ./src/loop-events/index.js ***!
+  !*** ./src/events-list/index.js ***!
   \**********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -50,12 +50,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./block.json */ "./src/loop-events/block.json");
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.scss */ "./src/loop-events/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./src/loop-events/edit.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./save */ "./src/loop-events/save.js");
-/* harmony import */ var _list_events__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./list-events */ "./src/loop-events/list-events.js");
-
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./block.json */ "./src/events-list/block.json");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.scss */ "./src/events-list/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./src/events-list/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./save */ "./src/events-list/save.js");
 
 
 
@@ -108,38 +106,98 @@ const icon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
 
 /***/ }),
 
-/***/ "./src/loop-events/list-events.js":
+/***/ "./src/events-list/list-events.js":
 /*!****************************************!*\
-  !*** ./src/loop-events/list-events.js ***!
+  !*** ./src/events-list/list-events.js ***!
   \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   HTML: () => (/* binding */ HTML),
-/* harmony export */   loadEvents: () => (/* binding */ loadEvents)
+/* harmony export */   html: () => (/* binding */ html),
+/* harmony export */   load: () => (/* binding */ load)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./block.json */ "./src/events-list/block.json");
+
+
 
 /**
- * Loads the event data.
+ * Loads the events data into the list.
+ * @param {string} start PHP date definition
+ * @param {string} end PHP date definition
+ * @returns {null}
  */
-function loadEvents() {
-  console.log("load events fom list-events.js");
+function load(start = 'now', end = '+10 years') {
+  const $ = jQuery;
+  const prefix = ".g4rf-eventkrake-events-list";
+  const template = "g4rf-eventkrake-events-list-template";
+  const list = $(prefix + "-list");
+  $.getJSON("/wp-json/eventkrake/v3/events", {
+    earliestStart: start,
+    latestStart: end
+  }, function (data) {
+    $.each(data.events, function (index, eventData) {
+      let eventHtml = $(prefix + "-event." + template, list).clone().removeClass(template).appendTo(list);
+      $(prefix + "-image", eventHtml).attr("src", eventData.image);
+      $(prefix + "-title", eventHtml).append(eventData.title);
+      $(prefix + "-excerpt", eventHtml).append(eventData.excerpt);
+      $(prefix + "-content", eventHtml).append(eventData.content);
+
+      // location
+      let location = data.locations[eventData.locationId];
+      $(prefix + "-location-title", eventHtml).append(location.title);
+      $(prefix + "-location-title-with-link a", eventHtml).attr("href", location.url).append(location.title);
+      $(prefix + "-location-address", eventHtml).append(location.address);
+
+      // dates
+      const start = new Date(eventData.start);
+      const end = new Date(eventData.end);
+      const dateOptions = {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      };
+      const timeOptions = {
+        hour: "2-digit",
+        minute: "2-digit"
+      };
+      // start
+      $(prefix + "-start-date", eventHtml).append(start.toLocaleDateString(undefined, dateOptions));
+      $(prefix + "-start-time", eventHtml).append(start.toLocaleTimeString(undefined, timeOptions));
+      // end
+      if (start.toDateString() !== end.toDateString()) {
+        // not on same day
+        $(prefix + "-end-date", eventHtml).append(end.toLocaleDateString(undefined, dateOptions));
+      }
+      $(prefix + "-end-time", eventHtml).append(end.toLocaleTimeString(undefined, timeOptions));
+      // ics
+      $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
+    });
+  });
 }
 
 /**
  * Creates the HTML to put the event data in.
+ * @param {obejct} blockProps
+ * @param {boolean} [isAdmin=false] true if in block editor
+ * @returns {String}
  */
-function HTML(blockProps) {
+function html(blockProps, isAdmin = false) {
   const cssPrefix = "g4rf-eventkrake-events-list";
   const cssTemplate = cssPrefix + "-template";
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BackendLabel, {
+    isAdmin: isAdmin
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: cssPrefix + "-list"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     className: cssPrefix + "-event " + cssTemplate
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    className: cssPrefix + "-image",
     src: "",
     alt: ""
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -149,21 +207,19 @@ function HTML(blockProps) {
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: cssPrefix + "-content"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-dates"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-date " + cssTemplate
+    className: cssPrefix + "-date"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: cssPrefix + "-start-date"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: cssPrefix + "-start-hour"
+    className: cssPrefix + "-start-time"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: cssPrefix + "-end-date"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: cssPrefix + "-end-hour"
+    className: cssPrefix + "-end-time"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     className: cssPrefix + "-ics",
     href: ""
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "ics")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: cssPrefix + "-location"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: cssPrefix + "-location-title"
@@ -173,14 +229,22 @@ function HTML(blockProps) {
     href: ""
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: cssPrefix + "-location-address"
-  }))));
+  })))));
+}
+function BackendLabel({
+  isAdmin
+}) {
+  if (isAdmin) {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, _block_json__WEBPACK_IMPORTED_MODULE_1__.title);
+  }
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
 }
 
 /***/ }),
 
-/***/ "./src/loop-events/save.js":
+/***/ "./src/events-list/save.js":
 /*!*********************************!*\
-  !*** ./src/loop-events/save.js ***!
+  !*** ./src/events-list/save.js ***!
   \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -190,20 +254,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _list_events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./list-events */ "./src/loop-events/list-events.js");
+/* harmony import */ var _list_events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./list-events */ "./src/events-list/list-events.js");
 
 
 function Save({
   attributes
 }) {
-  return _list_events__WEBPACK_IMPORTED_MODULE_1__.HTML(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps.save());
+  return _list_events__WEBPACK_IMPORTED_MODULE_1__.html(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps.save());
 }
 
 /***/ }),
 
-/***/ "./src/loop-events/style.scss":
+/***/ "./src/events-list/style.scss":
 /*!************************************!*\
-  !*** ./src/loop-events/style.scss ***!
+  !*** ./src/events-list/style.scss ***!
   \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -263,13 +327,13 @@ module.exports = window["wp"]["i18n"];
 
 /***/ }),
 
-/***/ "./src/loop-events/block.json":
+/***/ "./src/events-list/block.json":
 /*!************************************!*\
-  !*** ./src/loop-events/block.json ***!
+  !*** ./src/events-list/block.json ***!
   \************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"g4rf-eventkrake/events-list","version":"0.1.0","title":"Eventkrake Events list","category":"design","description":"Shows events in a list.","example":{},"attributes":{},"supports":{"html":false},"textdomain":"g4rf-eventkrake","editorScript":"file:./index.js","style":"file:./style-index.css","script":"file:./frontend.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"g4rf-eventkrake/events-list","version":"0.1.0","title":"Eventkrake Events list","description":"Shows events in a list.","example":{},"category":"design","attributes":{},"supports":{"html":false},"textdomain":"g4rf-eventkrake","editorScript":"file:./index.js","viewScript":"file:./view.js","style":"file:./style-index.css"}');
 
 /***/ })
 
@@ -383,8 +447,8 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"loop-events/index": 0,
-/******/ 			"loop-events/style-index": 0
+/******/ 			"events-list/index": 0,
+/******/ 			"events-list/style-index": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -434,7 +498,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["loop-events/style-index"], () => (__webpack_require__("./src/loop-events/index.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["events-list/style-index"], () => (__webpack_require__("./src/events-list/index.js")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

@@ -1,0 +1,1 @@
+{"version":3,"file":"events-list/style-index.css","mappings":";;;AAAA;EACI;EACA;AACJ,C","sources":["webpack://g4rf-eventkrake-blocks/./src/events-list/style.scss"],"sourcesContent":[".g4rf-eventkrake-events-list-template {\n    display: none !important;\n    visibility: hidden !important;\n}"],"names":[],"sourceRoot":""}

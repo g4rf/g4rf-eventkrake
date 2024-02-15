@@ -1,8 +1,8 @@
 import { useBlockProps } from '@wordpress/block-editor';
 
-import getHTML from './loop-events';
+import * as loader from './list-events';
 
 export default function Save({ attributes }) {
-    return getHTML(useBlockProps.save());
+    return loader.html(useBlockProps.save());
 }
 
