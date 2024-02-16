@@ -6,7 +6,7 @@ export default function Save({ attributes }) {
     return (
         <div { ...useBlockProps.save() } >
             
-            { /*List.html()*/ }
+            <List.html attributes={attributes} />
             
         </div>
     );

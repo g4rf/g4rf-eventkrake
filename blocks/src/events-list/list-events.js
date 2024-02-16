@@ -124,49 +124,52 @@ export function html({ attributes }) {
     attributes.template = cssTemplate;
     
     return (
-        <ul className={ cssPrefix + "-list" }>
-            <li className={ cssPrefix + "-event " + cssTemplate } href="">
+        <div className={ cssPrefix + "-list" }>
+            <div className={ cssPrefix + "-event " + cssTemplate } >
 
                 { /* featured image */ }
                 <a className={ cssPrefix + "-image" } href="">
                     <img  src="" alt="" />
                 </a>
+                
+                <div className={ cssPrefix + "-info" }>
 
-                { /* title */ }
-                <div className={ cssPrefix + "-title" }>
-                    <h3><a href=""></a></h3>
-                </div>
-
-                { /* excerpt */ }
-                <div className={ cssPrefix + "-excerpt" }><p></p></div>
-
-                { /* content */ }
-                <Controls.Content attributes={attributes} />
-
-                { /* date */ }
-                <div className={ cssPrefix + "-date" }>
-                    <span className={ cssPrefix + "-start-date" }></span>
-                    <span className={ cssPrefix + "-start-time" }></span>
-                    <span className={ cssPrefix + "-date-separator" }>–</span>
-                    <span className={ cssPrefix + "-end-date" }></span>
-                    <span className={ cssPrefix + "-end-time" }></span>
-                    <a className={ cssPrefix + "-ics" } href="">ics</a>
-                </div>
-
-                { /* location */ }
-                <div className={ cssPrefix + "-location" }>
                     { /* title */ }
-                    <div className={ cssPrefix + "-location-title" }></div>
-                    { /* title with link */ }
-                    <div className={ cssPrefix + "-location-title-with-link" }>
-                        <a href=""></a>
+                    <div className={ cssPrefix + "-title" }>
+                        <h3><a href=""></a></h3>
                     </div>
-                    { /* address */ }
-                    <div className={ cssPrefix + "-location-address" }></div>
-                </div>
 
-            </li>
-        </ul>
+                    { /* date */ }
+                    <div className={ cssPrefix + "-date" }>
+                        <span className={ cssPrefix + "-start-date" }></span>
+                        <span className={ cssPrefix + "-start-time" }></span>
+                        <span className={ cssPrefix + "-date-separator" }>–</span>
+                        <span className={ cssPrefix + "-end-date" }></span>
+                        <span className={ cssPrefix + "-end-time" }></span>
+                        <a className={ cssPrefix + "-ics" } href="">ics</a>
+                    </div>
+
+                    { /* location */ }
+                    <div className={ cssPrefix + "-location" }>
+                        { /* title */ }
+                        <div className={ cssPrefix + "-location-title" }></div>
+                        { /* title with link */ }
+                        <div className={ cssPrefix + "-location-title-with-link" }>
+                            <a href=""></a>
+                        </div>
+                        { /* address */ }
+                        <div className={ cssPrefix + "-location-address" }></div>
+                    </div>
+
+                    { /* excerpt */ }
+                    <div className={ cssPrefix + "-excerpt" }><p></p></div>
+
+                    { /* content */ }
+                    <Controls.Content attributes={attributes} />
+                        
+                </div>
+            </div>
+        </div>
     );
 }
 

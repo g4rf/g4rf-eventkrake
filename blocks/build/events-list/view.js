@@ -170,11 +170,10 @@ function html({
   const cssTemplate = cssPrefix + "-template";
   attributes.prefix = cssPrefix;
   attributes.template = cssTemplate;
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: cssPrefix + "-list"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
-    className: cssPrefix + "-event " + cssTemplate,
-    href: ""
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: cssPrefix + "-event " + cssTemplate
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     className: cssPrefix + "-image",
     href: ""
@@ -182,14 +181,12 @@ function html({
     src: "",
     alt: ""
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: cssPrefix + "-info"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: cssPrefix + "-title"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: ""
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-excerpt"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Content, {
-    attributes: attributes
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: cssPrefix + "-date"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: cssPrefix + "-start-date"
@@ -214,6 +211,10 @@ function html({
     href: ""
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: cssPrefix + "-location-address"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: cssPrefix + "-excerpt"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Content, {
+    attributes: attributes
   }))));
 }
 
