@@ -12,11 +12,31 @@
     "category": "design",
     
     "attributes": {		
-    
+        "showContent": {
+            "type": "boolean",
+            "default": true
+        }
     },
 	
     "supports": {
-        "html": false		
+        "html": false,
+        "anchor": true,
+        "color": {
+            "background": true,
+            "gradients": true,
+            "link": true,
+            "text": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true
+		}
 	},
 	
     "textdomain": "g4rf-eventkrake",

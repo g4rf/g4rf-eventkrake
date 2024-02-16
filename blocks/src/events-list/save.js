@@ -1,8 +1,14 @@
 import { useBlockProps } from '@wordpress/block-editor';
 
-import * as loader from './list-events';
+import * as List from './list-events';
 
 export default function Save({ attributes }) {
-    return loader.html(useBlockProps.save());
+    return (
+        <div { ...useBlockProps.save() } >
+            
+            { /*List.html()*/ }
+            
+        </div>
+    );
 }
 

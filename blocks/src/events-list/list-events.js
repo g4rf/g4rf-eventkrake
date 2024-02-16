@@ -1,38 +1,75 @@
+import { InspectorControls } from '@wordpress/block-editor';
+import { ToggleControl, PanelBody } from '@wordpress/components';
+
+import * as Controls from './controls';
+
 import metadata from './block.json';
+
 
 /**
  * Loads the events data into the list.
- * @param {string} start PHP date definition
- * @param {string} end PHP date definition
+ * @param {object} arguments[0]
+ *      {HTML} block: Parent block that contains the events list.
+ *      {boolean} isEditor: if in block editor or not, default false
+ *      {string} start: PHP date definition, default "now"
+ *      {string} end: PHP date definition, default "+10 years"
  * @returns {null}
  */
-export function load(start = 'now', end = '+10 years') {
+export function load(
+        { block, isEditor = false, start = 'now', end = '+10 years' } )
+{
     const $ = jQuery;
+    
+    // prevent double loading (especially in editor)
+    if($(block).data("loading")) return;    
+    $(block).data("loading", true);
+    
     const prefix = ".g4rf-eventkrake-events-list";    
     const template = "g4rf-eventkrake-events-list-template";
-    const list = $(prefix + "-list");
+    const list = $(prefix + "-list", block);
+    
+    // remove old blocks
+    $(".g4rf-eventkrake-events-list-event", list).not("." + template).remove();
     
     $.getJSON("/wp-json/eventkrake/v3/events", {
         earliestStart: start,
         latestStart: end
     }, function(data) { $.each(data.events, function(index, eventData) {
         
-        let eventHtml = $(prefix + "-event." + template, list)
+        const eventHtml = $(prefix + "-event." + template, list)
                 .clone()
                 .removeClass(template)
                 .appendTo(list);
-
-        $(prefix + "-image", eventHtml).attr("src", eventData.image);
-        $(prefix + "-title", eventHtml).append(eventData.title);
-        $(prefix + "-excerpt", eventHtml).append(eventData.excerpt);
+        
+        // image
+        $(prefix + "-image img", eventHtml).attr("src", eventData.image);
+        if(!isEditor) {
+            $(prefix + "-image", eventHtml).attr("href", eventData.url);
+        }
+        
+        // title
+        $(prefix + "-title h3 a", eventHtml).append(eventData.title);
+        if(!isEditor) {
+            $(prefix + "-title h3 a", eventHtml).attr("href", eventData.url);
+        }
+        
+        // excerpt
+        $(prefix + "-excerpt p", eventHtml).append(eventData.excerpt);
+        
+        // content
         $(prefix + "-content", eventHtml).append(eventData.content);
        
         // location
-        let location = data.locations[eventData.locationId];
+        const location = data.locations[eventData.locationId];
         $(prefix + "-location-title", eventHtml).append(location.title);
+        // location with link
         $(prefix + "-location-title-with-link a", eventHtml)
-                .attr("href", location.url)
                 .append(location.title);
+        if(!isEditor) {
+            $(prefix + "-location-title-with-link a", eventHtml)
+                .attr("href", location.url);
+        }
+        // location address
         $(prefix + "-location-address", eventHtml).append(location.address);
        
         // dates
@@ -54,7 +91,10 @@ export function load(start = 'now', end = '+10 years') {
         $(prefix + "-start-time", eventHtml).append(
                 start.toLocaleTimeString(undefined, timeOptions));
         // end
-        if (start.toDateString() !== end.toDateString()) {
+        if (start.toDateString() === end.toDateString()) {
+            // on same day
+            $(prefix + "-end-date", eventHtml).remove();
+        } else {
             // not on same day
             $(prefix + "-end-date", eventHtml).append(
                     end.toLocaleDateString(undefined, dateOptions));
@@ -62,72 +102,71 @@ export function load(start = 'now', end = '+10 years') {
         $(prefix + "-end-time", eventHtml).append(
                 end.toLocaleTimeString(undefined, timeOptions));
         // ics
-        $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
+        if(!isEditor) {
+            $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
+        }
         
+        $(block).data("loading", false);
     });});
 }
 
 /**
  * Creates the HTML to put the event data in.
- * @param {obejct} blockProps
- * @param {boolean} [isAdmin=false] true if in block editor
+ * @param {object} arguments[0]
+ *      {object} attributes The settings of the control.
  * @returns {String}
  */
-export function html(blockProps, isAdmin = false) {
+export function html({ attributes }) {    
     const cssPrefix = "g4rf-eventkrake-events-list";
     const cssTemplate = cssPrefix + "-template";
-        
+    
+    attributes.prefix = cssPrefix;
+    attributes.template = cssTemplate;
+    
     return (
-        <div { ...blockProps } >
+        <ul className={ cssPrefix + "-list" }>
+            <li className={ cssPrefix + "-event " + cssTemplate } href="">
 
-            <BackendLabel isAdmin={isAdmin} />
-            
-            <ul className={ cssPrefix + "-list" }>
-                <li className={ cssPrefix + "-event " + cssTemplate }>
+                { /* featured image */ }
+                <a className={ cssPrefix + "-image" } href="">
+                    <img  src="" alt="" />
+                </a>
 
-                    { /* featured image */ }
-                    <img className={ cssPrefix + "-image" } src="" alt="" />
+                { /* title */ }
+                <div className={ cssPrefix + "-title" }>
+                    <h3><a href=""></a></h3>
+                </div>
 
+                { /* excerpt */ }
+                <div className={ cssPrefix + "-excerpt" }><p></p></div>
+
+                { /* content */ }
+                <Controls.Content attributes={attributes} />
+
+                { /* date */ }
+                <div className={ cssPrefix + "-date" }>
+                    <span className={ cssPrefix + "-start-date" }></span>
+                    <span className={ cssPrefix + "-start-time" }></span>
+                    <span className={ cssPrefix + "-date-separator" }>–</span>
+                    <span className={ cssPrefix + "-end-date" }></span>
+                    <span className={ cssPrefix + "-end-time" }></span>
+                    <a className={ cssPrefix + "-ics" } href="">ics</a>
+                </div>
+
+                { /* location */ }
+                <div className={ cssPrefix + "-location" }>
                     { /* title */ }
-                    <div className={ cssPrefix + "-title" }></div>
-
-                    { /* excerpt */ }
-                    <div className={ cssPrefix + "-excerpt" }></div>
-
-                    { /* content */ }
-                    <div className={ cssPrefix + "-content" }></div>
-
-                    { /* date */ }
-                    <div className={ cssPrefix + "-date" }>
-                        <span className={ cssPrefix + "-start-date" }></span>
-                        <span className={ cssPrefix + "-start-time" }></span>
-                        <span className={ cssPrefix + "-end-date" }></span>
-                        <span className={ cssPrefix + "-end-time" }></span>
-                        <a className={ cssPrefix + "-ics" } href="">ics</a>
+                    <div className={ cssPrefix + "-location-title" }></div>
+                    { /* title with link */ }
+                    <div className={ cssPrefix + "-location-title-with-link" }>
+                        <a href=""></a>
                     </div>
+                    { /* address */ }
+                    <div className={ cssPrefix + "-location-address" }></div>
+                </div>
 
-                    { /* location */ }
-                    <div className={ cssPrefix + "-location" }>
-                        { /* title */ }
-                        <div className={ cssPrefix + "-location-title" }></div>
-                        { /* title with link */ }
-                        <div className={ cssPrefix + "-location-title-with-link" }>
-                            <a href=""></a>
-                        </div>
-                        { /* address */ }
-                        <div className={ cssPrefix + "-location-address" }></div>
-                    </div>
-
-                </li>
-            </ul>
-        </div>
+            </li>
+        </ul>
     );
 }
 
-
-function BackendLabel({ isAdmin }) {
-    if(isAdmin) {
-        return (<div>{ metadata.title }</div>);
-    }
-    return (<></>);
-}

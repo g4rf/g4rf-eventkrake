@@ -20,8 +20,12 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#view-script
  */
 
-import * as loader from './list-events';
+import * as List from './list-events';
 
 document.addEventListener('DOMContentLoaded', () => {
-    loader.load();
+    jQuery(".wp-block-g4rf-eventkrake-events-list").each(function() {
+        List.load({
+            block: this
+        });
+    });
 });
