@@ -42,7 +42,7 @@
   position: absolute;
   left: 0;
 }
-.eventkrake-event-start:after {
+.eventkrake-event-end:before {
   content: " – ";
 }
 .eventkrake-event-ics {
