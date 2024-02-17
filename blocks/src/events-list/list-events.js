@@ -48,9 +48,9 @@ export function load(
         }
         
         // title
-        $(prefix + "-title h3 a", eventHtml).append(eventData.title);
+        $(prefix + "-title a", eventHtml).append(eventData.title);
         if(!isEditor) {
-            $(prefix + "-title h3 a", eventHtml).attr("href", eventData.url);
+            $(prefix + "-title a", eventHtml).attr("href", eventData.url);
         }
         
         // excerpt
@@ -117,57 +117,39 @@ export function load(
  * @returns {String}
  */
 export function html({ attributes }) {    
-    const cssPrefix = "g4rf-eventkrake-events-list";
-    const cssTemplate = cssPrefix + "-template";
+    const prefix = "g4rf-eventkrake-events-list";
+    const template = prefix + "-template";
     
-    attributes.prefix = cssPrefix;
-    attributes.template = cssTemplate;
+    attributes.prefix = prefix;
+    attributes.template = template;
     
     return (
-        <div className={ cssPrefix + "-list" }>
-            <div className={ cssPrefix + "-event " + cssTemplate } >
+        <div className={ prefix + "-list" }>
+            <div className={ prefix + "-event " + template } >
 
                 { /* featured image */ }
-                <a className={ cssPrefix + "-image" } href="">
-                    <img  src="" alt="" />
-                </a>
+                <Controls.Image attributes={attributes} />
                 
-                <div className={ cssPrefix + "-info" }>
+                <div className={ prefix + "-info" }>
 
                     { /* title */ }
-                    <div className={ cssPrefix + "-title" }>
-                        <h3><a href=""></a></h3>
-                    </div>
+                    <Controls.Title attributes={attributes} />
 
                     { /* date */ }
-                    <div className={ cssPrefix + "-date" }>
-                        <span className={ cssPrefix + "-start-date" }></span>
-                        <span className={ cssPrefix + "-start-time" }></span>
-                        <span className={ cssPrefix + "-date-separator" }>–</span>
-                        <span className={ cssPrefix + "-end-date" }></span>
-                        <span className={ cssPrefix + "-end-time" }></span>
-                        <a className={ cssPrefix + "-ics" } href="">ics</a>
-                    </div>
+                    <Controls.Date attributes={attributes} />
 
                     { /* location */ }
-                    <div className={ cssPrefix + "-location" }>
-                        { /* title */ }
-                        <div className={ cssPrefix + "-location-title" }></div>
-                        { /* title with link */ }
-                        <div className={ cssPrefix + "-location-title-with-link" }>
-                            <a href=""></a>
-                        </div>
-                        { /* address */ }
-                        <div className={ cssPrefix + "-location-address" }></div>
-                    </div>
+                    <Controls.Location attributes={attributes} />
 
                     { /* excerpt */ }
-                    <div className={ cssPrefix + "-excerpt" }><p></p></div>
+                    <Controls.Excerpt attributes={attributes} />
 
                     { /* content */ }
                     <Controls.Content attributes={attributes} />
                         
                 </div>
+                
+                <Controls.Seperator attributes={attributes} />
             </div>
         </div>
     );

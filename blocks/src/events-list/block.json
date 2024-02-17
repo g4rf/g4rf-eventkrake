@@ -11,8 +11,54 @@
     
     "category": "design",
     
-    "attributes": {		
+    "attributes": {
+        "showImage": {
+            "type": "boolean",
+            "default": true
+        },
+        "showTitle": {
+            "type": "boolean",
+            "default": true
+        },
+        "showExcerpt": {
+            "type": "boolean",
+            "default": true
+        },
         "showContent": {
+            "type": "boolean",
+            "default": false
+        },
+        "showSeperator": {
+            "type": "boolean",
+            "default": true
+        },
+        
+        "showDate": {
+            "type": "boolean",
+            "default": true
+        },
+        "showDateStart": {
+            "type": "boolean",
+            "default": true
+        },
+        "showDateEnd": {
+            "type": "boolean",
+            "default": false
+        },
+        "showDateIcs": {
+            "type": "boolean",
+            "default": true
+        },
+        
+        "showLocation": {
+            "type": "boolean",
+            "default": true
+        },
+        "showLocationWithLink": {
+            "type": "boolean",
+            "default": true
+        },
+        "showLocationAddress": {
             "type": "boolean",
             "default": true
         }

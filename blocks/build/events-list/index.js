@@ -10,16 +10,142 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BackendLabel: () => (/* binding */ BackendLabel),
-/* harmony export */   Content: () => (/* binding */ Content)
+/* harmony export */   Content: () => (/* binding */ Content),
+/* harmony export */   Date: () => (/* binding */ Date),
+/* harmony export */   Excerpt: () => (/* binding */ Excerpt),
+/* harmony export */   Image: () => (/* binding */ Image),
+/* harmony export */   Location: () => (/* binding */ Location),
+/* harmony export */   Seperator: () => (/* binding */ Seperator),
+/* harmony export */   Title: () => (/* binding */ Title)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./block.json */ "./src/events-list/block.json");
 
 
-function BackendLabel() {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, _block_json__WEBPACK_IMPORTED_MODULE_1__.title);
+function Image({
+  attributes
+}) {
+  const {
+    showImage,
+    prefix
+  } = attributes;
+  if (!showImage) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    className: prefix + "-image",
+    href: ""
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: "",
+    alt: ""
+  }));
+}
+function Title({
+  attributes
+}) {
+  const {
+    showTitle,
+    prefix
+  } = attributes;
+  if (!showTitle) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-title"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: ""
+  })));
+}
+function Date({
+  attributes
+}) {
+  const {
+    showDate,
+    showDateStart,
+    showDateEnd,
+    showDateIcs,
+    prefix
+  } = attributes;
+  if (!showDate) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  let start = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  if (showDateStart) {
+    start = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-start-date"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-start-time"
+    }));
+  }
+  let end = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  if (showDateEnd) {
+    end = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-end-date"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-end-time"
+    }));
+  }
+  let seperator = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  if (showDateStart && showDateEnd) {
+    seperator = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-date-separator"
+    }, "\u2013");
+  }
+  let ics = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  if (showDateIcs) {
+    ics = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      className: prefix + "-date-ics",
+      href: ""
+    }, "ics");
+  }
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-date"
+  }, start, seperator, end, ics);
+}
+function Location({
+  attributes
+}) {
+  const {
+    showLocation,
+    showLocationWithLink,
+    showLocationAddress,
+    prefix
+  } = attributes;
+  if (!showLocation) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  let title = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  if (showLocationWithLink) {
+    title = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-location-title-with-link"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: ""
+    }));
+  } else {
+    title = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-location-title"
+    });
+  }
+  let address = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  if (showLocationAddress) {
+    address = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-location-address"
+    });
+  }
+  let seperator = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  if (showLocationAddress) {
+    seperator = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-location-seperator"
+    }, "//");
+  }
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-location"
+  }, title, seperator, address);
+}
+function Excerpt({
+  attributes
+}) {
+  const {
+    showExcerpt,
+    prefix
+  } = attributes;
+  if (!showExcerpt) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-excerpt"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null));
 }
 function Content({
   attributes
@@ -31,6 +157,18 @@ function Content({
   if (!showContent) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: prefix + "-content"
+  });
+}
+function Seperator({
+  attributes
+}) {
+  const {
+    showSeperator,
+    prefix
+  } = attributes;
+  if (!showSeperator) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
+    className: prefix + "-seperator"
   });
 }
 
@@ -68,7 +206,18 @@ function Edit({
   setAttributes
 }) {
   const {
-    showContent
+    showImage,
+    showTitle,
+    showExcerpt,
+    showContent,
+    showSeperator,
+    showDate,
+    showDateStart,
+    showDateEnd,
+    showDateIcs,
+    showLocation,
+    showLocationWithLink,
+    showLocationAddress
   } = attributes;
 
   // load events
@@ -83,13 +232,153 @@ function Edit({
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)(),
     ref: list
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Elements', 'g4rf-eventkrake')
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show', 'g4rf-eventkrake')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showTitle,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show title', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showTitle: !showTitle
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showExcerpt,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show excerpt', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showExcerpt: !showExcerpt
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
     checked: !!showContent,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show content', 'g4rf-eventkrake'),
     onChange: () => {
       setAttributes({
         showContent: !showContent
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Date', 'g4rf-eventkrake')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showDate,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show date', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showDate: !showDate
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showDateStart,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show start date', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showDateStart: !showDateStart
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showDateEnd,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show end date', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showDateEnd: !showDateEnd
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showDateIcs,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show ics link', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showDateIcs: !showDateIcs
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Location', 'g4rf-eventkrake')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showLocation,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show location', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showLocation: !showLocation
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showLocationWithLink,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Link location to location page', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showLocationWithLink: !showLocationWithLink
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showLocationAddress,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show location address', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showLocationAddress: !showLocationAddress
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Image', 'g4rf-eventkrake')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showImage,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show image', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showImage: !showImage
+      });
+      _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
+        block: list.current,
+        isEditor: true
+      });
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Seperator', 'g4rf-eventkrake')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    checked: !!showSeperator,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show event seperator', 'g4rf-eventkrake'),
+    onChange: () => {
+      setAttributes({
+        showSeperator: !showSeperator
       });
       _list_events__WEBPACK_IMPORTED_MODULE_4__.load({
         block: list.current,
@@ -235,9 +524,9 @@ function load({
       }
 
       // title
-      $(prefix + "-title h3 a", eventHtml).append(eventData.title);
+      $(prefix + "-title a", eventHtml).append(eventData.title);
       if (!isEditor) {
-        $(prefix + "-title h3 a", eventHtml).attr("href", eventData.url);
+        $(prefix + "-title a", eventHtml).attr("href", eventData.url);
       }
 
       // excerpt
@@ -300,56 +589,31 @@ function load({
 function html({
   attributes
 }) {
-  const cssPrefix = "g4rf-eventkrake-events-list";
-  const cssTemplate = cssPrefix + "-template";
-  attributes.prefix = cssPrefix;
-  attributes.template = cssTemplate;
+  const prefix = "g4rf-eventkrake-events-list";
+  const template = prefix + "-template";
+  attributes.prefix = prefix;
+  attributes.template = template;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-list"
+    className: prefix + "-list"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-event " + cssTemplate
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    className: cssPrefix + "-image",
-    href: ""
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-    src: "",
-    alt: ""
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-info"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-title"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: ""
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-date"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: cssPrefix + "-start-date"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: cssPrefix + "-start-time"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: cssPrefix + "-date-separator"
-  }, "\u2013"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: cssPrefix + "-end-date"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: cssPrefix + "-end-time"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    className: cssPrefix + "-ics",
-    href: ""
-  }, "ics")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-location"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-location-title"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-location-title-with-link"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: ""
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-location-address"
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: cssPrefix + "-excerpt"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Content, {
+    className: prefix + "-event " + template
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Image, {
     attributes: attributes
-  }))));
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-info"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Title, {
+    attributes: attributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Date, {
+    attributes: attributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Location, {
+    attributes: attributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Excerpt, {
+    attributes: attributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Content, {
+    attributes: attributes
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Seperator, {
+    attributes: attributes
+  })));
 }
 
 /***/ }),
@@ -452,7 +716,7 @@ module.exports = window["wp"]["i18n"];
   \************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"g4rf-eventkrake/events-list","version":"0.1.0","title":"Eventkrake Events list","description":"Shows events in a list.","example":{},"category":"design","attributes":{"showContent":{"type":"boolean","default":true}},"supports":{"html":false,"anchor":true,"color":{"background":true,"gradients":true,"link":true,"text":true},"spacing":{"margin":true,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true}},"textdomain":"g4rf-eventkrake","editorScript":"file:./index.js","viewScript":"file:./view.js","style":"file:./style-index.css"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"g4rf-eventkrake/events-list","version":"0.1.0","title":"Eventkrake Events list","description":"Shows events in a list.","example":{},"category":"design","attributes":{"showImage":{"type":"boolean","default":true},"showTitle":{"type":"boolean","default":true},"showExcerpt":{"type":"boolean","default":true},"showContent":{"type":"boolean","default":false},"showSeperator":{"type":"boolean","default":true},"showDate":{"type":"boolean","default":true},"showDateStart":{"type":"boolean","default":true},"showDateEnd":{"type":"boolean","default":false},"showDateIcs":{"type":"boolean","default":true},"showLocation":{"type":"boolean","default":true},"showLocationWithLink":{"type":"boolean","default":true},"showLocationAddress":{"type":"boolean","default":true}},"supports":{"html":false,"anchor":true,"color":{"background":true,"gradients":true,"link":true,"text":true},"spacing":{"margin":true,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true}},"textdomain":"g4rf-eventkrake","editorScript":"file:./index.js","viewScript":"file:./view.js","style":"file:./style-index.css"}');
 
 /***/ })
 

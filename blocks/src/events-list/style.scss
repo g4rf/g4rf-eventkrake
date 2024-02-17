@@ -9,7 +9,10 @@
 
 .g4rf-eventkrake-events-list-event {
     display: grid;
-    grid-template: "image info" min-content / min(10em,30%) auto;
+    grid-template: 
+        "image info" min-content
+        "seperator seperator" min-content
+        / min-content auto;
     row-gap: 10px;
     column-gap: 15px;
     justify-items: stretch;
@@ -17,10 +20,20 @@
     justify-content: stretch;
     
     padding: 15px;
+    
+    @media(max-width: 666px) {
+        grid-template:
+            "image" min-content
+            "info" min-content
+            "seperator" min-content
+            / auto;
+    }
 }
 
 .g4rf-eventkrake-events-list-image {
     grid-area: image;
+    width: 30vw;
+    max-width: 10em;
     
     img {
         height: 100%;
@@ -34,32 +47,36 @@
     grid-area: info;
 }
 
-.g4rf-eventkrake-events-list-title {
-}
-
-.g4rf-eventkrake-events-list-date {    
+.g4rf-eventkrake-events-list-date {
     span {
         margin-right: 1ch; // width of O
     }
 }
+.g4rf-eventkrake-events-list-start-date,
+.g4rf-eventkrake-events-list-start-time,
+.g4rf-eventkrake-events-list-end-date,
+.g4rf-eventkrake-events-list-end-time {
+    font-weight: bold;
+}
+.g4rf-eventkrake-events-list-date-ics {
+    font-style: italic;
+    font-size: small;
+    text-decoration: none;
+}
 
 .g4rf-eventkrake-events-list-location {
-    
+    span {
+        margin-right: 1ch; // width of O
+    }
 }
-.g4rf-eventkrake-events-list-location-title {
-    
-}
+.g4rf-eventkrake-events-list-location-title,
 .g4rf-eventkrake-events-list-location-title-with-link a {
-    
+    font-weight: bold;
 }
 .g4rf-eventkrake-events-list-location-address {
     font-style: italic;
 }
 
-.g4rf-eventkrake-events-list-excerpt {
-    
-}
-
-.g4rf-eventkrake-events-list-content {
-    
+.g4rf-eventkrake-events-list-seperator {
+    grid-area: seperator;
 }
