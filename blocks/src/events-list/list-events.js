@@ -30,84 +30,93 @@ export function load(
     
     // remove old blocks
     $(".g4rf-eventkrake-events-list-event", list).not("." + template).remove();
+        
+    // show spinner
+    $(".g4rf-eventkrake-spinner", list).show();    
     
     $.getJSON("/wp-json/eventkrake/v3/events", {
         earliestStart: start,
         latestStart: end
-    }, function(data) { $.each(data.events, function(index, eventData) {
+    }, function(data) { 
+        // hide spinner
+        $(".g4rf-eventkrake-spinner", list).hide();
         
-        const eventHtml = $(prefix + "-event." + template, list)
-                .clone()
-                .removeClass(template)
-                .appendTo(list);
-        
-        // image
-        $(prefix + "-image img", eventHtml).attr("src", eventData.image);
-        if(!isEditor) {
-            $(prefix + "-image", eventHtml).attr("href", eventData.url);
-        }
-        
-        // title
-        $(prefix + "-title a", eventHtml).append(eventData.title);
-        if(!isEditor) {
-            $(prefix + "-title a", eventHtml).attr("href", eventData.url);
-        }
-        
-        // excerpt
-        $(prefix + "-excerpt p", eventHtml).append(eventData.excerpt);
-        
-        // content
-        $(prefix + "-content", eventHtml).append(eventData.content);
-       
-        // location
-        const location = data.locations[eventData.locationId];
-        $(prefix + "-location-title", eventHtml).append(location.title);
-        // location with link
-        $(prefix + "-location-title-with-link a", eventHtml)
-                .append(location.title);
-        if(!isEditor) {
+        // crawl events
+        $.each(data.events, function(index, eventData)
+        {
+            const eventHtml = $(prefix + "-event." + template, list)
+                    .clone()
+                    .removeClass(template)
+                    .appendTo(list);
+
+            // image
+            $(prefix + "-image img", eventHtml).attr("src", eventData.image);
+            if(!isEditor) {
+                $(prefix + "-image", eventHtml).attr("href", eventData.url);
+            }
+
+            // title
+            $(prefix + "-title a", eventHtml).append(eventData.title);
+            if(!isEditor) {
+                $(prefix + "-title a", eventHtml).attr("href", eventData.url);
+            }
+
+            // excerpt
+            $(prefix + "-excerpt p", eventHtml).append(eventData.excerpt);
+
+            // content
+            $(prefix + "-content", eventHtml).append(eventData.content);
+
+            // location
+            const location = data.locations[eventData.locationId];
+            $(prefix + "-location-title", eventHtml).append(location.title);
+            // location with link
             $(prefix + "-location-title-with-link a", eventHtml)
-                .attr("href", location.url);
-        }
-        // location address
-        $(prefix + "-location-address", eventHtml).append(location.address);
-       
-        // dates
-        const start = new Date(eventData.start);
-        const end = new Date(eventData.end);
-        const dateOptions = {
-            weekday: "short",
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-        };
-        const timeOptions = {
-            hour: "2-digit",
-            minute: "2-digit"
-        };
-        // start
-        $(prefix + "-start-date", eventHtml).append(
-                start.toLocaleDateString(undefined, dateOptions));
-        $(prefix + "-start-time", eventHtml).append(
-                start.toLocaleTimeString(undefined, timeOptions));
-        // end
-        if (start.toDateString() === end.toDateString()) {
-            // on same day
-            $(prefix + "-end-date", eventHtml).remove();
-        } else {
-            // not on same day
-            $(prefix + "-end-date", eventHtml).append(
-                    end.toLocaleDateString(undefined, dateOptions));
-        }
-        $(prefix + "-end-time", eventHtml).append(
-                end.toLocaleTimeString(undefined, timeOptions));
-        // ics
-        if(!isEditor) {
-            $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
-        }
-        
-        $(block).data("loading", false);
-    });});
+                    .append(location.title);
+            if(!isEditor) {
+                $(prefix + "-location-title-with-link a", eventHtml)
+                    .attr("href", location.url);
+            }
+            // location address
+            $(prefix + "-location-address", eventHtml).append(location.address);
+
+            // dates
+            const start = new Date(eventData.start);
+            const end = new Date(eventData.end);
+            const dateOptions = {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            };
+            const timeOptions = {
+                hour: "2-digit",
+                minute: "2-digit"
+            };
+            // start
+            $(prefix + "-start-date", eventHtml).append(
+                    start.toLocaleDateString(undefined, dateOptions));
+            $(prefix + "-start-time", eventHtml).append(
+                    start.toLocaleTimeString(undefined, timeOptions));
+            // end
+            if (start.toDateString() === end.toDateString()) {
+                // on same day
+                $(prefix + "-end-date", eventHtml).remove();
+            } else {
+                // not on same day
+                $(prefix + "-end-date", eventHtml).append(
+                        end.toLocaleDateString(undefined, dateOptions));
+            }
+            $(prefix + "-end-time", eventHtml).append(
+                    end.toLocaleTimeString(undefined, timeOptions));
+            // ics
+            if(!isEditor) {
+                $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
+            }
+
+            $(block).data("loading", false);
+        });
+    });
 }
 
 /**
@@ -125,6 +134,9 @@ export function html({ attributes }) {
     
     return (
         <div className={ prefix + "-list" }>
+            
+            <div className="g4rf-eventkrake-spinner"></div>
+            
             <div className={ prefix + "-event " + template } >
 
                 { /* featured image */ }

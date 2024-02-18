@@ -80,3 +80,34 @@
 .g4rf-eventkrake-events-list-seperator {
     grid-area: seperator;
 }
+
+/** spinner **/
+
+.g4rf-eventkrake-spinner {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}
+.g4rf-eventkrake-spinner:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid var(--wp--preset--color--cyan-bluish-gray);
+    border-color: 
+        var(--wp--preset--color--cyan-bluish-gray)
+        transparent 
+        var(--wp--preset--color--cyan-bluish-gray)
+        transparent;
+    animation: g4rf-eventkrake-spinner 1.2s linear infinite;
+}
+@keyframes g4rf-eventkrake-spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

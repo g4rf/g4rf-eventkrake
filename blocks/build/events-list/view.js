@@ -225,10 +225,17 @@ function load({
 
   // remove old blocks
   $(".g4rf-eventkrake-events-list-event", list).not("." + template).remove();
+
+  // show spinner
+  $(".g4rf-eventkrake-spinner", list).show();
   $.getJSON("/wp-json/eventkrake/v3/events", {
     earliestStart: start,
     latestStart: end
   }, function (data) {
+    // hide spinner
+    $(".g4rf-eventkrake-spinner", list).hide();
+
+    // crawl events
     $.each(data.events, function (index, eventData) {
       const eventHtml = $(prefix + "-event." + template, list).clone().removeClass(template).appendTo(list);
 
@@ -311,6 +318,8 @@ function html({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: prefix + "-list"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "g4rf-eventkrake-spinner"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: prefix + "-event " + template
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_3__.Image, {
     attributes: attributes
