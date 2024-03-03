@@ -13,12 +13,29 @@ class Eventkrake {
                 + (self::$CURRENT_MENU_POSITION++ * $step);
     }
 
+    /**
+     * @param type $postId
+     * @param type $key
+     * @return type
+     */
     public static function getSinglePostMeta($postId, $key) {
         return get_post_meta($postId, "eventkrake_$key", true);
     }
+    
+    /**
+     * @param type $postId
+     * @param type $key
+     * @return type
+     */
     public static function getPostMeta($postId, $key) {
         return get_post_meta($postId, "eventkrake_$key", false);
     }
+    
+    /**
+     * @param type $postId
+     * @param type $key
+     * @param type $value
+     */
     public static function setSinglePostMeta($postId, $key, $value) {
         // If the custom field already has a value
         if(get_post_meta($postId, "eventkrake_$key", false)) {
@@ -27,6 +44,13 @@ class Eventkrake {
             add_post_meta($postId, "eventkrake_$key", $value);
         }
     }
+    
+    /**
+     * @param type $postId
+     * @param type $key
+     * @param type $values
+     * @return type
+     */
     public static function setPostMeta($postId, $key, $values) {
         delete_post_meta($postId, "eventkrake_$key");
         if(!$values) return;
@@ -36,76 +60,39 @@ class Eventkrake {
     }
     
     /**
+     * @deprecated since version 5.01
      * Returns list of all events.
      * @param array [$filter=[]] More filter, @see https://developer.wordpress.org/reference/functions/get_posts/
      * @return array Array of all events, sorted.
      */
     public static function events($filter = []) {
-        $options = [
-            'numberposts' => -1,
-            'offset' => 0,
-            'post_type' => 'eventkrake_event',
-            'post_status' => 'publish'
-        ];
-        $posts = get_posts(array_merge($options, $filter));
-
-        $events = [];
-        foreach($posts as $post) {
-            $events = array_merge($events, Event::Factory($post));
-        }
-        return self::sortEvents($events);
+        return Event::all($filter);
     }
     
     /**
+     * @deprecated since version 5.01
      * Returns list of all locations.
      * @param boolean [$private=false] If set to true, also non-public posts 
      *          are returned.  
      * @return array Array of all locations.
      */
     public static function locations($filter = []) {
-        $options = [
-            'numberposts' => -1,
-            'offset' => 0,
-            'orderby' => 'title',
-            'order' => 'ASC',
-            'post_type' => 'eventkrake_location',
-            'post_status' => 'publish'
-        ];
-        $posts = get_posts(array_merge($options, $filter));
-        
-        $locations = [];
-        foreach($posts as $post) {
-            $locations[] = new Location($post);
-        }
-        
-        return $locations;
+        return Location::all($filter);
     }
     
     /**
+     * @deprecated since version 5.01
      * Returns list of all artists.
      * @param boolean [$private=false] If set to true, also non-public posts 
      *          are returned.  
      * @return array Array of all artists.
      */
     public static function artists($filter = []) {
-        $options = [
-            'numberposts' => -1,
-            'offset' => 0,
-            'orderby' => 'title',
-            'order' => 'ASC',
-            'post_type' => 'eventkrake_artist',
-            'post_status' => 'publish'
-        ];
-        $posts = get_posts(array_merge($options, $filter));
-        
-        $artists = [];
-        foreach($posts as $post) {
-            $artists[] = new Artist($post);
-        }
-        return $artists;
+        return Artist::all($filter);
     }
 
     /**
+     * @deprecated since version 5.01
      * Gibt verfügbare Posts vom Typ Location aus (angelegte Orte).
      * @param bool $onlyPublic wenn true, nur veröffentlichte Posts, andernfalls
      *  auch Entwürfe und private Posts.
@@ -125,6 +112,7 @@ class Eventkrake {
     }
 
     /**
+     * @deprecated since version 5.01
      * Gibt verfügbare Posts vom Typ Event an einer Location aus.
      * @param int $locationId Die ID der Location, für den die Events ausgegeben
      *  werden.
@@ -153,6 +141,7 @@ class Eventkrake {
     }
 
     /**
+     * @deprecated since version 5.01
      * Gibt verfügbare Posts vom Typ Event aus.
      * @param bool $onlyPublic wenn true, nur veröffentlichte Posts, andernfalls
      *  auch Entwürfe und private Posts.
@@ -173,6 +162,7 @@ class Eventkrake {
     }
 
     /**
+     * @deprecated since version 5.01
      * Gibt verfügbare Posts vom Typ Artist aus.
      * @param bool $onlyPublic wenn true, nur veröffentlichte Posts, andernfalls
      *  auch Entwürfe und private Posts.
@@ -192,6 +182,7 @@ class Eventkrake {
     }
 
     /**
+     * @deprecated since version 5.01
      * Gibt verfügbare Posts vom Typ Event aus, an denen der Artist teilnimmt.
      * @param int $artistId Die post id des Artist.
      * @param bool $onlyPublic wenn true, nur veröffentlichte Posts, andernfalls
@@ -211,7 +202,6 @@ class Eventkrake {
 
     /**
      * Gibt verfügbare Event-Kategorien zurück.
-     * @TODO collect categories from database
      * @return array Ein Array von Event-Kategorien.
      */
     public static function getCategories() {
@@ -246,6 +236,7 @@ class Eventkrake {
     }
     
     /**
+     * @deprecated since version 5.01
      * Sorts an array of events ascending by start date.
      * @param array $events Events with property 'start'.
      * @return array The sorted events array.
@@ -377,8 +368,8 @@ class Eventkrake {
     }
 
     /**
-     * Date display should be done on client side.
-     * Erzeugt einen Timepicker.
+     * @TODO: Date display should be done on client side.
+     * Creates a time picker.
      * @param string $nameHour Der Formular-Name der Stundenauswahl.
      * @param string $nameMin Der Formular-Name der Minutenauswahl.
      * @param int $selHour Die selektierte Stunde.

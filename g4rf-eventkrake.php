@@ -4,7 +4,7 @@
  * Plugin URI:      https://github.com/g4rf/g4rf-eventkrake
  * Description:     A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
  * Author:          Jan Kossick
- * Version:         5.00beta
+ * Version:         5.01beta
  * License:         CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
  * Author URI:      https://jankossick.de
  * Min WP Version:  6.1
@@ -18,7 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
 
-/***** Needs & needles *****/
+
+/*
+ * Needs & needles 
+ */
 add_theme_support('post-thumbnails');
 
 require_once 'Eventkrake/Config.php';
@@ -33,321 +36,85 @@ use Eventkrake\Eventkrake as Eventkrake;
 use Eventkrake\Event as Event;
 use Eventkrake\Location as Location;
 
-/***** Widgets *****/
+
+/*
+ * Widgets 
+ */
+
 add_action('widgets_init', function() {
     register_widget('Eventkrake\Widget\ShowNextEvents');
 });
 
 
-/***** Scripte & CSS hinzufügen *****/
-// Backend JS und CSS
+/*
+ * Scripts & CSS 
+ */
+
+// backend
 add_action('admin_enqueue_scripts', function() {
     $path = plugin_dir_url(__FILE__);
 
-    // Leaflet
+    // leaflet
     wp_register_script('eventkrake_leaflet',  $path.'leaflet/leaflet.js',
-        array('jquery'));
+        ['jquery']);
     wp_enqueue_script('eventkrake_leaflet');
-    // allgemeine Scripte
+    // general scripts
     wp_register_script('eventkrake',  $path.'js/plugin.js',
-        array('eventkrake_leaflet'));
+        ['eventkrake_leaflet']);
     wp_enqueue_script('eventkrake');
-    // Adminscripte
+    // admin scripts
     wp_register_script('eventkrake_admin', $path.'js/admin.js',
-        array('jquery', 'eventkrake'));
+        ['jquery', 'eventkrake']);
     wp_enqueue_script('eventkrake_admin');
 
-    // allgemeines CSS
+    // general css
     wp_register_style('eventkrake_all', $path.'css/all.css');
     wp_enqueue_style('eventkrake_all');
-    // Admin-CSS
+    // admin css
     wp_register_style('eventkrake_admin', $path.'css/admin.css',
-        array('eventkrake_all'));
+        ['eventkrake_all']);
     wp_enqueue_style('eventkrake_admin');
-    // Leaflet CSS
+    // leaflet CSS
     wp_register_style('eventkrake_leaflet', $path.'leaflet/leaflet.css');
     wp_enqueue_style('eventkrake_leaflet');
 });
 
-// Frontend JS und CSS
+// frontend
 add_action('wp_enqueue_scripts', function() {
     $path = plugin_dir_url(__FILE__);
 
-    // Leaflet-JS
+    // leaflet
     wp_register_script('eventkrake_leaflet',  $path.'leaflet/leaflet.js',
-        array('jquery'));
+        ['jquery']);
     wp_enqueue_script('eventkrake_leaflet');
-    // allgemeines JS
+    // general scripts
     wp_register_script('eventkrake',  $path.'js/plugin.js',
-        array('eventkrake_leaflet'));
+        ['eventkrake_leaflet']);
     wp_enqueue_script('eventkrake');
 
-    // allgemeines CSS
+    // general css
     wp_register_style('eventkrake_all', $path.'css/all.css');
     wp_enqueue_style('eventkrake_all');
-    // Leaflet-CSS
+    // leaflet css
     wp_register_style('eventkrake_leaflet', $path.'leaflet/leaflet.css');
     wp_enqueue_style('eventkrake_leaflet');
 });
 
 
-/***** Blocks *****/
+/*
+ * Blocks 
+ */
 
 add_action( 'init', function() {
-    // extend the query loop
+    // events list
     register_block_type( __DIR__ . '/blocks/build/events-list' );
 });
 
 
-/***** Custom Post Types *****/
+/*
+ * shortcodes
+ */
 
-/* LOCATIONS */
-add_action('init', function () {
-    register_post_type('eventkrake_location', array(
-        'public' => true,
-        'has_archive' => true,
-        'taxonomies' => array('category'),
-        'labels' => array(
-            'name' => __('Orte', 'eventkrake'),
-            'singular_name' => __('Ort', 'eventkrake'),
-            'add_new' => __('Ort hinzufügen', 'eventkrake'),
-            'add_new_item' => __('Neuen Ort hinzufügen', 'eventkrake'),
-            'edit' => __('Ort bearbeiten', 'eventkrake'),
-            'edit_item' => __('Ort bearbeiten', 'eventkrake'),
-            'new_item' => __('Ort hinzufügen', 'eventkrake'),
-            'view' => __('Ort anschauen', 'eventkrake'),
-            'search_items' => __('Ort suchen', 'eventkrake'),
-            'not_found' => __('Keine Orte gefunden', 'eventkrake'),
-            'not_found_in_trash' =>
-                __('Keine gelöschten Orte', 'eventkrake')
-        ),
-        'rewrite' => array('slug' => 'location'),
-        'menu_position' => Eventkrake::getNextMenuPosition(),
-        'menu_icon' => plugin_dir_url(__FILE__) . '/img/location.png',
-        'description' =>
-            __('An Orten finden Veranstaltungen statt.', 'eventkrake'),
-        'supports' => array('title', 'excerpt', 'editor', 'thumbnail', 
-            'comments'),
-        'show_in_rest' => true,
-        'register_meta_box_cb' => function() {
-            // Metaboxen laden
-            add_meta_box(
-                'eventkrake_location',
-                __('Weitere Angaben zum Ort', 'eventkrake'),
-                function($args = null) {
-                    // Inhalt der Metabox
-                    include 'meta_location.php';
-                }, null, 'normal', 'high', null
-            );
-        }
-    ));
-});
-// Inhalt der Metabox speichern
-add_action('save_post_eventkrake_location', function($post_id, $post) {
-    //die("$post_id<pre>" . print_r($post, true) . "</pre>");
-
-    // checken, ob wir vom edit screen kommen
-    if(! isset($_POST['eventkrake_on_edit_screen'])) return;
-
-    // automatische Speicherungen synchronisieren wir nicht
-    if($post->post_status == 'auto-draft') return;
-
-    // Is the user allowed to edit the post or page?
-    if (!current_user_can('edit_post', $post->ID)) return;
-
-    // If this is just a revision, do nothing.
-    if (wp_is_post_revision($post_id)) return;
-    
-    // check POST-fields
-    $lat = filter_input(INPUT_POST, 'eventkrake_lat');
-    $lng = filter_input(INPUT_POST, 'eventkrake_lng');
-    $address = filter_input(INPUT_POST, 'eventkrake_address');
-    $accessibility = filter_input(INPUT_POST, 'eventkrake-accessibility');
-    $accessibilityInfo = 
-        filter_input(INPUT_POST, 'eventkrake-accessibility-info');
-    $tags = filter_input(INPUT_POST, 'eventkrake_tags');
-    
-    // links
-    $linksKeys = $_POST['eventkrake-links-key'];
-    $linksValues = $_POST['eventkrake-links-value'];
-    $links = [];
-    for($i = 0; $i < count($linksKeys); $i++) {
-        if(empty($linksKeys[$i])) continue;
-        if(empty($linksValues[$i])) continue;
-
-        $links[] = [
-            'name' => $linksKeys[$i],
-            'url' => $linksValues[$i]
-        ];
-    }
-
-    // categories
-    $categories = array();
-    if(isset($_POST['eventkrake_categories'])) {
-        $cats = explode(",", $_POST['eventkrake_categories']);
-        foreach($cats as $c) {
-            $c = trim($c);
-            if(strlen($c) > 0) $categories[] = $c;
-        }
-    }
-
-    // save fields
-    Eventkrake::setSinglePostMeta($post_id, 'lat', $lat);
-    Eventkrake::setSinglePostMeta($post_id, 'lng', $lng);
-    Eventkrake::setSinglePostMeta($post_id, 'address', $address);
-    Eventkrake::setSinglePostMeta($post_id, 'links', $links);
-    Eventkrake::setSinglePostMeta(
-        $post_id, 'accessibility', $accessibility);
-    Eventkrake::setSinglePostMeta(
-        $post_id, 'accessibility-info', $accessibilityInfo);
-    Eventkrake::setSinglePostMeta($post_id, 'tags', $tags);
-    Eventkrake::setPostMeta($post_id, 'categories', $categories);
-}, 1, 2);
-
-// add location address and date to event page
-add_filter('the_content', function($content) {
-    
-    if (!(is_single() && in_the_loop() && is_main_query() &&
-                                get_post_type() == 'eventkrake_location')) {
-        return $content;
-    }
-    
-    $location = new Location(get_the_ID());
-
-    ob_start(); ?>
-
-    <div class="eventkrake-location-meta">
-
-        <div class="eventkrake-location-address"><?=
-            $location->address
-        ?></div>
-        
-        <div class="eventkrake-accessibility-info"><?=
-            $location->accessibilityInfo
-        ?></div>
-
-    </div><?php
-
-    // TODO: add other meta like events, links, categories, tags
-    
-    return ob_get_clean() . $content;
-});
-// add accessibility information to the post
-add_filter('post_class', function($classes, $class, $post_id) {
-    if(is_admin()) return $classes;
-    
-    if (get_post_type() != 'eventkrake_location') {
-        return $classes;
-    }
-    
-    $accessibility = 
-            Eventkrake::getSinglePostMeta($post_id, 'accessibility');
-    
-    $classes[] = "eventkrake-accessibility-{$accessibility}";
-
-    return $classes;
-}, 10, 3);
-
-
-/* EVENTS */
-require_once('cpt/event.php');
-
-
-/* ARTISTS */
-add_action('init', function () {
-    register_post_type('eventkrake_artist', array(
-        'public' => true,
-        'has_archive' => true,
-        'taxonomies' => array('category'),
-        'labels' => array(
-            'name' => __('Künstler:innen', 'eventkrake'),
-            'singular_name' => __('Künstler:in', 'eventkrake'),
-            'add_new' => __('Künstler:in hinzufügen', 'eventkrake'),
-            'add_new_item' =>
-                    __('Neue Künstler:in hinzufügen', 'eventkrake'),
-            'edit' => __('Künstler:in bearbeiten', 'eventkrake'),
-            'edit_item' => __('Künstler:in bearbeiten', 'eventkrake'),
-            'new_item' => __('Künstler:in hinzufügen', 'eventkrake'),
-            'view' => __('Künstler:in ansehen', 'eventkrake'),
-            'search_items' => __('Künstler:in suchen', 'eventkrake'),
-            'not_found' => __('Keine Künstler:in gefunden', 'eventkrake'),
-            'not_found_in_trash' =>
-                    __('Keine gelöschten Künstler:innen', 'eventkrake')
-        ),
-        'rewrite' => array('slug' => 'artist'),
-        'menu_position' => Eventkrake::getNextMenuPosition(),
-        'menu_icon' => plugin_dir_url(__FILE__) . '/img/artist.png',
-        'description' =>
-                __('Künstler:innen sind Einzelpersonen oder
-                         Gruppen.', 'eventkrake'),
-        'supports' => array('title', 'excerpt', 'editor', 'thumbnail', 
-            'comments'),
-        'show_in_rest' => true,
-        'register_meta_box_cb' => function() {
-            // Metaboxen laden
-            add_meta_box(
-                'eventkrake_artist',
-                __('Weitere Angaben', 'eventkrake'),
-                function($args = null) {
-                    // Inhalt der Metabox
-                    include 'meta_artist.php';
-                }, null, 'normal', 'high', null
-            );
-        }
-    ));
-});
-// Inhalt der Metabox speichern
-add_action('save_post_eventkrake_artist', function($post_id, $post) {
-    //die("$post_id<pre>" . print_r($post, true) . "</pre>");
-
-    // Is the user allowed to edit the post or page?
-    if (!current_user_can('edit_post', $post->ID)) return;
-
-    // checken, ob wir vom edit screen kommen
-    if(! isset($_POST['eventkrake_on_edit_screen'])) return;
-
-    // automatische Speicherungen machen wir nicht
-    if($post->post_status == 'auto-draft') return;
-
-    // If this is just a revision, do nothing.
-    if (wp_is_post_revision($post_id)) return;
-
-    // check POST fields
-    $tags = $_POST['eventkrake_tags'];
-
-    // categories
-    $categories = array();
-    if(isset($_POST['eventkrake_categories'])) {
-        $cats = explode(",", $_POST['eventkrake_categories']);
-        foreach($cats as $c) {
-            $c = trim($c);
-            if(strlen($c) > 0) $categories[] = $c;
-        }
-    }
-
-    // links
-    $linksKeys = $_POST['eventkrake-links-key'];
-    $linksValues = $_POST['eventkrake-links-value'];
-    $links = [];
-    for($i = 0; $i < count($linksKeys); $i++) {
-        if(empty($linksKeys[$i])) continue;
-        if(empty($linksValues[$i])) continue;
-
-        $links[] = [
-            'name' => $linksKeys[$i],
-            'url' => $linksValues[$i]
-        ];
-    }
-
-    // save fields
-    Eventkrake::setSinglePostMeta($post_id, 'tags', $tags);
-    Eventkrake::setPostMeta($post_id, 'categories', $categories);
-    Eventkrake::setSinglePostMeta($post_id, 'links', $links);
-}, 1, 2);
-
-
-
-/***** Shortcode für Ausgabe *****/
 add_shortcode('eventkrake', function($atts, $content = null) {
     // put shortcode attributes into DOM as data element
     $dataAtts = '';
@@ -355,12 +122,13 @@ add_shortcode('eventkrake', function($atts, $content = null) {
         if(strlen($a) == 0) continue;
         $dataAtts .= " data-$k='$a'";
     }
-    ?><div class="Eventkrake"<?=$dataAtts?>></div><?php
+    ?><div class="eventkrake-data"<?=$dataAtts?>></div><?php
 });
 
 
-
-/***** REST API for events, locations and artists *****/
+/*
+ * REST API for events, locations and artists
+ */
 
 function eventkrake_restbuild_artist($artist) {
     $id = $artist->ID;
