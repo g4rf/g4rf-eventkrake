@@ -3,117 +3,131 @@ global $post;
 use Eventkrake\Eventkrake as Eventkrake;
 ?>
 
-<?php // damit WP nur Änderungen vom Edit-Screen durchführt ?>
-<input type="hidden" name="eventkrake_on_edit_screen" />
-
 <table class="form-table"><tr>
 
-    <th><?=__('Die Kategorien', 'eventkrake')?></th>
-    <td>
-        <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
-            implode(', ', Eventkrake::getPostMeta($post->ID, 'categories'));
-        ?></textarea><br />
-        <span class="description"><?php
-            _e('Notiere hier mit Komma getrennt Kategorien, z.B.:',
-                'eventkrake');
-            ?><br /><?php
-            foreach(Eventkrake::getCategories() as $c) {
-                ?><span class="eventkrake-cat-suggestion"><?=
-                    $c
-                ?></span><?php
-            }
+<!-- categories -->
+<th><?=__('Die Kategorien', 'eventkrake')?></th>
+<td>
+    <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
+        implode(', ', Eventkrake::getPostMeta($post->ID, 'categories'));
+    ?></textarea><br />
+    <span class="description"><?php
+        _e('Notiere hier mit Komma getrennt Kategorien, z.B.:',
+            'eventkrake');
+        ?><br /><?php
+        foreach(Eventkrake::getCategories() as $c) {
+            ?><span class="eventkrake-cat-suggestion"><?=
+                $c
+            ?></span><?php
+        }
+    ?></span>
+    
+</td></tr><tr>
+
+<!-- links -->        
+<th><?=__('Links zur Künstler·in', 'eventkrake')?></th>
+<td class="eventkrake-admin-flex">
+    <div>
+        <span class="description"><?=
+            __('Gebe Weblinks zur Webseite und sozialen Netzwerken an.',
+                'eventkrake')
         ?></span>
-    </td>
+    </div>
 
-</tr><tr>
+    <div class="eventkrake-links-template eventkrake-hide">
+        <input value="" type="text" name="eventkrake-links-key[]"
+               class="regular-text" placeholder="Name des Links" />
+        <input type="text" name="eventkrake-links-value[]"
+               class="regular-text" value="https://" />
+    </div><?php
 
-    <th><?=__('Links zur Künstler:in', 'eventkrake')?></th>
-    <td class="eventkrake-flexcol">
+    $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
+    if(empty($links)) { // no links yet ?>
+    
         <div>
-            <span class="description"><?=
-                __('Gebe Weblinks zur Webseite und sozialen Netzwerken an.',
-                    'eventkrake')
-            ?></span>
-        </div>
-
-        <div class="eventkrake-links-template eventkrake-hide">
             <input value="" type="text" name="eventkrake-links-key[]"
                    class="regular-text" placeholder="Name des Links" />
             <input type="text" name="eventkrake-links-value[]"
-                   class="regular-text" value="https://" />
-        </div><?php
+                   class="regular-text" placeholder="https://" />
+        </div>
 
-        $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
-        if(empty($links)) { // no links yet ?>
+    <?php } else {
+        
+        foreach($links as $link) { // show links ?>
             <div>
-                <input value="" type="text" name="eventkrake-links-key[]"
-                       class="regular-text" placeholder="Name des Links" />
+                <input type="text" name="eventkrake-links-key[]"
+                       class="regular-text"
+                       value="<?=htmlspecialchars($link->name)?>" />
                 <input type="text" name="eventkrake-links-value[]"
-                       class="regular-text" value="https://" />
+                       class="regular-text"
+                       value="<?=htmlspecialchars($link->url)?>" />
             </div>
+        <?php }
+        
+    } ?>
+    <div><input type="button" class="eventkrake-add-link"
+        value="<?=__('Weblink hinzufügen', 'eventkrake')?>" /></div>
 
-        <?php } else {
-            foreach($links as $link) { // show links ?>
-                <div>
-                    <input type="text" name="eventkrake-links-key[]"
-                           class="regular-text"
-                           value="<?=htmlspecialchars($link['name'])?>" />
-                    <input type="text" name="eventkrake-links-value[]"
-                           class="regular-text"
-                           value="<?=htmlspecialchars($link['url'])?>" />
-                </div>
-            <?php }
-        } ?>
-        <div><input type="button" class="eventkrake-add-link"
-            value="<?=__('Weblink hinzufügen', 'eventkrake')?>" /></div>
-    </td>
+</td></tr><tr>
 
-</tr><tr>
+<!-- tags -->
+<th><?=__('Zusatzinfos zur Künstler·in', 'eventkrake')?></th>
+<td>
+    <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
+        type="text" name="eventkrake_tags" class="regular-text" /><br />
+    <span class="description">
+        <?=__('Ein Feld, das beliebige Infos zur Künstler·in enthält.',
+            'eventkrake')?>
+    </span>
 
-    <th><?=__('Zusatzinfos zur Künstler:in', 'eventkrake')?></th>
-    <td>
-        <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
-            type="text" name="eventkrake_tags" class="regular-text" /><br />
-        <span class="description">
-            <?=__('Ein Feld, das beliebige Infos zur Künstler:in enthält. Die
-                   Infos lassen sich für die Suche nutzen. müssen
-                   jedoch nicht angezeigt werden.', 'eventkrake')?>
-        </span>
-    </td>
-
-</tr></table>
+</td></tr></table>
 
 <hr />
 
+<!-- events -->
 <table class="form-table">
     <tr>
-        <th colspan="3"><?=__('Veranstaltungen', 'eventkrake')?></th>
+        <th colspan="5"><?=__('Veranstaltungen', 'eventkrake')?></th>
     </tr><?php
-    foreach(array_reverse(Eventkrake::getEventsForArtist($post->ID, false)) as $e) {
-        $starts = Eventkrake::getPostMeta($e->ID, 'start');
-        $ends = Eventkrake::getPostMeta($e->ID, 'end');
-        $formatStart = '<\b>d.m.Y</\b>\&\n\b\s\p\;G:i';
-        $formatEnd = 'd.m.Y\&\n\b\s\p\;G:i';
-        ?><tr>
-            <td><b><?=get_the_title($e->ID)?></b></td>
+    try {
+        $artist = new Artist($post->ID);
+    
+        foreach(array_reverse(Artist->getEvents()) as $event) {
+            $location = $event->getLocation();
+            
+            ?><tr>
+
+            <!-- event title -->
+            <td><b><?= $event->getTitle() ?></b></td>
+
+            <!-- location -->
+            <td><a href="<?=
+                site_url("wp-admin/post.php?action=edit&post={$location->ID}")
+            ?>"><?=
+                    $location->getTitle() 
+            ?></a></td>
+
+            <!-- datetime -->
             <td><?php
-                $location = get_post(Eventkrake::getSinglePostMeta($e->ID, 'locationid'));
-                ?><a href="<?=
-                    site_url("wp-admin/post.php?action=edit&post={$location->ID}")?>"><?=
-                    get_the_title($location->ID)?></a>
-            </td>
-            <td><?php
-                for($i = 0; $i < count($starts); $i++) {
-                    $start = new DateTime($starts[$i]);
-                    $end = new DateTime($ends[$i]);
-                    print $start->format($formatStart) . '&nbsp;&ndash;&nbsp;' .
-                            $end->format($formatEnd) . '<br />';
-                }
+                print $event->start->format('Y-m-d H:i') 
+                    . '&nbsp;&ndash;&nbsp;' 
+                    . $event->end->format('Y-m-d H:i');
             ?></td>
-            <td><?=wp_trim_excerpt('', $e->ID)?></td>
-            <td><a href="<?=site_url("wp-admin/post.php?action=edit&post={$e->ID}")?>">
-                <?=__('Veranstaltung bearbeiten', 'eventkrake')?>
-            </a></td>
-        </tr><?php
-    }
+
+            <!-- excerpt -->
+            <td><?= $event->getExcerpt() ?></td>
+
+            <!-- edit link -->
+            <td><a href="<?=
+                site_url("wp-admin/post.php?action=edit&post={$event->ID}")
+            ?>"><?=
+                __('Veranstaltung bearbeiten', 'eventkrake')
+            ?></a></td>
+            
+            </tr><?php
+            
+        } // foreach
+
+    } catch (Exception $ex) {}
+
 ?></table>

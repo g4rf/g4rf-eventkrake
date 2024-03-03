@@ -14,7 +14,7 @@ use Eventkrake\Eventkrake as Eventkrake;
     <select class="eventkrake_formselect" name="eventkrake_locationid">
         <option value="0">---</option>
         <?php
-            $locations = Eventkrake::getLocations(false);
+            $locations = Location::all();
             $postLocationId = Eventkrake::getSinglePostMeta(
                                         $post->ID, 'locationid');
             foreach($locations as $l) {
@@ -88,7 +88,7 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter
            placeholder="<?=__('Suche', 'eventkrake')?>">
     <div class="eventkrake-select-multiple">
         <?php
-            $artists = Eventkrake::getArtists(false);
+            $artists = Artist::all();
             $artistIds = Eventkrake::getPostMeta($post->ID, 'artists');
             foreach($artists as $a) { 
                 $selected = in_array($a->ID, $artistIds); ?>
@@ -151,7 +151,7 @@ _e('Wähle hier die Künstler·innen aus, die an der Veranstaltung teilnehmen.',
             <input value="" type="text" name="eventkrake-links-key[]"
                    class="regular-text" placeholder="Name des Links" />
             <input type="text" name="eventkrake-links-value[]"
-                   class="regular-text" value="https://" />
+                   class="regular-text" placeholder="https://" />
         </div>
 
     <?php } else {
@@ -159,10 +159,10 @@ _e('Wähle hier die Künstler·innen aus, die an der Veranstaltung teilnehmen.',
             <div>
                 <input type="text" name="eventkrake-links-key[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link['name'])?>" />
+                       value="<?=htmlspecialchars($link->name)?>" />
                 <input type="text" name="eventkrake-links-value[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link['url'])?>" />
+                       value="<?=htmlspecialchars($link->url)?>" />
             </div>
         <?php }
     } ?>
