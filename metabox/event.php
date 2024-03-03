@@ -1,7 +1,10 @@
 <?php
 
-global $post;
 use Eventkrake\Eventkrake as Eventkrake;
+use Eventkrake\Location as Location;
+use Eventkrake\Artist as Artist;
+
+global $post;
 
 ?>
 
@@ -141,8 +144,8 @@ _e('Wähle hier die Künstler·innen aus, die an der Veranstaltung teilnehmen.',
     <div class="eventkrake-links-template eventkrake-hide">
         <input value="" type="text" name="eventkrake-links-key[]"
                class="regular-text" placeholder="Name des Links" />
-        <input type="text" name="eventkrake-links-value[]"
-               class="regular-text" value="https://" />
+        <input value="" type="text" name="eventkrake-links-value[]"
+               class="regular-text" placeholder="https://" />
     </div><?php
 
     $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
@@ -159,10 +162,10 @@ _e('Wähle hier die Künstler·innen aus, die an der Veranstaltung teilnehmen.',
             <div>
                 <input type="text" name="eventkrake-links-key[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link->name)?>" />
+                       value="<?=htmlspecialchars($link['name'])?>" />
                 <input type="text" name="eventkrake-links-value[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link->url)?>" />
+                       value="<?=htmlspecialchars($link['url'])?>" />
             </div>
         <?php }
     } ?>

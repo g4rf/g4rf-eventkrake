@@ -97,7 +97,7 @@ class Artist {
         ]);
         $events = [];
         foreach($posts as $post) {
-            $events[] = new Event($post->ID);
+            $events = array_merge($events, Event::Factory($post));
         }
         
         return Event::sort($events);
@@ -109,7 +109,7 @@ class Artist {
         
     /**
      * 
-     * @param array $links Array of Eventkrake\Type\Links
+     * @param array $links
      */
     public function setLinks($links) {
         return Eventkrake::setSinglePostMeta($this->ID, 'links', $links);
@@ -141,19 +141,19 @@ add_action('init', function () {
         'has_archive' => true,
         'taxonomies' => ['category'],
         'labels' => [
-            'name' => __('Künstler:innen', 'eventkrake'),
-            'singular_name' => __('Künstler:in', 'eventkrake'),
-            'add_new' => __('Künstler:in hinzufügen', 'eventkrake'),
+            'name' => __('Künstler·innen', 'eventkrake'),
+            'singular_name' => __('Künstler·in', 'eventkrake'),
+            'add_new' => __('Künstler·in hinzufügen', 'eventkrake'),
             'add_new_item' =>
-                    __('Neue Künstler:in hinzufügen', 'eventkrake'),
-            'edit' => __('Künstler:in bearbeiten', 'eventkrake'),
-            'edit_item' => __('Künstler:in bearbeiten', 'eventkrake'),
-            'new_item' => __('Künstler:in hinzufügen', 'eventkrake'),
-            'view' => __('Künstler:in ansehen', 'eventkrake'),
-            'search_items' => __('Künstler:in suchen', 'eventkrake'),
-            'not_found' => __('Keine Künstler:in gefunden', 'eventkrake'),
+                    __('Neue Künstler·in hinzufügen', 'eventkrake'),
+            'edit' => __('Künstler·in bearbeiten', 'eventkrake'),
+            'edit_item' => __('Künstler·in bearbeiten', 'eventkrake'),
+            'new_item' => __('Künstler·in hinzufügen', 'eventkrake'),
+            'view' => __('Künstler·in ansehen', 'eventkrake'),
+            'search_items' => __('Künstler·in suchen', 'eventkrake'),
+            'not_found' => __('Keine Künstler·in gefunden', 'eventkrake'),
             'not_found_in_trash' =>
-                    __('Keine gelöschten Künstler:innen', 'eventkrake')
+                    __('Keine gelöschten Künstler·innen', 'eventkrake')
         ],
         'rewrite' => ['slug' => 'artist'],
         'menu_position' => Eventkrake::getNextMenuPosition(),
@@ -232,7 +232,10 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
         if(empty($linkNames[$i])) continue;
         if(empty($linkUrls[$i])) continue;
 
-        $links[] = new Type\Link($linkNames[$i], $linkUrls[$i]);
+        $links[] = [
+            'name' => $linkNames[$i], 
+            'url' => $linkUrls[$i]
+        ];
     }
     $artist->setLinks($links);
 
@@ -252,7 +255,8 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
 /*
  *  add events to artist page
  */
-add_filter('the_content', function($content) {
+add_filter('the_content', function($content)
+{
     if(is_admin()) return $content;
     if(get_post_type() != 'eventkrake_artist') return $content;
     
@@ -260,7 +264,11 @@ add_filter('the_content', function($content) {
         return $content; 
     }
     
-    $artist = new Artist(get_the_ID());
+    try {
+        $artist = new Artist(get_the_ID());
+    } catch(\Exception $ex) {
+        return $content;
+    }
 
     ob_start(); ?>
 
@@ -281,8 +289,8 @@ add_filter('the_content', function($content) {
             <?php foreach($artist->getLinks() as $link) { ?>
             
                 <li><a class="eventkrake-event-link"
-                   href="<?= $link->url ?>"><?=
-                        $link->name
+                   href="<?= $link['url'] ?>"><?=
+                        $link['name']
                 ?></a></li>
                             
             <?php } ?>

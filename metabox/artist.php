@@ -1,6 +1,10 @@
 <?php
-global $post;
+
 use Eventkrake\Eventkrake as Eventkrake;
+use Eventkrake\Artist as Artist;
+
+global $post;
+
 ?>
 
 <table class="form-table"><tr>
@@ -26,7 +30,7 @@ use Eventkrake\Eventkrake as Eventkrake;
 
 <!-- links -->        
 <th><?=__('Links zur Künstler·in', 'eventkrake')?></th>
-<td class="eventkrake-admin-flex">
+<td class="eventkrake-flexcol">
     <div>
         <span class="description"><?=
             __('Gebe Weblinks zur Webseite und sozialen Netzwerken an.',
@@ -37,8 +41,8 @@ use Eventkrake\Eventkrake as Eventkrake;
     <div class="eventkrake-links-template eventkrake-hide">
         <input value="" type="text" name="eventkrake-links-key[]"
                class="regular-text" placeholder="Name des Links" />
-        <input type="text" name="eventkrake-links-value[]"
-               class="regular-text" value="https://" />
+        <input value="" type="text" name="eventkrake-links-value[]"
+               class="regular-text" placeholder="https://" />
     </div><?php
 
     $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
@@ -47,7 +51,7 @@ use Eventkrake\Eventkrake as Eventkrake;
         <div>
             <input value="" type="text" name="eventkrake-links-key[]"
                    class="regular-text" placeholder="Name des Links" />
-            <input type="text" name="eventkrake-links-value[]"
+            <input value="" type="text" name="eventkrake-links-value[]"
                    class="regular-text" placeholder="https://" />
         </div>
 
@@ -57,10 +61,10 @@ use Eventkrake\Eventkrake as Eventkrake;
             <div>
                 <input type="text" name="eventkrake-links-key[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link->name)?>" />
+                       value="<?=htmlspecialchars($link['name'])?>" />
                 <input type="text" name="eventkrake-links-value[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link->url)?>" />
+                       value="<?=htmlspecialchars($link['url'])?>" />
             </div>
         <?php }
         
@@ -92,7 +96,7 @@ use Eventkrake\Eventkrake as Eventkrake;
     try {
         $artist = new Artist($post->ID);
     
-        foreach(array_reverse(Artist->getEvents()) as $event) {
+        foreach(array_reverse($artist->getEvents()) as $event) {
             $location = $event->getLocation();
             
             ?><tr>
@@ -108,11 +112,7 @@ use Eventkrake\Eventkrake as Eventkrake;
             ?></a></td>
 
             <!-- datetime -->
-            <td><?php
-                print $event->start->format('Y-m-d H:i') 
-                    . '&nbsp;&ndash;&nbsp;' 
-                    . $event->end->format('Y-m-d H:i');
-            ?></td>
+            <td><?= $event->start->format('Y-m-d H:i') ?></td>
 
             <!-- excerpt -->
             <td><?= $event->getExcerpt() ?></td>

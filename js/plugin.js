@@ -63,7 +63,7 @@ var Eventkrake = {
          *		wohlformatierte Adresse.
          */
         getLatLng : function(address, callback) {
-            if((!address) || address.length == 0) {
+            if(! address || address.length == 0) {
                 callback(false, "Keine Adresse übergeben.");
                 return;
             }
@@ -72,8 +72,12 @@ var Eventkrake = {
                     + "?q=" + address
                     + "&format=json&addressdetails=1&limit=1",
                 function(data) {
-                    callback([data[0].lat, data[0].lon],
-                        Eventkrake.Geo.formatAdress(data[0].address));
+                    if(data.length == 0) {
+                        callback(false, "Keine Adresse gefunden.");
+                    } else {
+                        callback([data[0].lat, data[0].lon],
+                            Eventkrake.Geo.formatAdress(data[0].address));
+                    }
                 }
             );
         },

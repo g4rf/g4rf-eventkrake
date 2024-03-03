@@ -25,17 +25,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_theme_support('post-thumbnails');
 
 require_once 'Eventkrake/Config.php';
+
 require_once 'Eventkrake/Eventkrake.php';
 require_once 'Eventkrake/Event.php';
 require_once 'Eventkrake/Artist.php';
 require_once 'Eventkrake/Location.php';
+
 require_once 'Eventkrake/Widget/ShowNextEvents.php';
 
 use Eventkrake\Config as Config;
 use Eventkrake\Eventkrake as Eventkrake;
 use Eventkrake\Event as Event;
 use Eventkrake\Location as Location;
-
+use Eventkrake\Artist as Artist;
 
 /*
  * Widgets 
@@ -131,127 +133,64 @@ add_shortcode('eventkrake', function($atts, $content = null) {
  */
 
 function eventkrake_restbuild_artist($artist) {
-    $id = $artist->ID;
     return [
-        'id' => $id,
-        'url' => get_permalink($id),
-        'name' => get_the_title($id),
-        'title' => get_the_title($id),
-        'text' => apply_filters('the_content', $artist->post_content),
-        'content' => apply_filters('the_content', $artist->post_content),
-        'excerpt' => get_the_excerpt($id),
-        'image' =>  get_the_post_thumbnail_url($id, 'full'),
-        'categories' => Eventkrake::getPostMeta($id, 'categories'),
-        'links' => Eventkrake::getSinglePostMeta($id, 'links'),
-        'tags' => Eventkrake::getSinglePostMeta($id, 'tags')
+        'id' => $artist->ID,
+        'url' => $artist->getPermalink(),
+        'name' => $artist->getTitle(),
+        'title' => $artist->getTitle(),
+        'text' => $artist->getContent(),
+        'content' => $artist->getContent(),
+        'excerpt' => $artist->getExcerpt(),
+        'image' =>  get_the_post_thumbnail_url($artist->ID, 'full'),
+        'categories' => $artist->getCategories(),
+        'links' => $artist->getLinks(),
+        'tags' => $artist->getTags()
     ];
 }
 function eventkrake_restbuild_location($location) {
-    $id = $location->ID;
     return [
-        'id' => $id,
-        'url' => get_permalink($id),
-        'name' => get_the_title($id),
-        'title' => get_the_title($id),
-        'address' =>
-            Eventkrake::getSinglePostMeta($id, 'address'),
-        'lat' => Eventkrake::getSinglePostMeta($id, 'lat'),
-        'lng' => Eventkrake::getSinglePostMeta($id, 'lng'),
-        'text' => apply_filters('the_content', $location->post_content),
-        'content' => apply_filters('the_content', $location->post_content),
-        'excerpt' => get_the_excerpt($id),
-        'image' =>  get_the_post_thumbnail_url($id, 'full'),
-        'categories' => Eventkrake::getPostMeta($id, 'categories'),
-        'links' => Eventkrake::getSinglePostMeta($id, 'links'),
-        'tags' => Eventkrake::getSinglePostMeta($id, 'tags')
+        'id' => $location->ID,
+        'url' => $location->getPermalink(),
+        'name' => $location->getTitle(),
+        'title' => $location->getTitle(),
+        'address' => $location->getAddress(),
+        'lat' => $location->getLat(),
+        'lng' => $location->getLng(),
+        'text' => $location->getContent(),
+        'content' => $location->getContent(),
+        'excerpt' => $location->getExcerpt(),
+        'image' =>  get_the_post_thumbnail_url($location->ID, 'full'),
+        'categories' => $location->getCategories(),
+        'links' => $location->getLinks(),
+        'tags' => $location->getTags()
     ];
 }
-function eventkrake_restbuild_event($post, $params = []) {
-    // params
-    $earliestStart = false;
-    if(isset($params['earliestStart'])) {
-        try {
-            $earliestStart = new DateTime($params['earliestStart']);
-        } catch (Exception $ex) {
-            return new WP_Error(
-                'rest_invalid_param',
-                __('The parameter earliestStart is invalid.', 'eventkrake'),
-                ['status' => 400]);
-        }
-    }
-    $earliestEnd = false;
-    if(isset($params['earliestEnd'])) {
-        try {
-            $earliestEnd = new DateTime($params['earliestEnd']);
-        } catch (Exception $ex) {
-            return new WP_Error(
-                'rest_invalid_param',
-                __('The parameter earliestEnd is invalid.', 'eventkrake'),
-                ['status' => 400]);
-        }
-    }
-    $latestStart = false;
-    if(isset($params['latestStart'])) {
-        try {
-            $latestStart = new DateTime($params['latestStart']);
-        } catch (Exception $ex) {
-            return new WP_Error(
-                'rest_invalid_param',
-                __('The parameter latestStart is invalid.', 'eventkrake'),
-                ['status' => 400]);
-        }
-    }
-    $latestEnd = false;
-    if(isset($params['latestEnd'])) {
-        try {
-            $latestEnd = new DateTime($params['latestEnd']);
-        } catch (Exception $ex) {
-            return new WP_Error(
-                'rest_invalid_param',
-                __('The parameter latestEnd is invalid.', 'eventkrake'),
-                ['status' => 400]);
-        }
-    }
-
-    // go through dates
-    $dates = Event::Factory($post);
+function eventkrake_restbuild_event($event) {
     $dateFormat = 'Y-m-d\TH:i:s';
-    $events = [];
-    foreach($dates as $date) {
-        // check dates
-        if($earliestStart != false && $date->start < $earliestStart) continue;
-        if($earliestEnd != false && $date->end < $earliestEnd) continue;
-        if($latestStart != false && $date->start > $latestStart) continue;
-        if($latestEnd != false && $date->end > $latestEnd) continue;
-
-        // add event
-        $events[] = [
-            'id' => $date->ID,
-            'url' => get_permalink($date->ID),
-            'name' => get_the_title($date->ID),
-            'title' => get_the_title($date->ID),
-            'text' => apply_filters('the_content', $date->content),
-            'content' => apply_filters('the_content', $date->content),
-            'excerpt' => get_the_excerpt($date->ID),
-            'image' =>  get_the_post_thumbnail_url($date->ID, 'full'),
-            'locationid' => $date->location,
-            'locationId' => $date->location,
-            'start' => $date->start->format($dateFormat),
-            'end' => $date->end->format($dateFormat),
-            'artists' => Eventkrake::getPostMeta($date->ID, 'artists'),
-            'categories' => Eventkrake::getPostMeta($date->ID, 'categories'),
-            'links' => Eventkrake::getSinglePostMeta($date->ID, 'links'),
-            'tags' => Eventkrake::getSinglePostMeta($date->ID, 'tags'),
-            'icsUrl' => get_site_url(
-                            null, '/' . $date->icsParameter(), 'https')
-        ];
-    }
-
-    return $events;
+    return [
+        'id' => $event->ID,
+        'uid' => $event->getUID(),
+        'url' => $event->getPermalink(),
+        'name' => $event->getTitle(),
+        'title' => $event->getTitle(),
+        'text' => $event->getContent(),
+        'content' => $event->getContent(),
+        'excerpt' => $event->getExcerpt(),
+        'image' =>  get_the_post_thumbnail_url($event->ID, 'full'),
+        'locationid' => $event->getLocationId(),
+        'locationId' => $event->getLocationId(),
+        'start' => $event->getStart()->format($dateFormat),
+        'end' => $event->getEnd()->format($dateFormat),
+        'artists' => $event->getArtistIds(),
+        'categories' => $event->getCategories(),
+        'links' => $event->getLinks(),
+        'tags' => $event->getTags(),
+        'icsUrl' => get_site_url(null, '/' . $event->icsParameter(), 'https')
+    ];
 }
 
 // sort events by date ASC
-function eventkrake_sortevents($a, $b) {
+function eventkrake_sort_rest_events($a, $b) {
     $aDate = new DateTime($a['start']);
     $bDate = new DateTime($b['start']);
     if($aDate < $bDate) return -1;
@@ -267,31 +206,32 @@ function eventkrake_register_routes() {
     register_rest_route($base, '/locations', [
         'methods'  => WP_REST_Server::READABLE,
         'permission_callback' => '__return_true',
-        'callback' => function() {
+        'callback' => function()
+        {
             $locations = [];
             $events = [];
             $artists = [];
-            foreach(Eventkrake::getLocations() as $location) {
-                $locations[$location->ID] = eventkrake_restbuild_location($location);
+            foreach(Location::all() as $location) {
+                $locations[$location->ID] = 
+                    eventkrake_restbuild_location($location);
 
                 // events
-                foreach(Eventkrake::getEvents($location->ID) as $event) {
-                    $events = array_merge($events, eventkrake_restbuild_event($event));
+                foreach($location->getEvents() as $event) {
+                    $events[$event->getUID()] = 
+                                eventkrake_restbuild_event($event);
 
                     // artists
-                    foreach(Eventkrake::getPostMeta($event->ID, 'artists') as $artistId) {
+                    foreach($event->getArtistIds() as $artistId) {
                         if(! array_key_exists($artistId, $artists)) {
-                            $a = get_post($artistId);
-                            if($a) {
-                                $artists[$artistId] = eventkrake_restbuild_artist($a);
-                            }
+                            $artists[$artistId] = 
+                                eventkrake_restbuild_artist(new Artist($artistId));
                         }
                     }
                 }
             }
 
             // sort events
-            usort($events, 'eventkrake_sortevents');
+            usort($events, 'eventkrake_sort_rest_events');
 
             return rest_ensure_response([
                 'locations' => $locations,
@@ -308,53 +248,108 @@ function eventkrake_register_routes() {
         'args' => [
             'earliestStart' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a minimal date for the events. This parameter is checked against the start of an event.', 'eventkrake')
+                'description' => __('Gives a minimal date for the events. This '
+                    . 'parameter is checked against the start of an event.', 
+                    'eventkrake')
             ],
             'earliestEnd' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a minimal date for the events. This parameter is checked against the end of an event.', 'eventkrake')
+                'description' => __('Gives a minimal date for the events. This '
+                    . 'parameter is checked against the end of an event.', 
+                    'eventkrake')
             ],
             'latestStart' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a maximal date for the events. This parameter is checked against the start of an event.', 'eventkrake')
+                'description' => __('Gives a maximal date for the events. This '
+                    . 'parameter is checked against the start of an event.',
+                    'eventkrake')
             ],
             'latestEnd' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a maximal date for the events. This parameter is checked against the end of an event.', 'eventkrake')
+                'description' => __('Gives a maximal date for the events. This '
+                    . 'parameter is checked against the end of an event.', 
+                    'eventkrake')
             ]
         ],
-        'callback' => function($params) {
+        'callback' => function($params) 
+        {
+            // check params
+            $earliestStart = false;
+            if(isset($params['earliestStart'])) {
+                try {
+                    $earliestStart = new DateTime($params['earliestStart']);
+                } catch (Exception $ex) {
+                    return new WP_Error(
+                        'rest_invalid_param',
+                        __('The parameter earliestStart is invalid.', 'eventkrake'),
+                        ['status' => 400]);
+                }
+            }
+            $earliestEnd = false;
+            if(isset($params['earliestEnd'])) {
+                try {
+                    $earliestEnd = new DateTime($params['earliestEnd']);
+                } catch (Exception $ex) {
+                    return new WP_Error(
+                        'rest_invalid_param',
+                        __('The parameter earliestEnd is invalid.', 'eventkrake'),
+                        ['status' => 400]);
+                }
+            }
+            $latestStart = false;
+            if(isset($params['latestStart'])) {
+                try {
+                    $latestStart = new DateTime($params['latestStart']);
+                } catch (Exception $ex) {
+                    return new WP_Error(
+                        'rest_invalid_param',
+                        __('The parameter latestStart is invalid.', 'eventkrake'),
+                        ['status' => 400]);
+                }
+            }
+            $latestEnd = false;
+            if(isset($params['latestEnd'])) {
+                try {
+                    $latestEnd = new DateTime($params['latestEnd']);
+                } catch (Exception $ex) {
+                    return new WP_Error(
+                        'rest_invalid_param',
+                        __('The parameter latestEnd is invalid.', 'eventkrake'),
+                        ['status' => 400]);
+                }
+            }
+            
             $events = [];
             $locations = [];
             $artists = [];
-            foreach(Eventkrake::getAllEvents() as $event) {
-                $filteredEvents = eventkrake_restbuild_event($event, $params);
-                if(! is_array($filteredEvents)) return $filteredEvents; // probably a WP_Error
-                if(count($filteredEvents) < 1) continue;
-
-                $events = array_merge($events, $filteredEvents);
+            foreach(Event::all() as $event) 
+            {
+                if($earliestStart != false && $event->getStart() < $earliestStart)
+                    continue;
+                if($earliestEnd != false && $event->getEnd() < $earliestEnd) 
+                    continue;
+                if($latestStart != false && $event->getStart() > $latestStart) 
+                    continue;
+                if($latestEnd != false && $event->getEnd() > $latestEnd) 
+                    continue;
+                
+                $events[$event->getUID()] = eventkrake_restbuild_event($event);
 
                 // location
-                $locationId = Eventkrake::getSinglePostMeta($event->ID, 'locationid');
+                $locationId = $event->getLocationId();
                 if(! array_key_exists($locationId, $locations)) {
-                    if(!$location = get_post($locationId)) continue;
                     $locations[$locationId] =
-                            eventkrake_restbuild_location($location);
+                        eventkrake_restbuild_location(new Location($locationId));
                 }
 
                 // artists
-                foreach(Eventkrake::getPostMeta($event->ID, 'artists') as $artistId) {
+                foreach($event->getArtistIds() as $artistId) {
                     if(! array_key_exists($artistId, $artists)) {
-                        $a = get_post($artistId);
-                        if($a) {
-                            $artists[$artistId] = eventkrake_restbuild_artist($a);
-                        }
+                        $artists[$artistId] = 
+                            eventkrake_restbuild_artist(new Artist($artistId));
                     }
                 }
             }
-
-            // sort events
-            usort($events, 'eventkrake_sortevents');
 
             return rest_ensure_response([
                 'events' => $events,
@@ -369,32 +364,27 @@ function eventkrake_register_routes() {
         'methods'  => WP_REST_Server::READABLE,
         'permission_callback' => '__return_true',
         'callback' => function() {
-            $events = []; $eventsCollection = [];
+            $events = [];
             $locations = [];
             $artists = [];
-            foreach(Eventkrake::getArtists() as $artist) {
+            foreach(Artist::all() as $artist) {
                 $artists[$artist->ID] = eventkrake_restbuild_artist($artist);
 
-                foreach(Eventkrake::getEventsForArtist($artist->ID) as $event) {
-                    // ! only collect events
-                    $eventsCollection[$event->ID] = $event;
+                foreach($artist->getEvents() as $event) {
+                    $events[$event->getUID()] = 
+                        eventkrake_restbuild_event($event);
 
                     // location
-                    $locationId = Eventkrake::getSinglePostMeta($event->ID, 'locationid');
+                    $locationId = $event->getLocationId();
                     if(! array_key_exists($locationId, $locations)) {
-                        if(!$location = get_post($locationId)) continue;
                         $locations[$locationId] =
-                                eventkrake_restbuild_location($location);
+                            eventkrake_restbuild_location(new Location($locationId));
                     }
                 }
             }
 
-            // process events
-            foreach($eventsCollection as $event) {
-                $events = array_merge($events, eventkrake_restbuild_event($event));
-            }
             // sort events
-            usort($events, 'eventkrake_sortevents');
+            usort($events, 'eventkrake_sort_rest_events');
 
             return rest_ensure_response([
                 'events' => $events,

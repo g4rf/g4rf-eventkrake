@@ -159,7 +159,7 @@ class Event {
 
         $now = new \DateTime();
         foreach(Eventkrake::events() as $event) {
-            if($event->end < $now) continue;
+            if($event->getEnd() < $now) continue;
             
             $ics[] = $event->icsEvent($categories, $url);
         }
@@ -198,6 +198,10 @@ class Event {
      * getters
      */
     
+    public function getUID() {
+        return $this->ID . '-' . $this->getIndex();
+    }
+    
     public function getTitle() {
         return get_the_title($this->ID); 
     }
@@ -229,7 +233,7 @@ class Event {
     }
     
     public function getLocationId() {
-        return Eventkrake::getSinglePostMeta($this-ID, 'locationid');
+        return Eventkrake::getSinglePostMeta($this->ID, 'locationid');
     }
     
     public function getIndex() {
@@ -260,7 +264,7 @@ class Event {
         $artistIds = $this->getArtistIds();
         $artists = [];
         foreach($artistIds as $id) {
-            $artists[] = new Artists($id);
+            $artists[] = new Artist($id);
         }
         return $artists;
     }
@@ -325,12 +329,12 @@ class Event {
             }
         }
         
-        return Eventkrake::setPostMeta($this->id, 'artists', $ids);
+        return Eventkrake::setPostMeta($this->ID, 'artists', $ids);
     }
         
     /**
      * 
-     * @param array $links Array of Eventkrake\Type\Links
+     * @param array $links
      */
     public function setLinks($links) {
         return Eventkrake::setSinglePostMeta($this->ID, 'links', $links);
@@ -390,7 +394,7 @@ class Event {
         $dateFormat = 'Ymd\THis'; // no time zone set
         
         if(empty($url)) {
-            $url = get_permalink($this->ID);
+            $url = $this->getPermalink();
         }
         
         $cats = [];
@@ -398,24 +402,13 @@ class Event {
             $cats[] = $this->icsEscapeString($c);
         }
         
-        $location = new Location($this->location);
+        $location = $this->getLocation();
         
         // excerpt
         $excerpt = '';
-        if(strlen($this->excerpt) > 0) {
-            
-            // Elementor causes problems, so we do some magic advised here:
-            // @see https://github.com/elementor/elementor/issues/18722
-            if (is_plugin_active( 'elementor/elementor.php' )) {
-                \Elementor\Plugin::instance()
-                    ->frontend->remove_content_filter();
-            }
-            
-            // do the excerpt filtering
+        if(has_excerpt($this->ID)) {
             $excerpt = html_entity_decode(
-                wp_strip_all_tags(
-                    apply_filters('the_content', $this->excerpt),
-                true),
+                wp_strip_all_tags(get_the_excerpt($this->ID), true),
                 ENT_HTML5,
                 'UTF-8'
             );
@@ -427,7 +420,7 @@ class Event {
                 'TRANSP:OPAQUE', // busy
                 self::icsEscapeKeyValue(
                     'UID',
-                    'ID' . $this->ID . '-' . $this->index .
+                    'ID' . $this->ID . '-' . $this->getIndex() .
                     '@' . parse_url(get_site_url(), PHP_URL_HOST)
                 ),
                 'CATEGORIES:' . implode(',', $cats),
@@ -436,13 +429,13 @@ class Event {
                     html_entity_decode(
                         wp_strip_all_tags(
                             get_the_title($location->ID) . 
-                            ' (' . $location->address . ')'
+                            ' (' . $location->getAddress() . ')'
                             , true),
                         ENT_HTML5,
                         'UTF-8'
                     )
                 ),
-                'GEO:' . $location->lat . ';' . $location->lng,
+                'GEO:' . $location->getLat() . ';' . $location->getLng(),
                 self::icsEscapeKeyValue(
                     'SUMMARY',
                     html_entity_decode(
@@ -453,8 +446,8 @@ class Event {
                 ),
                 self::icsEscapeKeyValue('DESCRIPTION', $excerpt),
                 self::icsEscapeKeyValue('URL', $url),
-                'DTSTART:' . $this->start->format($dateFormat),
-                'DTEND:' . $this->end->format($dateFormat),
+                'DTSTART:' . $this->getStart()->format($dateFormat),
+                'DTEND:' . $this->getEnd()->format($dateFormat),
                 'DTSTAMP:' . (new \DateTime())->format($dateFormat),
             'END:VEVENT'
         ];
@@ -472,7 +465,7 @@ class Event {
         return '?' . http_build_query([
             'eventkrake_ics' => '1',
             'eventkrake_ics_id' => $this->ID,
-            'eventkrake_ics_index' => $this->index,
+            'eventkrake_ics_index' => $this->getIndex(),
             'eventkrake_ics_categories' => $categories,
             'eventkrake_ics_url' => $url
         ]);
@@ -627,7 +620,7 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
      */
     if(empty($properties)) return;
     
-    $event = new Event($post_id);
+    $event = new Event($post_id, new \DateTime(), new \DateTime());
     
     // tags
     $event->setTags($properties['eventkrake_tags']);
@@ -659,7 +652,10 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
         if(empty($linkNames[$i])) continue;
         if(empty($linkUrls[$i])) continue;
 
-        $links[] = new Type\Link($linkNames[$i], $linkUrls[$i]);
+        $links[] = [
+            'name' => $linkNames[$i], 
+            'url' => $linkUrls[$i]
+        ];
     }
     $event->setLinks($links);
 
@@ -694,7 +690,7 @@ add_filter('post_class', function($classes, $class, $post_id) {
         return $classes;
     }
     
-    $event = new Event($post_id);
+    $event = Event::Factory($post_id)[0];
     if(($location = $event->getLocation()) !== false) {
         $classes[] = "eventkrake-accessibility-{$location->getAccessibility()}";
     }
@@ -709,7 +705,7 @@ add_filter('post_class', function($classes, $class, $post_id) {
 add_filter( 'get_the_excerpt', function( $excerpt, $post ) {
     if(is_admin()) return $excerpt;
 
-    if(get_post_type() != 'eventkrake_event') return $excerpt;
+    if(get_post_type($post->ID) != 'eventkrake_event') return $excerpt;
     
     if (!(is_single() || in_the_loop())) {
         return $excerpt; 
@@ -767,7 +763,8 @@ add_filter( 'get_the_excerpt', function( $excerpt, $post ) {
 /*
  * add event location, dates and other meta to event post content 
  */
-add_filter('the_content', function($content) {
+add_filter('the_content', function($content)
+{
     if(is_admin()) return $content;
     if(get_post_type() != 'eventkrake_event') return $content;
     
@@ -775,8 +772,14 @@ add_filter('the_content', function($content) {
         return $content; 
     }
     
-    $times = Event::Factory(get_the_ID());
+    try {
+        $times = Event::Factory(get_the_ID());
+    } catch(\Exception $ex) {
+        return $content;
+    }
+    
     if(count($times) == 0) return $content;
+    
     $event = $times[0];
     
     ob_start(); ?>
@@ -815,10 +818,10 @@ add_filter('the_content', function($content) {
             $locale = wpm_get_language();
         }
         
-        $dateFormatter = new IntlDateFormatter(
-            $locale, IntlDateFormatter::LONG, IntlDateFormatter::NONE);        
-        $timeFormatter = new IntlDateFormatter(
-            $locale, IntlDateFormatter::NONE, IntlDateFormatter::SHORT);
+        $dateFormatter = new \IntlDateFormatter(
+            $locale, \IntlDateFormatter::LONG, \IntlDateFormatter::NONE);        
+        $timeFormatter = new \IntlDateFormatter(
+            $locale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
 
         ?><div class="eventkrake-event-times"><?php
             foreach($times as $time) { ?>
@@ -868,8 +871,8 @@ add_filter('the_content', function($content) {
             <?php foreach($event->getLinks() as $link) { ?>
             
                 <li><a class="eventkrake-event-link"
-                   href="<?= $link->url ?>"><?=
-                        $link->name
+                   href="<?= $link['url'] ?>"><?=
+                        $link['name']
                 ?></a></li>
                             
             <?php } ?>
@@ -886,11 +889,11 @@ add_filter('the_content', function($content) {
                     <div class="eventkrake-event-artist-title">
                         <a href="<?= $artist->getPermalink() ?>"><?=
                             $artist->getTitle();
-                    ?></div>
+                    ?></a></div>
                     
                     <!-- artist excerpt -->
                     <div class="eventkrake-event-artist-excerpt"><?=
-                        wpautop($artist->getExcerpt());
+                        wpautop($artist->getExcerpt())
                     ?></div>
                     
                     <!-- artist image -->
@@ -912,7 +915,7 @@ add_filter('the_content', function($content) {
     </div><?php
     
     return  ob_get_clean();
-});
+}, 10, 2);
 
 
 /*

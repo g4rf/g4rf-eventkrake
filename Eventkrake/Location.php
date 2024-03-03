@@ -130,7 +130,7 @@ class Location {
         ]);
         $events = [];
         foreach($posts as $post) {
-            $events[] = new Event($post->ID);
+            $events = array_merge($events, Event::Factory($post));
         }
         
         return Event::sort($events);
@@ -154,7 +154,7 @@ class Location {
     
     /**
      * 
-     * @param array $links Array of Eventkrake\Type\Links
+     * @param array $links
      */
     public function setLinks($links) {
         return Eventkrake::setSinglePostMeta($this->ID, 'links', $links);
@@ -223,7 +223,6 @@ add_action('init', function () {
                 'eventkrake_location',
                 __('Weitere Angaben zum Ort', 'eventkrake'),
                 function($args = null) {
-                    // Inhalt der Metabox
                     include dirname(__FILE__) . '/../metabox/location.php';
                 }, null, 'normal', 'high', null
             );
@@ -305,7 +304,10 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
         if(empty($linkNames[$i])) continue;
         if(empty($linkUrls[$i])) continue;
 
-        $links[] = new Type\Link($linkNames[$i], $linkUrls[$i]);
+        $links[] = [
+            'name' => $linkNames[$i],
+            'url' => $linkUrls[$i]
+        ];
     }
     $location->setLinks($links);
 
@@ -325,7 +327,8 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
 /*
  *  add location address and date to event page
  */
-add_filter('the_content', function($content) {
+add_filter('the_content', function($content)
+{
     if(is_admin()) return $content;
     if(get_post_type() != 'eventkrake_location') return $content;
     
@@ -333,8 +336,11 @@ add_filter('the_content', function($content) {
         return $content; 
     }
     
-    $location = new Location(get_the_ID());
-
+    try {
+        $location = new Location(get_the_ID());
+    } catch(\Exception $ex) {
+        return $content;
+    }
     ob_start(); ?>
 
     <div class="eventkrake-location">
@@ -353,7 +359,7 @@ add_filter('the_content', function($content) {
         
         <!-- accessibility info -->
         <div class="eventkrake-accessibility-info"><?=
-            $location->accessibilityInfo
+            $location->getAccessibilityInfo()
         ?></div>
         
         <!-- tags -->
@@ -371,8 +377,8 @@ add_filter('the_content', function($content) {
             <?php foreach($location->getLinks() as $link) { ?>
             
                 <li><a class="eventkrake-event-link"
-                   href="<?= $link->url ?>"><?=
-                        $link->name
+                   href="<?= $link['url'] ?>"><?=
+                        $link['name']
                 ?></a></li>
                             
             <?php } ?>
@@ -389,7 +395,7 @@ add_filter('the_content', function($content) {
                     <div class="eventkrake-location-event-title">
                         <a href="<?= $event->getPermalink() ?>"><?=
                             $event->getTitle();
-                    ?></div>
+                    ?></a></div>
                     
                     <!-- event excerpt -->
                     <div class="eventkrake-location-event-excerpt"><?=

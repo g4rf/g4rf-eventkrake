@@ -1,7 +1,9 @@
 <?php
 
-global $post;
 use Eventkrake\Eventkrake as Eventkrake;
+use Eventkrake\Location as Location;
+
+global $post;
 
 ?>
 
@@ -24,7 +26,7 @@ use Eventkrake\Eventkrake as Eventkrake;
 <!-- sets the correct Leaflet imagePath -->
 <script>
     Leaflet.Icon.Default.prototype.options.imagePath = 
-            "<?= plugins_url('/leaflet/images/', __FILE__) ?>";
+            "<?= plugins_url('/../leaflet/images/', __FILE__) ?>";
 </script>
 
 <!-- map -->
@@ -84,31 +86,35 @@ __('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
     <div class="eventkrake-links-template eventkrake-hide">
         <input value="" type="text" name="eventkrake-links-key[]"
                class="regular-text" placeholder="Name des Links" />
-        <input type="text" name="eventkrake-links-value[]"
+        <input value="" type="text" name="eventkrake-links-value[]"
                class="regular-text" placeholder="https://" />
     </div><?php
 
     $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
     if(empty($links)) { // no links yet ?>
+
         <div>
             <input value="" type="text" name="eventkrake-links-key[]"
                    class="regular-text" placeholder="Name des Links" />
-            <input type="text" name="eventkrake-links-value[]"
+            <input value="" type="text" name="eventkrake-links-value[]"
                    class="regular-text" placeholder="https://" />
         </div>
 
     <?php } else {
+        
         foreach($links as $link) { // show links ?>
             <div>
                 <input type="text" name="eventkrake-links-key[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link->name)?>" />
+                       value="<?=htmlspecialchars($link['name'])?>" />
                 <input type="text" name="eventkrake-links-value[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link->url)?>" />
+                       value="<?=htmlspecialchars($link['url'])?>" />
             </div>
         <?php }
+    
     } ?>
+    
     <div><input type="button" class="eventkrake-add-link"
         value="<?=__('Weblink hinzufügen', 'eventkrake')?>" /></div>
 
@@ -210,19 +216,15 @@ Nähere Informationen können im Textfeld vermerkt werden.', 'eventkrake'),
     </tr><?php
     try {
         $location = new Location($post->ID);
-    
-        foreach(array_reverse(Location->getEvents()) as $event) {            
+        
+        foreach(array_reverse($location->getEvents()) as $event) {            
             ?><tr>
 
             <!-- event title -->
             <td><b><?= $event->getTitle() ?></b></td>
 
             <!-- datetime -->
-            <td><?php
-                print $event->start->format('Y-m-d H:i') 
-                    . '&nbsp;&ndash;&nbsp;' 
-                    . $event->end->format('Y-m-d H:i');
-            ?></td>
+            <td><?= $event->start->format('Y-m-d H:i') ?></td>
 
             <!-- excerpt -->
             <td><?= $event->getExcerpt() ?></td>

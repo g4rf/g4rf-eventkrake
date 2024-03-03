@@ -216,7 +216,7 @@ class Eventkrake {
             'Musicals & Shows' => 0, 'Sport' => 0, 'Kino' => 0,
             'Bar & Kneipe' => 0, 'Restaurant & Buffett' => 0,
             'Diskussion & Podium' => 0, 'DJ' => 0, 'Tanz' => 0,
-            'Sonstiges' => 0, 'Zirkus, Akrobatik & Jonglage' => 0];
+            'Sonstiges' => 0, 'Zirkus' => 0, 'Akrobatik & Jonglage' => 0];
 
         $usedCategories = $wpdb->get_col($wpdb->prepare(
             "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = %s",

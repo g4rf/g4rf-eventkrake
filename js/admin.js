@@ -1,6 +1,6 @@
 /* global Leaflet */
 
-jQuery(window).load(function() {
+jQuery(window).on("load", function() {
     /* Map für die Auswahl des Ortes */
     if(document.getElementById(Eventkrake.Admin.mapId)) {
         var lat = parseFloat(jQuery("#" + Eventkrake.Admin.latId).val());
@@ -43,21 +43,21 @@ jQuery(window).load(function() {
         });
     }
     
-    jQuery('.eventkrake_lookforaddress').click(function() {
+    jQuery('.eventkrake_lookforaddress').on("click", function() {
         Eventkrake.Geo.getLatLng(
             jQuery("#" + Eventkrake.Admin.addressId).val(),
             Eventkrake.Admin.loadNewAddressForLocation
         );
     });
 
-    jQuery('#' + Eventkrake.Admin.recId).click(function() {
+    jQuery('#' + Eventkrake.Admin.recId).on("click", function() {
         jQuery("#" + Eventkrake.Admin.addressId).val(
             jQuery(this).text()
         );
     });
 
     // Link bei Events zu "Ort bearbeiten"
-    jQuery("#eventkrake_locationid_edit_location").click(function() {
+    jQuery("#eventkrake_locationid_edit_location").on("click", function() {
         var locationId = jQuery("select[name='eventkrake_locationid']").val();
         if(locationId > 0) {
             window.location.href = jQuery(this).data("url") + locationId;
@@ -66,7 +66,7 @@ jQuery(window).load(function() {
     });
 
     // suggested categories
-    jQuery(".eventkrake-cat-suggestion").click(function() {
+    jQuery(".eventkrake-cat-suggestion").on("click", function() {
         var categories = jQuery("[name='eventkrake_categories']")
                 .val().split(",");
         var newCategories = [];
@@ -79,7 +79,7 @@ jQuery(window).load(function() {
     });
 
     // add new link in meta
-    jQuery(".eventkrake-add-link").click(function(e) {
+    jQuery(".eventkrake-add-link").on("click", function(e) {
         e.preventDefault();
         jQuery(".eventkrake-links-template").clone()
                 .removeClass("eventkrake-links-template eventkrake-hide")
@@ -87,7 +87,7 @@ jQuery(window).load(function() {
     });
 
     // add new time on events
-    jQuery(".eventkrake-add-time").click(function(e) {
+    jQuery(".eventkrake-add-time").on("click", function(e) {
         e.preventDefault();
         var dates = jQuery(".eventkrake-template.eventkrake-dates").clone()
                 .removeClass("eventkrake-template")
