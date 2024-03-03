@@ -5,9 +5,6 @@ use Eventkrake\Eventkrake as Eventkrake;
 
 ?>
 
-<?php // TODO: replace with nonce technology ?>
-<input type="hidden" name="eventkrake_on_edit_screen" value="1" />
-
 <table class="form-table">
 <tr>
 
