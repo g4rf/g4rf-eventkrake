@@ -729,7 +729,7 @@ add_filter( 'get_the_excerpt', function( $excerpt, $post ) {
     // date+time formatter
     $dateFormatter = new \IntlDateFormatter(
         $locale, \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE);
-    $timeFormatter = new IntlDateFormatter(
+    $timeFormatter = new \IntlDateFormatter(
         $locale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
 
     // list start datetimes
