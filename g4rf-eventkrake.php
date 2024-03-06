@@ -248,25 +248,25 @@ function eventkrake_register_routes() {
         'args' => [
             'earliestStart' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a minimal date for the events. This '
+                'description' => __('Gives a minimal start date for the events. This '
                     . 'parameter is checked against the start of an event.', 
                     'eventkrake')
             ],
             'earliestEnd' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a minimal date for the events. This '
+                'description' => __('Gives a minimal end date for the events. This '
                     . 'parameter is checked against the end of an event.', 
                     'eventkrake')
             ],
             'latestStart' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a maximal date for the events. This '
+                'description' => __('Gives a maximal start date for the events. This '
                     . 'parameter is checked against the start of an event.',
                     'eventkrake')
             ],
             'latestEnd' => [
                 'type' => 'DateTime',
-                'description' => __('Gives a maximal date for the events. This '
+                'description' => __('Gives a maximal end date for the events. This '
                     . 'parameter is checked against the end of an event.', 
                     'eventkrake')
             ]

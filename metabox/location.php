@@ -10,7 +10,7 @@ global $post;
 <!-- address -->
 <div class="eventkrake_right">
     <input type="button" id="eventkrake-reload-map" 
-           value="<?=__('Lade Karte neu', 'eventkrake')?>" />
+           value="<?=__('Reload map', 'eventkrake')?>" />
    
     <span class="description">Lat:&nbsp;</span>
     <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'lat')?>"
@@ -31,20 +31,20 @@ global $post;
 
 <!-- map -->
 <div id="eventkrake_map" class="eventkrake_map">
-    <noscript><?=__('Bitte aktiviere Javascript um die Karte zu benutzen.', 
+    <noscript><?=__('Please activate Javascript to use the map.', 
         'eventkrake')?></noscript>
 </div>
 
 <br />
 <span class="description"><?=
-    __('Vorschlag: ', 'eventkrake')
-?></span>
+    __('Proposal:', 'eventkrake')
+?>&nbsp;</span>
 
 <span id="eventkrake_rec" 
-      title="<?= __('Vorschlag übernehmen', 'eventkrake') ?>"></span><br />
+      title="<?= __('Accept proposal', 'eventkrake') ?>"></span><br />
 
 <span class="description"><?=
-    __('Adresse:', 'eventkrake')
+    __('Address:', 'eventkrake')
 ?>&nbsp;</span>
 
 <input value="<?= Eventkrake::getSinglePostMeta($post->ID, 'address') ?>"
@@ -54,19 +54,19 @@ global $post;
        maxlength="255"
        id="eventkrake_address" />
 
-<input value="<?= __('Adresse suchen', 'eventkrake') ?>"
+<input value="<?= __('Address search', 'eventkrake') ?>"
        type="button"
         class="eventkrake_lookforaddress button button-secondary" /><br />
 
 <span class="description"><?=
-__('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
-    klicken. Die Karte wird aktualisiert und Geokoordinaten angezeigt. Durch
-    Klicken in der oberen Karte kannst du den Ort verändern.<br />
-    <b>Für den Ort sind die Geokoordinaten maßgebend.</b> Der Text im
-    Adressfeld wird aber von vielen Templates ebenfalls ausgegeben. Achte also
-    darauf, dass dieser keine verwirrenden Angaben enthält.<br />
-    <b>Wenn du statt der Karte nur einen grauen Block siehst, dann klicke auf
-    "Lade Karte neu".</b>', 'eventkrake')
+__('You can type an address into the address field and click on "Address search"
+    button. The map is updated and geocoordinates are displayed. By
+    clicking in the upper map you can change the location.<br />
+    <b>The geocoordinates are decisive for the location.</b> The text in the
+    address field is also output by many templates. So make sure
+    that it does not contain any confusing information.<br />
+    <b>If you only see a grey block instead of the map, click on
+    "Reload map".</b>', 'eventkrake')
 ?></span>
 
 <hr />
@@ -74,11 +74,11 @@ __('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
 <table class="form-table"><tr>
 
 <!-- links -->
-<th><?=__('Links zum Ort', 'eventkrake')?></th>
+<th><?=__('Web links', 'eventkrake')?></th>
 <td class="eventkrake-flexcol">
     <div>
         <span class="description"><?=
-            __('Gebe Weblinks zur Webseite und sozialen Netzwerken an.',
+            __('Provide web links to the website and social networks.',
                 'eventkrake')
         ?></span>
     </div>
@@ -106,29 +106,28 @@ __('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
             <div>
                 <input type="text" name="eventkrake-links-key[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link['name'])?>" />
+                       value="<?=htmlspecialchars($link->name)?>" />
                 <input type="text" name="eventkrake-links-value[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link['url'])?>" />
+                       value="<?=htmlspecialchars($link->url)?>" />
             </div>
         <?php }
     
     } ?>
     
     <div><input type="button" class="eventkrake-add-link"
-        value="<?=__('Weblink hinzufügen', 'eventkrake')?>" /></div>
+        value="<?=__('Add web link', 'eventkrake')?>" /></div>
 
 </td></tr><tr>
     
 <!-- categories -->
-<th><?=__('Die Kategorien', 'eventkrake')?></th>
+<th><?=__('Categories', 'eventkrake')?></th>
 <td>
     <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
         implode(', ', Eventkrake::getPostMeta($post->ID, 'categories'));
     ?></textarea><br />
     <span class="description"><?php
-        _e('Notiere hier mit Komma getrennt Kategorien, z.B.:',
-            'eventkrake');
+            _e('Note categories separated by commas, e.g:', 'eventkrake');
         ?><br /><?php
         foreach(Eventkrake::getCategories() as $c) {
             ?><span class="eventkrake-cat-suggestion"><?=
@@ -140,7 +139,7 @@ __('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
 </td></tr><tr>
 
 <!-- accessibility -->
-<th><?=__('Barrierefreiheit', 'eventkrake')?></th>
+<th><?=__('Accessibility', 'eventkrake')?></th>
 <td><?php
     $accessibility = 
         Eventkrake::getSinglePostMeta($post->ID, 'accessibility');
@@ -151,38 +150,38 @@ __('Du kannst eine Adresse in das Adressfeld eintippen und auf "Adresse suchen"
         <label class="eventkrake-label eventkrake-accessibility-x">
             <input type="radio" name="eventkrake-accessibility" value=""
                    <?=$accessibility == '' ? 'checked' : ''?>/>
-            <?=__('unbekannt', 'eventkrake')?>
+            <?=__('unknown', 'eventkrake')?>
         </label>
         <label class="eventkrake-label eventkrake-accessibility-0">
             <input type="radio" name="eventkrake-accessibility" value="0"
                    <?=$accessibility == '0' ? 'checked' : ''?>/>
-            <?=__('rot', 'eventkrake')?>
+            <?=__('red', 'eventkrake')?>
         </label>
         <label class="eventkrake-label eventkrake-accessibility-1">
             <input type="radio" name="eventkrake-accessibility" value="1"
                    <?=$accessibility == '1' ? 'checked' : ''?>/>
-            <?=__('gelb', 'eventkrake')?>
+            <?=__('yellow', 'eventkrake')?>
         </label>
         <label class="eventkrake-label eventkrake-accessibility-2">
             <input type="radio" name="eventkrake-accessibility" value="2"
                    <?=$accessibility == '2' ? 'checked' : ''?>/>
-            <?=__('grün', 'eventkrake')?>
+            <?=__('green', 'eventkrake')?>
         </label>
     </div>
 
     <input type="text" name="eventkrake-accessibility-info"
         class="regular-text wpm-accessibility-info" placeholder="<?=
-            __('Zusätzliche Infos zur Barrierefreiheit', 'eventkrake')?>"
+            __('Additional accessibility informations', 'eventkrake')?>"
         value="<?=$accessibilityInfo?>"
     /><br />
 
     <span class="description"><?=
         sprintf(
-            __('Die Barrierefreiheit wird mit einem Ampelsystem
-wiedergegeben. Dabei bedeutet %2$srot%1$s keinerlei Barrierefreiheit, 
-%3$sgelb%1$s das bspw. eine Rampe vorhanden ist und %4$sgrün%1$s, dass neben 
-der Rampe auch ein rollstuhlgerechtes WC am Ort ist.%5$s
-Nähere Informationen können im Textfeld vermerkt werden.', 'eventkrake'),
+            __('Accessibility is indicated with a traffic light system. Here,
+%2$sred%1$s means no accessibility at all, %3$yellow%1$s that e.g. a ramp is 
+available and %4$green%1$s that there is a wheelchair-accessible toilet next 
+to the ramp.%5$s Further information can be noted in the text field.', 
+                'eventkrake'),
             '</span>', 
             '<span class="eventkrake-accessibility-0">',
             '<span class="eventkrake-accessibility-1">',
@@ -194,15 +193,13 @@ Nähere Informationen können im Textfeld vermerkt werden.', 'eventkrake'),
 </td></tr><tr>
         
 <!-- tags -->
-<th><?=__('Zusatzinfos zum Ort', 'eventkrake')?></th>
+<th><?=__('Additional informations', 'eventkrake')?></th>
 <td>
     <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
         type="text" name="eventkrake_tags" class="regular-text" /><br />
-    <span class="description">
-        <?=__('Ein Feld, das beliebige Infos über den Ort enthält. Die
-               Infos lassen sich für die Suche nutzen. müssen
-               jedoch nicht angezeigt werden.', 'eventkrake')?>
-    </span>
+    <span class="description"><?=
+        __('A field that contains any information.', 'eventkrake')
+    ?></span>
 
 </td></tr></table>
 
@@ -212,7 +209,7 @@ Nähere Informationen können im Textfeld vermerkt werden.', 'eventkrake'),
 <table class="form-table">
     <tr>
         <th colspan="4"><?=
-            __('Veranstaltungen am Ort', 'eventkrake')?></th>
+            __('Events for this location', 'eventkrake')?></th>
     </tr><?php
     try {
         $location = new Location($post->ID);
@@ -233,7 +230,7 @@ Nähere Informationen können im Textfeld vermerkt werden.', 'eventkrake'),
             <td><a href="<?=
                 site_url("wp-admin/post.php?action=edit&post={$event->ID}")
             ?>"><?=
-                __('Veranstaltung bearbeiten', 'eventkrake')
+                __('Edit event', 'eventkrake')
             ?></a></td>
             
             </tr><?php

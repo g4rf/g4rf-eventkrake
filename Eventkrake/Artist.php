@@ -72,7 +72,20 @@ class Artist {
     }
     
     public function getLinks() {
-        return Eventkrake::getSinglePostMeta($this->ID, 'links');
+        $links = Eventkrake::getSinglePostMeta($this->ID, 'links');
+        $return = [];
+        foreach($links as $link) 
+        {
+            if(is_array($link)) 
+            {
+                $return[] = new Link($link['name'], $link['url']);
+            }
+            elseif(is_object($link)) 
+            {
+                $return[] = $link;
+            }
+        }
+        return $return; 
     }
     
     public function getCategories() {
@@ -141,25 +154,25 @@ add_action('init', function () {
         'has_archive' => true,
         'taxonomies' => ['category'],
         'labels' => [
-            'name' => __('Künstler·innen', 'eventkrake'),
-            'singular_name' => __('Künstler·in', 'eventkrake'),
-            'add_new' => __('Künstler·in hinzufügen', 'eventkrake'),
+            'name' => __('Artists', 'eventkrake'),
+            'singular_name' => __('Artist', 'eventkrake'),
+            'add_new' => __('Add artist', 'eventkrake'),
             'add_new_item' =>
-                    __('Neue Künstler·in hinzufügen', 'eventkrake'),
-            'edit' => __('Künstler·in bearbeiten', 'eventkrake'),
-            'edit_item' => __('Künstler·in bearbeiten', 'eventkrake'),
-            'new_item' => __('Künstler·in hinzufügen', 'eventkrake'),
-            'view' => __('Künstler·in ansehen', 'eventkrake'),
-            'search_items' => __('Künstler·in suchen', 'eventkrake'),
-            'not_found' => __('Keine Künstler·in gefunden', 'eventkrake'),
+                    __('Add new artist', 'eventkrake'),
+            'edit' => __('Edit artist', 'eventkrake'),
+            'edit_item' => __('Edit artist', 'eventkrake'),
+            'new_item' => __('Add artist', 'eventkrake'),
+            'view' => __('View artist', 'eventkrake'),
+            'search_items' => __('Search for artist', 'eventkrake'),
+            'not_found' => __('No artist found', 'eventkrake'),
             'not_found_in_trash' =>
-                    __('Keine gelöschten Künstler·innen', 'eventkrake')
+                    __('No artists in trash', 'eventkrake')
         ],
         'rewrite' => ['slug' => 'artist'],
         'menu_position' => Eventkrake::getNextMenuPosition(),
         'menu_icon' => plugins_url( '/img/artist.png', dirname(__FILE__) ),
         'description' =>
-                __('Künstler·innen sind Einzelpersonen oder Gruppen.', 
+                __('Artists are persons or groups.', 
                     'eventkrake'),
         'supports' => ['title', 'excerpt', 'editor', 'thumbnail', 
             'comments'],
@@ -168,7 +181,7 @@ add_action('init', function () {
             // load meta box
             add_meta_box(
                 'eventkrake_artist',
-                __('Weitere Angaben', 'eventkrake'),
+                __('Additional informations', 'eventkrake'),
                 function($args = null) {
                     // Inhalt der Metabox
                     include dirname(__FILE__) . '/../metabox/artist.php';
@@ -289,8 +302,8 @@ add_filter('the_content', function($content)
             <?php foreach($artist->getLinks() as $link) { ?>
             
                 <li><a class="eventkrake-event-link"
-                   href="<?= $link['url'] ?>"><?=
-                        $link['name']
+                   href="<?= $link->url ?>"><?=
+                        $link->name
                 ?></a></li>
                             
             <?php } ?>

@@ -11,7 +11,7 @@ global $post;
 <!-- location -->
 <table class="form-table"><tr>
 
-<th><?=__('Der Ort der Veranstaltung', 'eventkrake')?></th>
+<th><?=__('Location for the event', 'eventkrake')?></th>
 
 <td>
     <select class="eventkrake_formselect" name="eventkrake_locationid">
@@ -31,12 +31,12 @@ global $post;
     </select>
     <a id="eventkrake_locationid_edit_location" href="#"
        data-url="<?=site_url("wp-admin/post.php?action=edit&post=")?>">
-        <?=__('Ort bearbeiten', 'eventkrake')?>
+        <?=__('Edit location', 'eventkrake')?>
     </a><br />
     <span class="description"><?php
-_e('Wähle einen Ort für die Veranstaltung aus. Unter
-<a href="edit.php?post_type=eventkrake_location">Orte</a> kannst Du
-<a href="post-new.php?post_type=eventkrake_location">neue Orte anlegen</a>.',
+_e('Select a location for the event. You can create 
+<a href="post-new.php?post_type=eventkrake_location">a new location</a> under
+<a href="edit.php?post_type=eventkrake_location">Locations</a>.',
     'eventkrake');
     ?></span>
 
@@ -47,7 +47,7 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter
 <!-- dates & times -->
 <table class="form-table"><tr>
 
-<th><?=__('Zeiten', 'eventkrake')?></th>
+<th><?=__('Dates & Times', 'eventkrake')?></th>
 
 <td>
 
@@ -74,7 +74,7 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter
     <div>
         <hr />
         <input type="button" class="eventkrake-add-time"
-            value="<?=__('Zeit hinzufügen', 'eventkrake')?>" />
+            value="<?=__('Add time', 'eventkrake')?>" />
     </div>
     
 </td></tr></table>
@@ -84,11 +84,11 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter
 <!-- artists -->
 <table class="form-table"><tr>
         
-<th><?=__('Teilnehmende Künstler·innen', 'eventkrake')?></th>
+<th><?=__('Participating artists', 'eventkrake')?></th>
 
 <td>
     <input type="text" class="eventkrake-select-search"
-           placeholder="<?=__('Suche', 'eventkrake')?>">
+           placeholder="<?=__('Search', 'eventkrake')?>">
     <div class="eventkrake-select-multiple">
         <?php
             $artists = Artist::all();
@@ -106,21 +106,19 @@ _e('Wähle einen Ort für die Veranstaltung aus. Unter
         ?>
     </div>
     <span class="description"><?php
-_e('Wähle hier die Künstler·innen aus, die an der Veranstaltung teilnehmen.',
-'eventkrake');
+        _e('Select the artists taking part in the event.', 'eventkrake');
    ?></span>
 
 </td></tr><tr>
 
 <!-- categories -->
-<th><?=__('Die Kategorien', 'eventkrake')?></th>
+<th><?=__('Categories', 'eventkrake')?></th>
 <td>
     <textarea class="eventkrake-textarea" name="eventkrake_categories"><?=
         implode(', ', Eventkrake::getPostMeta($post->ID, 'categories'));
     ?></textarea><br />
     <span class="description"><?php
-        _e('Notiere hier mit Komma getrennt Kategorien, z.B.:',
-            'eventkrake');
+            _e('Note categories separated by commas, e.g:', 'eventkrake');
         ?><br /><?php
         foreach(Eventkrake::getCategories() as $c) {
             ?><span class="eventkrake-cat-suggestion"><?=
@@ -132,11 +130,11 @@ _e('Wähle hier die Künstler·innen aus, die an der Veranstaltung teilnehmen.',
 </td></tr><tr>
 
 <!-- links -->
-<th><?=__('Links zur Veranstaltung', 'eventkrake')?></th>
+<th><?=__('Web links', 'eventkrake')?></th>
 <td class="eventkrake-flexcol">
     <div>
         <span class="description"><?=
-            __('Gebe Weblinks zur Webseite und sozialen Netzwerken an.',
+            __('Provide web links to the website and social networks.',
                 'eventkrake')
         ?></span>
     </div>
@@ -162,27 +160,25 @@ _e('Wähle hier die Künstler·innen aus, die an der Veranstaltung teilnehmen.',
             <div>
                 <input type="text" name="eventkrake-links-key[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link['name'])?>" />
+                       value="<?=htmlspecialchars($link->name)?>" />
                 <input type="text" name="eventkrake-links-value[]"
                        class="regular-text"
-                       value="<?=htmlspecialchars($link['url'])?>" />
+                       value="<?=htmlspecialchars($link->url)?>" />
             </div>
         <?php }
     } ?>
     <div><input type="button" class="eventkrake-add-link"
-        value="<?=__('Weblink hinzufügen', 'eventkrake')?>" /></div>
+        value="<?=__('Add web link', 'eventkrake')?>" /></div>
 
 </td></tr><tr>
 
 <!-- tags -->
-<th><?=__('Zusatzinfos zur Veranstaltung', 'eventkrake')?></th>
+<th><?=__('Additional informations', 'eventkrake')?></th>
 <td>
     <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
         type="text" name="eventkrake_tags" class="regular-text" /><br />
-    <span class="description">
-        <?=__('Ein Feld, das beliebige Infos zur Veranstaltung enthält. Die'
-                . ' Infos lassen sich für die Suche nutzen. müssen'
-                . ' jedoch nicht angezeigt werden.', 'eventkrake')?>
-    </span>
+    <span class="description"><?=
+        __('A field containing any information about the event.', 'eventkrake')
+    ?></span>
     
 </td></tr></table>

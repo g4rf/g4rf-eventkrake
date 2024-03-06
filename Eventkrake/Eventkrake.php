@@ -327,7 +327,7 @@ class Eventkrake {
             <!-- remove date period picker -->
             <?php if($removable) { ?>
                 <a class="eventkrake-remove-date"
-                   title="<?=__('Zeit entfernen', 'eventkrake')?>">❌</a>
+                   title="<?=__('Remove time', 'eventkrake')?>">❌</a>
             <?php } ?>
 
             <!-- date start -->
@@ -346,8 +346,7 @@ class Eventkrake {
             <!-- date end -->
             <div class="eventkrake-date-end">
                 
-                <span class="eventkrake-bold"><?=
-                        __('bis', 'eventkrake')?></span>
+                <span class="eventkrake-bold">&nbsp;&mdash;&nbsp;</span>
                 
                 <input type="date" name="eventkrake_enddate[]"
                     value="<?=$endDate->format('Y-m-d')?>" />
@@ -360,7 +359,7 @@ class Eventkrake {
             </div>
             
             <div class="eventkrake-date-warning">⚠️ <?=
-                __('Das Ende liegt vor dem Anfang.', 'eventkrake');
+                __('The beginning must come before the end.', 'eventkrake');
             ?></div>
 
         </div>

@@ -270,7 +270,20 @@ class Event {
     }
     
     public function getLinks() {
-        return Eventkrake::getSinglePostMeta($this->ID, 'links');
+        $links = Eventkrake::getSinglePostMeta($this->ID, 'links');
+        $return = [];
+        foreach($links as $link) 
+        {
+            if(is_array($link)) 
+            {
+                $return[] = new Link($link['name'], $link['url']);
+            }
+            elseif(is_object($link)) 
+            {
+                $return[] = $link;
+            }
+        }
+        return $return; 
     }
     
     public function getCategories() {
@@ -506,26 +519,26 @@ add_action('init', function () {
         'has_archive' => true,
         'taxonomies' => ['category', 'tag'],
         'labels' => [
-            'name' => __('Veranstaltungen', 'eventkrake'),
-            'singular_name' => __('Veranstaltung', 'eventkrake'),
-            'add_new' => __('Veranstaltung anlegen', 'eventkrake'),
+            'name' => __('Events', 'eventkrake'),
+            'singular_name' => __('Event', 'eventkrake'),
+            'add_new' => __('Add event', 'eventkrake'),
             'add_new_item' =>
-                __('Neue Veranstaltung anlegen', 'eventkrake'),
-            'edit' => __('Veranstaltung ändern', 'eventkrake'),
-            'edit_item' => __('Veranstaltung ändern', 'eventkrake'),
-            'new_item' => __('Veranstaltung anlegen', 'eventkrake'),
-            'view' => __('Veranstaltung ansehen', 'eventkrake'),
-            'search_items' => __('Veranstaltung suchen', 'eventkrake'),
+                __('Add new event', 'eventkrake'),
+            'edit' => __('Edit event', 'eventkrake'),
+            'edit_item' => __('Edit event', 'eventkrake'),
+            'new_item' => __('Add event', 'eventkrake'),
+            'view' => __('View event', 'eventkrake'),
+            'search_items' => __('Search for event', 'eventkrake'),
             'not_found' =>
-                __('Keine Veranstaltungen gefunden', 'eventkrake'),
+                __('No events found', 'eventkrake'),
             'not_found_in_trash' =>
-                __('Keine gelöschten Veranstaltungen', 'eventkrake')
+                __('No even in trash', 'eventkrake')
         ],
         'rewrite' => ['slug' => 'event'],
         'menu_position' => Eventkrake::getNextMenuPosition(),
         'menu_icon' => plugins_url( '/img/event.png', dirname(__FILE__) ),
-        'description' => __('Veranstaltungen sind zeitlich begrenzte Ereignisse'
-                . ' an einem Ort.', 'eventkrake'),
+        'description' => __('Events are temporary occurrences in one place.',
+            'eventkrake'),
         'supports' => ['title', 'excerpt', 'editor', 'thumbnail', 
             'comments'],
         'show_in_rest' => true,
@@ -533,7 +546,7 @@ add_action('init', function () {
             // load meta box
             add_meta_box(
                 'eventkrake_event',
-                __('Weitere Angaben zur Veranstaltung', 'eventkrake'),
+                __('Additional informations', 'eventkrake'),
                 function($args = null) {
                     // contents of meta box
                     include dirname(__FILE__) . '/../metabox/event.php';
@@ -871,8 +884,8 @@ add_filter('the_content', function($content)
             <?php foreach($event->getLinks() as $link) { ?>
             
                 <li><a class="eventkrake-event-link"
-                   href="<?= $link['url'] ?>"><?=
-                        $link['name']
+                   href="<?= $link->url ?>"><?=
+                        $link->name
                 ?></a></li>
                             
             <?php } ?>
