@@ -60,6 +60,27 @@ class Eventkrake {
     }
     
     /**
+     * Transforms link arrays to link objects.
+     * @param array $links Array of linkArrays and/or linkObjects
+     * @return array Array of linkObjects
+     */
+    public static function compatLinks($links) {
+        $linksObjects = [];
+        foreach($links as $link) 
+        {
+            if(is_array($link)) 
+            {
+                $linksObjects[] = new Type\Link($link['name'], $link['url']);
+            }
+            elseif(is_object($link)) 
+            {
+                $linksObjects[] = $link;
+            }
+        }
+        return $linksObjects;
+    }
+    
+    /**
      * @deprecated since version 5.01
      * Returns list of all events.
      * @param array [$filter=[]] More filter, @see https://developer.wordpress.org/reference/functions/get_posts/

@@ -90,7 +90,8 @@ __('You can type an address into the address field and click on "Address search"
                class="regular-text" placeholder="https://" />
     </div><?php
 
-    $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
+    $links = Eventkrake::compatLinks(
+        Eventkrake::getSinglePostMeta($post->ID, 'links'));
     if(empty($links)) { // no links yet ?>
 
         <div>
@@ -176,6 +177,7 @@ __('You can type an address into the address field and click on "Address search"
     /><br />
 
     <span class="description"><?=
+        /* translators: Placeholders are just tags. */
         sprintf(
             __('Accessibility is indicated with a traffic light system. Here,
 %2$sred%1$s means no accessibility at all, %3$yellow%1$s that e.g. a ramp is 

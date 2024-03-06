@@ -44,7 +44,8 @@ global $post;
                class="regular-text" placeholder="https://" />
     </div><?php
 
-    $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
+    $links = Eventkrake::compatLinks(
+        Eventkrake::getSinglePostMeta($post->ID, 'links'));
     if(empty($links)) { // no links yet ?>
     
         <div>

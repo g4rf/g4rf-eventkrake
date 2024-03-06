@@ -146,7 +146,8 @@ _e('Select a location for the event. You can create
                class="regular-text" placeholder="https://" />
     </div><?php
 
-    $links = Eventkrake::getSinglePostMeta($post->ID, 'links');
+    $links = Eventkrake::compatLinks(
+        Eventkrake::getSinglePostMeta($post->ID, 'links'));
     if(empty($links)) { // no links yet ?>
         <div>
             <input value="" type="text" name="eventkrake-links-key[]"

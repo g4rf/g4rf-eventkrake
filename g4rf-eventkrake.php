@@ -9,6 +9,7 @@
  * Author URI:      https://jankossick.de
  * Min WP Version:  6.1
  * Text Domain:     eventkrake
+ * Domain Path:     /lang
  * 
  * @package         g4rf
  */
@@ -22,8 +23,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 /*
  * Needs & needles 
  */
+
+// featured images
 add_theme_support('post-thumbnails');
 
+// translations
+add_action( 'plugins_loaded', function() {
+    load_plugin_textdomain( 'eventkrake', false, 
+        dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
+});
+
+// classes and helper
+require_once 'Eventkrake/Type/Link.php';
 require_once 'Eventkrake/Config.php';
 
 require_once 'Eventkrake/Eventkrake.php';

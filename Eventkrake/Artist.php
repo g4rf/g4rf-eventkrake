@@ -72,20 +72,8 @@ class Artist {
     }
     
     public function getLinks() {
-        $links = Eventkrake::getSinglePostMeta($this->ID, 'links');
-        $return = [];
-        foreach($links as $link) 
-        {
-            if(is_array($link)) 
-            {
-                $return[] = new Link($link['name'], $link['url']);
-            }
-            elseif(is_object($link)) 
-            {
-                $return[] = $link;
-            }
-        }
-        return $return; 
+        return Eventkrake::compatLinks(
+            Eventkrake::getSinglePostMeta($this->ID, 'links'));
     }
     
     public function getCategories() {

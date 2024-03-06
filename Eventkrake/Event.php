@@ -270,20 +270,8 @@ class Event {
     }
     
     public function getLinks() {
-        $links = Eventkrake::getSinglePostMeta($this->ID, 'links');
-        $return = [];
-        foreach($links as $link) 
-        {
-            if(is_array($link)) 
-            {
-                $return[] = new Link($link['name'], $link['url']);
-            }
-            elseif(is_object($link)) 
-            {
-                $return[] = $link;
-            }
-        }
-        return $return; 
+        return Eventkrake::compatLinks(
+            Eventkrake::getSinglePostMeta($this->ID, 'links'));
     }
     
     public function getCategories() {
@@ -739,10 +727,10 @@ add_filter( 'get_the_excerpt', function( $excerpt, $post ) {
     }
 
     // date+time formatter
-    $dateFormatter = new IntlDateFormatter(
-        $locale, IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
+    $dateFormatter = new \IntlDateFormatter(
+        $locale, \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE);
     $timeFormatter = new IntlDateFormatter(
-        $locale, IntlDateFormatter::NONE, IntlDateFormatter::SHORT);
+        $locale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
 
     // list start datetimes
     $list = [];
