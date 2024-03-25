@@ -1,0 +1,179 @@
+/**
+ * CSS for the frontend.
+ */
+
+.eventkrake {
+    
+    &-icon-before::before {
+        content: ""; /* important to show the element */
+        display: inline-block;    
+        vertical-align: middle;
+        background-attachment: scroll;
+        background-repeat: no-repeat;   
+        background-size: 1em 1em;
+        background-position: left bottom;
+        width: 1.4em;
+        height: 1em;
+    }
+    
+    /**
+     * accessibility
+     */
+    
+    &-accessibility- &-icon-before.eventkrake-wheelchair::before { // no info
+        display: none;
+    }
+    
+    &-accessibility-0 &-icon-before.eventkrake-wheelchair::before {
+        background-image: url(../img/wheelchair-0.png);
+    }
+
+    &-accessibility-1 &-icon-before.eventkrake-wheelchair::before {
+        background-image: url(../img/wheelchair-1.png);
+    }
+
+    &-accessibility-2 &-icon-before.eventkrake-wheelchair::before {
+        background-image: url(../img/wheelchair-2.png);
+    }
+    
+    &-accessibility-info {
+        font-style: italic;
+        font-size: 0.9em;
+    }
+
+    /**
+     * Event
+     */
+    &-event {
+        display: grid;
+        gap: 0;
+        grid-template: 
+            "location"
+            "times"
+            "content"
+            "links"
+            "artists"
+            "wp-categories"
+            "categories"
+            "wp-tags"
+            / auto;
+        
+        &-content {
+            grid-area: content;
+        }
+        
+        &-location {
+            grid-area: location;
+            
+            &-title, &-title-link {
+                font-weight: bold;
+            }
+            &-title {
+                display: none;
+            }
+            
+            &-address {
+                display: none;
+            }
+        }
+        
+        &-wp-tags, &-categories, &-wp-categories {
+            font-size: 0.8em;
+            font-style: italic;
+        }
+        
+        &-wp-tags {
+            grid-area: wp-tags;
+        }
+        
+        &-categories {
+            grid-area: categories;
+        }
+        
+        &-wp-categories {
+            grid-area: wp-categories;
+        }
+        
+        &-links {
+            grid-area: links;
+            margin-bottom: 15px;
+        }
+        
+        &-artists {
+            grid-area: artists;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            
+            margin-top: var(--wp--style--block-gap);
+            margin-bottom: var(--wp--style--block-gap);
+        }
+        
+        &-artist {
+            display: grid;
+            gap: 15px;
+            grid-template:
+                "image title" min-content
+                "image excerpt" min-content
+                / min-content auto;
+            
+            &-title, &-title-link {
+                grid-area: title;
+            }
+            &-title {
+                display: none;
+            }
+            
+            &-excerpt {
+                grid-area: excerpt;
+            }
+            
+            &-image {
+                grid-area: image;
+                height: 5em;
+                width: 5em;
+                
+                img {
+                    width: 5em;
+                    height: 5em;
+                    object-fit: cover;
+                    
+                    border-style: solid;
+                    border-width: 1px;
+                    border-radius: 50%;
+                }
+            }
+        }
+        
+        &-times {
+            grid-area: times;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        
+        &-time {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 5px;
+            
+            &::before {
+                background-image: url(../img/clock.png);
+            }
+        }
+        
+        &-end::before {
+            content: " – ";
+        }
+
+        &-ics {
+            font-style: italic;
+            font-size: small;
+        }
+    }
+
+}

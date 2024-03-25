@@ -2,14 +2,14 @@
 # This file is distributed under the CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/.
 msgid ""
 msgstr ""
-"Project-Id-Version: Eventkrake 5.01beta\n"
+"Project-Id-Version: Eventkrake 5.02beta\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/g4rf-eventkrake\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-03-06T12:12:22+00:00\n"
+"POT-Creation-Date: 2024-03-25T07:02:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: eventkrake\n"
@@ -39,151 +39,204 @@ msgstr ""
 msgid "https://jankossick.de"
 msgstr ""
 
-#: Eventkrake/Artist.php:157
+#: Eventkrake/Artist.php:141
 msgid "Artists"
 msgstr ""
 
-#: Eventkrake/Artist.php:158
+#: Eventkrake/Artist.php:142
 msgid "Artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:159
-#: Eventkrake/Artist.php:164
+#: Eventkrake/Artist.php:143
+#: Eventkrake/Artist.php:148
 msgid "Add artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:161
+#: Eventkrake/Artist.php:145
 msgid "Add new artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:162
-#: Eventkrake/Artist.php:163
+#: Eventkrake/Artist.php:146
+#: Eventkrake/Artist.php:147
 msgid "Edit artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:165
+#: Eventkrake/Artist.php:149
 msgid "View artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:166
+#: Eventkrake/Artist.php:150
 msgid "Search for artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:167
+#: Eventkrake/Artist.php:151
 msgid "No artist found"
 msgstr ""
 
-#: Eventkrake/Artist.php:169
+#: Eventkrake/Artist.php:153
 msgid "No artists in trash"
 msgstr ""
 
-#: Eventkrake/Artist.php:175
+#: Eventkrake/Artist.php:159
 msgid "Artists are persons or groups."
 msgstr ""
 
-#: Eventkrake/Artist.php:184
-#: Eventkrake/Event.php:549
-#: Eventkrake/Location.php:237
-#: metabox/artist.php:77
-#: metabox/event.php:176
-#: metabox/location.php:197
+#: Eventkrake/Artist.php:168
+#: Eventkrake/Event.php:525
+#: Eventkrake/Location.php:221
 msgid "Additional informations"
 msgstr ""
 
-#: Eventkrake/Event.php:522
-#: metabox/artist.php:92
+#: Eventkrake/Config.php:28
+msgid "Concert"
+msgstr ""
+
+#: Eventkrake/Config.php:29
+msgid "DJ"
+msgstr ""
+
+#: Eventkrake/Config.php:30
+msgid "Performance"
+msgstr ""
+
+#: Eventkrake/Config.php:31
+msgid "Exhibition"
+msgstr ""
+
+#: Eventkrake/Config.php:32
+msgid "Talk"
+msgstr ""
+
+#: Eventkrake/Config.php:33
+msgid "Film"
+msgstr ""
+
+#: Eventkrake/Config.php:34
+msgid "Photography"
+msgstr ""
+
+#: Eventkrake/Config.php:35
+msgid "Workshop"
+msgstr ""
+
+#: Eventkrake/Config.php:36
+msgid "Theatre"
+msgstr ""
+
+#: Eventkrake/Config.php:37
+msgid "Dance"
+msgstr ""
+
+#: Eventkrake/Config.php:38
+msgid "Music"
+msgstr ""
+
+#: Eventkrake/Config.php:39
+msgid "Party"
+msgstr ""
+
+#: Eventkrake/Config.php:40
+msgid "Reading"
+msgstr ""
+
+#: Eventkrake/Config.php:41
+msgid "Demonstration"
+msgstr ""
+
+#: Eventkrake/Event.php:498
+#: metabox/artist.php:82
 msgid "Events"
 msgstr ""
 
-#: Eventkrake/Event.php:523
+#: Eventkrake/Event.php:499
 msgid "Event"
 msgstr ""
 
-#: Eventkrake/Event.php:524
-#: Eventkrake/Event.php:529
+#: Eventkrake/Event.php:500
+#: Eventkrake/Event.php:505
 msgid "Add event"
 msgstr ""
 
-#: Eventkrake/Event.php:526
+#: Eventkrake/Event.php:502
 msgid "Add new event"
 msgstr ""
 
-#: Eventkrake/Event.php:527
-#: Eventkrake/Event.php:528
-#: metabox/artist.php:122
-#: metabox/location.php:234
+#: Eventkrake/Event.php:503
+#: Eventkrake/Event.php:504
+#: metabox/artist.php:112
+#: metabox/location.php:227
 msgid "Edit event"
 msgstr ""
 
-#: Eventkrake/Event.php:530
+#: Eventkrake/Event.php:506
 msgid "View event"
 msgstr ""
 
-#: Eventkrake/Event.php:531
+#: Eventkrake/Event.php:507
 msgid "Search for event"
 msgstr ""
 
-#: Eventkrake/Event.php:533
+#: Eventkrake/Event.php:509
 msgid "No events found"
 msgstr ""
 
-#: Eventkrake/Event.php:535
+#: Eventkrake/Event.php:511
 msgid "No even in trash"
 msgstr ""
 
-#: Eventkrake/Event.php:540
+#: Eventkrake/Event.php:516
 msgid "Events are temporary occurrences in one place."
 msgstr ""
 
-#: Eventkrake/Event.php:864
+#: Eventkrake/Event.php:846
 msgid "ics"
 msgstr ""
 
-#: Eventkrake/Eventkrake.php:330
+#: Eventkrake/Eventkrake.php:351
 msgid "Remove time"
 msgstr ""
 
-#: Eventkrake/Eventkrake.php:362
+#: Eventkrake/Eventkrake.php:383
 msgid "The beginning must come before the end."
 msgstr ""
 
-#: Eventkrake/Location.php:212
+#: Eventkrake/Location.php:196
 msgid "Locations"
 msgstr ""
 
-#: Eventkrake/Location.php:213
+#: Eventkrake/Location.php:197
 msgid "Location"
 msgstr ""
 
-#: Eventkrake/Location.php:214
-#: Eventkrake/Location.php:215
-#: Eventkrake/Location.php:218
+#: Eventkrake/Location.php:198
+#: Eventkrake/Location.php:199
+#: Eventkrake/Location.php:202
 msgid "Add location"
 msgstr ""
 
-#: Eventkrake/Location.php:216
-#: Eventkrake/Location.php:217
+#: Eventkrake/Location.php:200
+#: Eventkrake/Location.php:201
 #: metabox/event.php:34
 msgid "Edit location"
 msgstr ""
 
-#: Eventkrake/Location.php:219
+#: Eventkrake/Location.php:203
 msgid "View location"
 msgstr ""
 
-#: Eventkrake/Location.php:220
+#: Eventkrake/Location.php:204
 msgid "Search for location"
 msgstr ""
 
-#: Eventkrake/Location.php:221
+#: Eventkrake/Location.php:205
 msgid "No location found"
 msgstr ""
 
-#: Eventkrake/Location.php:223
+#: Eventkrake/Location.php:207
 msgid "No locations in trash"
 msgstr ""
 
-#: Eventkrake/Location.php:229
+#: Eventkrake/Location.php:213
 msgid "Events take place at locations."
 msgstr ""
 
@@ -211,41 +264,45 @@ msgstr ""
 msgid "Date format for end date:"
 msgstr ""
 
-#: g4rf-eventkrake.php:262
+#: g4rf-eventkrake.php:64
+msgid "Holds the main categories for events, locations and artists."
+msgstr ""
+
+#: g4rf-eventkrake.php:283
 msgid "Gives a minimal start date for the events. This parameter is checked against the start of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:268
+#: g4rf-eventkrake.php:289
 msgid "Gives a minimal end date for the events. This parameter is checked against the end of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:274
+#: g4rf-eventkrake.php:295
 msgid "Gives a maximal start date for the events. This parameter is checked against the start of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:280
+#: g4rf-eventkrake.php:301
 msgid "Gives a maximal end date for the events. This parameter is checked against the end of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:295
+#: g4rf-eventkrake.php:316
 msgid "The parameter earliestStart is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:306
+#: g4rf-eventkrake.php:327
 msgid "The parameter earliestEnd is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:317
+#: g4rf-eventkrake.php:338
 msgid "The parameter latestStart is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:328
+#: g4rf-eventkrake.php:349
 msgid "The parameter latestEnd is invalid."
 msgstr ""
 
 #: metabox/artist.php:13
 #: metabox/event.php:115
-#: metabox/location.php:124
+#: metabox/location.php:126
 msgid "Categories"
 msgstr ""
 
@@ -255,24 +312,20 @@ msgstr ""
 
 #: metabox/artist.php:31
 #: metabox/event.php:133
-#: metabox/location.php:77
+#: metabox/location.php:78
 msgid "Web links"
 msgstr ""
 
 #: metabox/artist.php:35
 #: metabox/event.php:137
-#: metabox/location.php:81
+#: metabox/location.php:82
 msgid "Provide web links to the website and social networks."
 msgstr ""
 
-#: metabox/artist.php:72
-#: metabox/event.php:171
-#: metabox/location.php:119
+#: metabox/artist.php:73
+#: metabox/event.php:172
+#: metabox/location.php:121
 msgid "Add web link"
-msgstr ""
-
-#: metabox/artist.php:82
-msgid "A field containing any additional information."
 msgstr ""
 
 #: metabox/event.php:14
@@ -307,39 +360,35 @@ msgid "Select the artists taking part in the event."
 msgstr ""
 
 #: metabox/event.php:121
-#: metabox/location.php:130
+#: metabox/location.php:132
 msgid "Note categories separated by commas, e.g:"
 msgstr ""
 
-#: metabox/event.php:181
-msgid "A field containing any information about the event."
-msgstr ""
-
-#: metabox/location.php:13
+#: metabox/location.php:14
 msgid "Reload map"
 msgstr ""
 
-#: metabox/location.php:34
+#: metabox/location.php:35
 msgid "Please activate Javascript to use the map."
 msgstr ""
 
-#: metabox/location.php:40
+#: metabox/location.php:41
 msgid "Proposal:"
 msgstr ""
 
-#: metabox/location.php:44
+#: metabox/location.php:45
 msgid "Accept proposal"
 msgstr ""
 
-#: metabox/location.php:47
+#: metabox/location.php:48
 msgid "Address:"
 msgstr ""
 
-#: metabox/location.php:57
+#: metabox/location.php:58
 msgid "Address search"
 msgstr ""
 
-#: metabox/location.php:62
+#: metabox/location.php:63
 msgid ""
 "You can type an address into the address field and click on \"Address search\"\n"
 "    button. The map is updated and geocoordinates are displayed. By\n"
@@ -351,31 +400,31 @@ msgid ""
 "    \"Reload map\".</b>"
 msgstr ""
 
-#: metabox/location.php:142
+#: metabox/location.php:144
 msgid "Accessibility"
 msgstr ""
 
-#: metabox/location.php:153
+#: metabox/location.php:155
 msgid "unknown"
 msgstr ""
 
-#: metabox/location.php:158
+#: metabox/location.php:160
 msgid "red"
 msgstr ""
 
-#: metabox/location.php:163
+#: metabox/location.php:165
 msgid "yellow"
 msgstr ""
 
-#: metabox/location.php:168
+#: metabox/location.php:170
 msgid "green"
 msgstr ""
 
-#: metabox/location.php:174
+#: metabox/location.php:176
 msgid "Additional accessibility informations"
 msgstr ""
 
-#: metabox/location.php:181
+#: metabox/location.php:183
 msgid ""
 "Accessibility is indicated with a traffic light system. Here,\n"
 "%2$sred%1$s means no accessibility at all, %3$yellow%1$s that e.g. a ramp is \n"
@@ -383,10 +432,6 @@ msgid ""
 "to the ramp.%5$s Further information can be noted in the text field."
 msgstr ""
 
-#: metabox/location.php:202
-msgid "A field that contains any information."
-msgstr ""
-
-#: metabox/location.php:213
+#: metabox/location.php:206
 msgid "Events for this location"
 msgstr ""

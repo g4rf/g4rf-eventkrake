@@ -76,13 +76,31 @@ class Artist {
             Eventkrake::getSinglePostMeta($this->ID, 'links'));
     }
     
+    public function getWordpressCategories() {
+        $categories = get_the_category($this->ID);
+        if(empty($categories)) return [];
+        
+        $return = [];
+        foreach($categories as $category) {
+            $return[] = $category->name;
+        }
+        return $return;
+    }
+    
+    public function getWordpressTags() {
+        $tags = get_the_terms($this->ID, 'post_tag');
+        if(empty($tags)) return [];
+        
+        $return = [];
+        foreach($tags as $tag) {
+            $return[] = $tag->name;
+        }
+        return $return;
+    }
+    
     public function getCategories() {
         return Eventkrake::getPostMeta($this->ID, 'categories');
     }
-    
-    public function getTags() {
-        return Eventkrake::getSinglePostMeta($this->ID, 'tags');
-    }    
     
     public function getEvents() {
         $posts = get_posts([
@@ -123,14 +141,6 @@ class Artist {
     public function setCategories($categories) {
         return Eventkrake::setPostMeta($this->ID, 'categories', $categories);
     }
-    
-    /**
-     * 
-     * @param string $tags
-     */
-    public function setTags($tags) {
-        return Eventkrake::setSinglePostMeta($this->ID, 'tags', $tags);
-    }
 }
 
 /*
@@ -140,7 +150,7 @@ add_action('init', function () {
     register_post_type('eventkrake_artist', [
         'public' => true,
         'has_archive' => true,
-        'taxonomies' => ['category'],
+        'taxonomies' => ['category', 'post_tag'],
         'labels' => [
             'name' => __('Artists', 'eventkrake'),
             'singular_name' => __('Artist', 'eventkrake'),
@@ -207,10 +217,7 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
         ],
         
         // categories
-        'eventkrake_categories' => FILTER_DEFAULT,
-        
-        // tags
-        'eventkrake_tags' => FILTER_DEFAULT,
+        'eventkrake_categories' => FILTER_DEFAULT
         
     ]);
     
@@ -221,9 +228,6 @@ add_action('save_post_eventkrake_artist', function($post_id, $post) {
     if(empty($properties)) return;
     
     $artist = new Artist($post_id);
-
-    // tags
-    $artist->setTags($properties['eventkrake_tags']);
     
     // links
     $linkNames = $properties['eventkrake-links-key'];
@@ -275,9 +279,14 @@ add_filter('the_content', function($content)
 
     <div class="eventkrake-artist">
         
-        <!-- tags -->
-        <div class="eventkrake-artist-tags"><?=
-            $artist->getTags();
+        <!-- wp tags -->
+        <div class="eventkrake-artist-wp-tags"><?=
+            implode(', ', $artist->getWordpressTags());
+        ?></div>
+        
+        <!-- wp categories -->
+        <div class="eventkrake-artist-wp-categories"><?=
+            implode(', ', $artist->getWordpressCategories());
         ?></div>
         
         <!-- categories -->

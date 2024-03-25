@@ -74,17 +74,6 @@ global $post;
 
 </td></tr><tr>
 
-<!-- tags -->
-<th><?=__('Additional informations', 'eventkrake')?></th>
-<td>
-    <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
-        type="text" name="eventkrake_tags" class="regular-text" /><br />
-    <span class="description"><?=
-        __('A field containing any additional information.', 'eventkrake')
-    ?></span>
-
-</td></tr></table>
-
 <hr />
 
 <!-- events -->

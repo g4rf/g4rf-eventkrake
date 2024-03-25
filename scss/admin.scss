@@ -1,0 +1,157 @@
+/**
+ * CSS for the backend.
+ */
+
+.eventkrake {
+    
+    &-flexcol {
+        display: flex;
+        flex-direction: column;
+
+        div {
+            margin-bottom: 10px;
+        }
+    }
+
+    &-right {
+        position: relative;
+        text-align: right;
+    }
+
+    &-bold {
+        font-weight: bold;
+    }
+
+    &-hide, &-template {
+        display: none !important;
+    }
+
+    &-textarea {
+        width: 100%;
+    }
+    
+    &-label {
+        display: inline-block;
+        margin: 10px;
+        padding: 5px 10px;
+    }
+
+    &-select-search {
+        width: 100%;
+        max-width: 50em;
+        border: solid 1px #ccc;
+        padding: 5px;
+        margin: 5px;
+    }
+    &-select-multiple {
+        display: flex;
+        flex-direction: column;
+
+        height: 200px;
+        max-width: 50em;
+        padding: 5px;
+        margin: 5px;
+
+        overflow: auto;
+
+        border: solid 1px #ccc;
+
+        label {
+            display: block;
+            white-space: nowrap;
+            margin-right: 10px;
+            vertical-align: middle;
+            cursor: pointer;
+
+            &:hover {
+                color: #0073aa;
+            }
+        }
+    }
+    
+    /** categories */
+    &-cat-suggestion {
+        color: #0073aa;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    
+    &-cat-suggestion:hover {
+        text-decoration: underline;
+    }
+
+    /**
+     * Event
+     */
+
+    &-dates {
+        margin: 10px 0;
+    }
+    
+    &-date-start, &-date-end, &-remove-date {
+        display: inline-block;
+    }
+
+    &-remove-date {
+        cursor: pointer;
+        margin-right: 10px;
+        text-decoration: none;
+    }
+
+    &-date-warning {
+        display: none;
+        color: darkred;
+        padding: 3px 30px;
+    }
+
+    /**
+     * Location
+     */
+
+    &-map {
+        width: 100%;
+        height: 50vh;
+        cursor: pointer;
+    }
+    &-map noscript {
+        background-color: #eee;
+        font-style: italic;
+        cursor: auto;
+        text-align: center;
+        line-height: 300%;
+    }
+    &-reload-map {
+        position: absolute;
+        left: 0;
+    }
+    
+    &-latlng {
+        background: none;
+        border: none;
+    }
+
+    &-address-recommendation {
+        cursor: pointer;
+    }
+    &-address-recommendation:hover {
+        text-decoration: underline;
+    }
+
+    &-accessibility {
+        &-x, &-0, &-1, &-2 {
+            font-weight: bold;
+        }
+        
+        &-0 {
+            background-color: #ef9a9a;
+        }
+        
+        &-1 {
+            background-color: #fff59d;
+        }
+        
+        &-2 {
+            background-color: #aed581;
+        }
+    }
+}

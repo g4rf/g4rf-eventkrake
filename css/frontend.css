@@ -1,0 +1,137 @@
+@charset "UTF-8";
+/**
+ * CSS for the frontend.
+ */
+.eventkrake {
+  /**
+   * accessibility
+   */
+  /**
+   * Event
+   */
+}
+.eventkrake-icon-before::before {
+  content: ""; /* important to show the element */
+  display: inline-block;
+  vertical-align: middle;
+  background-attachment: scroll;
+  background-repeat: no-repeat;
+  background-size: 1em 1em;
+  background-position: left bottom;
+  width: 1.4em;
+  height: 1em;
+}
+.eventkrake-accessibility- .eventkrake-icon-before.eventkrake-wheelchair::before {
+  display: none;
+}
+.eventkrake-accessibility-0 .eventkrake-icon-before.eventkrake-wheelchair::before {
+  background-image: url(../img/wheelchair-0.png);
+}
+.eventkrake-accessibility-1 .eventkrake-icon-before.eventkrake-wheelchair::before {
+  background-image: url(../img/wheelchair-1.png);
+}
+.eventkrake-accessibility-2 .eventkrake-icon-before.eventkrake-wheelchair::before {
+  background-image: url(../img/wheelchair-2.png);
+}
+.eventkrake-accessibility-info {
+  font-style: italic;
+  font-size: 0.9em;
+}
+.eventkrake-event {
+  display: grid;
+  gap: 0;
+  grid-template: "location" "times" "content" "links" "artists" "wp-categories" "categories" "wp-tags"/auto;
+}
+.eventkrake-event-content {
+  grid-area: content;
+}
+.eventkrake-event-location {
+  grid-area: location;
+}
+.eventkrake-event-location-title, .eventkrake-event-location-title-link {
+  font-weight: bold;
+}
+.eventkrake-event-location-title {
+  display: none;
+}
+.eventkrake-event-location-address {
+  display: none;
+}
+.eventkrake-event-wp-tags, .eventkrake-event-categories, .eventkrake-event-wp-categories {
+  font-size: 0.8em;
+  font-style: italic;
+}
+.eventkrake-event-wp-tags {
+  grid-area: wp-tags;
+}
+.eventkrake-event-categories {
+  grid-area: categories;
+}
+.eventkrake-event-wp-categories {
+  grid-area: wp-categories;
+}
+.eventkrake-event-links {
+  grid-area: links;
+  margin-bottom: 15px;
+}
+.eventkrake-event-artists {
+  grid-area: artists;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: var(--wp--style--block-gap);
+  margin-bottom: var(--wp--style--block-gap);
+}
+.eventkrake-event-artist {
+  display: grid;
+  gap: 15px;
+  grid-template: "image title" min-content "image excerpt" min-content/min-content auto;
+}
+.eventkrake-event-artist-title, .eventkrake-event-artist-title-link {
+  grid-area: title;
+}
+.eventkrake-event-artist-title {
+  display: none;
+}
+.eventkrake-event-artist-excerpt {
+  grid-area: excerpt;
+}
+.eventkrake-event-artist-image {
+  grid-area: image;
+  height: 5em;
+  width: 5em;
+}
+.eventkrake-event-artist-image img {
+  width: 5em;
+  height: 5em;
+  object-fit: cover;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50%;
+}
+.eventkrake-event-times {
+  grid-area: times;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.eventkrake-event-time {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.eventkrake-event-time::before {
+  background-image: url(../img/clock.png);
+}
+.eventkrake-event-end::before {
+  content: " – ";
+}
+.eventkrake-event-ics {
+  font-style: italic;
+  font-size: small;
+}
+
+/*# sourceMappingURL=frontend.css.map */

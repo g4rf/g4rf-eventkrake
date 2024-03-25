@@ -8,17 +8,18 @@ global $post;
 ?>
 
 <!-- address -->
-<div class="eventkrake_right">
+<div class="eventkrake-right">
     <input type="button" id="eventkrake-reload-map" 
+           class="eventkrake-reload-map"
            value="<?=__('Reload map', 'eventkrake')?>" />
    
     <span class="description">Lat:&nbsp;</span>
     <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'lat')?>"
-        class="eventkrake_latlng" type="text" name="eventkrake_lat" readonly
+        class="eventkrake-latlng" type="text" name="eventkrake_lat" readonly
         id="eventkrake_lat" />
     <span class="description">Lng:&nbsp;</span>
     <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'lng')?>"
-        class="eventkrake_latlng" type="text" name="eventkrake_lng" readonly
+        class="eventkrake-latlng" type="text" name="eventkrake_lng" readonly
         id="eventkrake_lng" />
 
 </div>
@@ -30,7 +31,7 @@ global $post;
 </script>
 
 <!-- map -->
-<div id="eventkrake_map" class="eventkrake_map">
+<div id="eventkrake_map" class="eventkrake-map">
     <noscript><?=__('Please activate Javascript to use the map.', 
         'eventkrake')?></noscript>
 </div>
@@ -40,7 +41,7 @@ global $post;
     __('Proposal:', 'eventkrake')
 ?>&nbsp;</span>
 
-<span id="eventkrake_rec" 
+<span id="eventkrake_rec" class="eventkrake-address-recommendation"
       title="<?= __('Accept proposal', 'eventkrake') ?>"></span><br />
 
 <span class="description"><?=
@@ -193,15 +194,6 @@ to the ramp.%5$s Further information can be noted in the text field.',
     ?></span>
 
 </td></tr><tr>
-        
-<!-- tags -->
-<th><?=__('Additional informations', 'eventkrake')?></th>
-<td>
-    <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
-        type="text" name="eventkrake_tags" class="regular-text" /><br />
-    <span class="description"><?=
-        __('A field that contains any information.', 'eventkrake')
-    ?></span>
 
 </td></tr></table>
 

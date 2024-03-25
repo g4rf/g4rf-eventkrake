@@ -32,8 +32,8 @@ class Event {
         $ends = self::getEnds($p->ID);
         
         for($i = 0; $i < count($starts); $i++) {
-            $start = new \DateTime($starts[$i]);
-            $end = new \DateTime($ends[$i]);
+            $start = new \DateTimeImmutable($starts[$i]);
+            $end = new \DateTimeImmutable($ends[$i]);
             
             $events[] = new self($post, $start, $end, $i);
         }
@@ -176,8 +176,8 @@ class Event {
     /**
      * Creates an event.
      * @param type $post The corresponding post or post id.
-     * @param type $start DateTime start date
-     * @param type $end DateTime end date
+     * @param type $start DateTimeImmutable start date
+     * @param type $end DateTimeImmutable end date
      * @param type [$index=0] If the correponding post has more than one date, every date get's an index.
      * @throws \Exception If the post does not exists or is not of type `eventkrake_event`.
      */
@@ -225,11 +225,25 @@ class Event {
     }
     
     public function getWordpressCategories() {
-        return wp_get_post_categories($this->ID, ['fields' => 'all']);
+        $categories = get_the_category($this->ID);
+        if(empty($categories)) return [];
+        
+        $return = [];
+        foreach($categories as $category) {
+            $return[] = $category->name;
+        }
+        return $return;
     }
     
     public function getWordpressTags() {
-        return wp_get_post_tags($this->ID);
+        $tags = get_the_terms($this->ID, 'post_tag');
+        if(empty($tags)) return [];
+        
+        $return = [];
+        foreach($tags as $tag) {
+            $return[] = $tag->name;
+        }
+        return $return;
     }
     
     public function getLocationId() {
@@ -276,10 +290,6 @@ class Event {
     
     public function getCategories() {
         return Eventkrake::getPostMeta($this->ID, 'categories');
-    }
-        
-    public function getTags() {
-        return Eventkrake::getSinglePostMeta($this->ID, 'tags');
     }
     
     /*
@@ -347,14 +357,6 @@ class Event {
      */
     public function setCategories($categories) {
         return Eventkrake::setPostMeta($this->ID, 'categories', $categories);
-    }
-        
-    /**
-     * 
-     * @param string $tags
-     */
-    public function setTags($tags) {
-        return Eventkrake::setSinglePostMeta($this->ID, 'tags', $tags);
     }
     
     /*
@@ -505,7 +507,7 @@ add_action('init', function () {
     register_post_type('eventkrake_event', [
         'public' => true,
         'has_archive' => true,
-        'taxonomies' => ['category', 'tag'],
+        'taxonomies' => ['category', 'post_tag'],
         'labels' => [
             'name' => __('Events', 'eventkrake'),
             'singular_name' => __('Event', 'eventkrake'),
@@ -610,9 +612,6 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
         // categories
         'eventkrake_categories' => FILTER_DEFAULT,
         
-        // tags
-        'eventkrake_tags' => FILTER_DEFAULT,
-        
     ]);
     
     /* if properties is empty, don't do nothing
@@ -621,10 +620,8 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
      */
     if(empty($properties)) return;
     
-    $event = new Event($post_id, new \DateTime(), new \DateTime());
-    
-    // tags
-    $event->setTags($properties['eventkrake_tags']);
+    $event = new Event($post_id, new \DateTimeImmutable(), 
+        new \DateTimeImmutable());
     
     // dates & times
     $startDates = $properties['eventkrake_startdate'];
@@ -773,6 +770,8 @@ add_filter('the_content', function($content)
         return $content; 
     }
     
+    if(Config::disableEventMeta()) return $content;
+    
     try {
         $times = Event::Factory(get_the_ID());
     } catch(\Exception $ex) {
@@ -790,45 +789,66 @@ add_filter('the_content', function($content)
         <!-- location --><?php
         $location = $event->getLocation(); ?>
         <div class="eventkrake-event-location">
-            <!-- location title -->
-            <div class="eventkrake-event-location-title">
+
+            <!-- location title with link -->
+            <div class="eventkrake-event-location-title-link
+                        eventkrake-icon-before
+                        eventkrake-wheelchair">
                 <a href="<?= $location->getPermalink() ?>"><?=
                     $location->getTitle();
                 ?></a>
             </div>
-            <!-- location address (without link) -->
-            <div class="eventkrake-event-location-address"><?=
-                $location->getAddress();
+
+            <!-- location title (without link) -->
+            <div class="eventkrake-event-location-title
+                        eventkrake-icon-before
+                        eventkrake-wheelchair"><?=
+                    $location->getTitle();
             ?></div>
-            <!-- location addres with link -->
-            <div class="eventkrake-event-location-address-with-link">
+
+            <!-- location address with link -->
+            <div class="eventkrake-event-location-address-link">
                 <a href="<?= $location->getAddressUrl() ?>"><?=
                     $location->getAddress();
                 ?></a>
             </div>
+
+            <!-- location address (without link) -->
+            <div class="eventkrake-event-location-address"><?=
+                $location->getAddress();
+            ?></div>
+
             <!-- location accessibility info -->
             <div class="eventkrake-accessibility-info"><?=
                 $location->getAccessibilityInfo();
             ?></div>
+
         </div>
 
-        <!-- times --><?php
+        <!-- times --><?php            
         $locale = substr(get_locale(), 0, 2);
         // if WP MultiLang is installed
         if(function_exists('wpm_get_language')) {
             $locale = wpm_get_language();
         }
-        
+
         $dateFormatter = new \IntlDateFormatter(
             $locale, \IntlDateFormatter::LONG, \IntlDateFormatter::NONE);        
         $timeFormatter = new \IntlDateFormatter(
             $locale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
 
         ?><div class="eventkrake-event-times"><?php
-            foreach($times as $time) { ?>
-            
-                <div class="eventkrake-event-time">
-                    
+
+            foreach($times as $time) { 
+
+                $showEndDate =
+                    $time->getStart()->sub(Config::dayChange())->format('Y-m-d')
+                    != $time->getEnd()->sub(Config::dayChange())->format('Y-m-d');                    
+
+                ?>
+
+                <div class="eventkrake-event-time eventkrake-icon-before">
+
                     <span class="eventkrake-event-start">
                         <span class="eventkrake-event-start-date"><?=
                             $dateFormatter->format($time->getStart())
@@ -837,66 +857,80 @@ add_filter('the_content', function($content)
                             $timeFormatter->format($time->getStart())
                         ?></span>
                     </span>
-                    
+
                     <span class="eventkrake-event-end">
-                        <span class="eventkrake-event-end-date"><?=
-                            $dateFormatter->format($time->getEnd())
-                        ?></span>
+                        <?php if($showEndDate) { ?>
+                            <span class="eventkrake-event-end-date"><?=
+                                $dateFormatter->format($time->getEnd())
+                            ?></span>
+                        <?php } ?>
                         <span class="eventkrake-event-end-time"><?=
                             $timeFormatter->format($time->getEnd())
                         ?></span>
                     </span>
-                    
+
                     <span class="eventkrake-event-ics">
                         <a href="/<?=$time->icsParameter()?>"><?=
                             __('ics', 'eventkrake')
                         ?></a>
                     </span>
+
                 </div>
-            
+
             <?php }
         ?></div>
 
-        <!-- tags -->
-        <div class="eventkrake-event-tags"><?=
-            $event->getTags();
+        <!-- wp tags -->
+        <div class="eventkrake-event-wp-tags"><?=
+            implode(', ', $event->getWordpressTags());
+        ?></div>
+        
+        <!-- wp categories -->
+        <div class="eventkrake-event-wp-categories"><?=
+            implode(', ', $event->getWordpressCategories());
         ?></div>
         
         <!-- categories -->
         <div class="eventkrake-event-categories"><?=
             implode(', ', $event->getCategories());
         ?></div>
-
+        
         <!-- links -->
         <ul class="eventkrake-event-links">
             <?php foreach($event->getLinks() as $link) { ?>
-            
+
                 <li><a class="eventkrake-event-link"
                    href="<?= $link->url ?>"><?=
                         $link->name
                 ?></a></li>
-                            
+
             <?php } ?>
         </ul>
         
         <!-- artists -->
         <div class="eventkrake-event-artists"><?php
-            
+
             foreach($event->getArtists() as $artist) { ?>
-            
+
                 <div class="eventkrake-event-artist">
-                    
+
                     <!-- artist name & link -->
-                    <div class="eventkrake-event-artist-title">
+                    <div class="eventkrake-event-artist-title-link">
                         <a href="<?= $artist->getPermalink() ?>"><?=
                             $artist->getTitle();
                     ?></a></div>
                     
+                    <!-- artist name (without link) -->
+                    <div class="eventkrake-event-artist-title"><?=
+                        $artist->getTitle();
+                    ?></div>
+
+
                     <!-- artist excerpt -->
                     <div class="eventkrake-event-artist-excerpt"><?=
                         wpautop($artist->getExcerpt())
                     ?></div>
-                    
+
                     <!-- artist image -->
                     <div class="eventkrake-event-artist-image"><?php
                         if (has_post_thumbnail($artist->ID)) {
@@ -904,9 +938,9 @@ add_filter('the_content', function($content)
                         }
                     ?></div>
                 </div>
-            
+
             <?php }
-        ?></div>
+            ?></div>
 
         <!-- content -->
         <div class="eventkrake-event-content"><?=

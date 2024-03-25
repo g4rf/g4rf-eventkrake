@@ -4,7 +4,7 @@
  * Plugin URI:      https://github.com/g4rf/g4rf-eventkrake
  * Description:     A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
  * Author:          Jan Kossick
- * Version:         5.01beta
+ * Version:         5.02beta
  * License:         CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
  * Author URI:      https://jankossick.de
  * Min WP Version:  6.1
@@ -18,7 +18,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
-
 
 /*
  * Needs & needles 
@@ -50,6 +49,32 @@ use Eventkrake\Event as Event;
 use Eventkrake\Location as Location;
 use Eventkrake\Artist as Artist;
 
+
+/*
+ * Installation
+ */
+register_activation_hook( __FILE__, function() {
+    // look if category `eventkrake` is already set
+    if(term_exists('eventkrake', 'category') != null) return;
+    
+    // category: eventkrake
+    $id = wp_insert_category([
+        'cat_name' => 'Eventkrake',
+        'category_description' => 
+            __('Holds the main categories for events, locations and artists.', 'eventkrake'),
+        'category_nicename' => 'eventkrake'
+    ]);
+    if(empty($id)) return;
+    foreach(Config::getDefaultWordpressCategories() as $slug => $name) {
+        wp_insert_category([
+            'cat_name' => $name,
+            'category_nicename' => $slug,
+            'category_parent' => $id
+        ]);
+    }
+});
+
+
 /*
  * Widgets 
  */
@@ -68,28 +93,24 @@ add_action('admin_enqueue_scripts', function() {
     $path = plugin_dir_url(__FILE__);
 
     // leaflet
-    wp_register_script('eventkrake_leaflet',  $path.'leaflet/leaflet.js',
+    wp_register_script('eventkrake-leaflet-js',  $path . 'leaflet/leaflet.js',
         ['jquery']);
-    wp_enqueue_script('eventkrake_leaflet');
+    wp_enqueue_script('eventkrake-leaflet-js');
     // general scripts
-    wp_register_script('eventkrake',  $path.'js/plugin.js',
-        ['eventkrake_leaflet']);
-    wp_enqueue_script('eventkrake');
+    wp_register_script('eventkrake-js',  $path . 'js/plugin.js',
+        ['eventkrake-leaflet-js']);
+    wp_enqueue_script('eventkrake-js');
     // admin scripts
-    wp_register_script('eventkrake_admin', $path.'js/admin.js',
-        ['jquery', 'eventkrake']);
-    wp_enqueue_script('eventkrake_admin');
+    wp_register_script('eventkrake-admin-js', $path . 'js/admin.js',
+        ['jquery', 'eventkrake-js']);
+    wp_enqueue_script('eventkrake-admin-js');
 
-    // general css
-    wp_register_style('eventkrake_all', $path.'css/all.css');
-    wp_enqueue_style('eventkrake_all');
     // admin css
-    wp_register_style('eventkrake_admin', $path.'css/admin.css',
-        ['eventkrake_all']);
-    wp_enqueue_style('eventkrake_admin');
+    wp_register_style('eventkrake-admin-css', $path . 'css/admin.css');
+    wp_enqueue_style('eventkrake-admin-css');
     // leaflet CSS
-    wp_register_style('eventkrake_leaflet', $path.'leaflet/leaflet.css');
-    wp_enqueue_style('eventkrake_leaflet');
+    wp_register_style('eventkrake-leaflet-css', $path . 'leaflet/leaflet.css');
+    wp_enqueue_style('eventkrake-leaflet-css');
 });
 
 // frontend
@@ -97,20 +118,20 @@ add_action('wp_enqueue_scripts', function() {
     $path = plugin_dir_url(__FILE__);
 
     // leaflet
-    wp_register_script('eventkrake_leaflet',  $path.'leaflet/leaflet.js',
+    wp_register_script('eventkrake-leaflet-js',  $path . 'leaflet/leaflet.js',
         ['jquery']);
-    wp_enqueue_script('eventkrake_leaflet');
+    wp_enqueue_script('eventkrake-leaflet-js');
     // general scripts
-    wp_register_script('eventkrake',  $path.'js/plugin.js',
-        ['eventkrake_leaflet']);
-    wp_enqueue_script('eventkrake');
+    wp_register_script('eventkrake-js',  $path . 'js/plugin.js',
+        ['eventkrake-leaflet-js']);
+    wp_enqueue_script('eventkrake-js');
 
-    // general css
-    wp_register_style('eventkrake_all', $path.'css/all.css');
-    wp_enqueue_style('eventkrake_all');
+    // frontend css
+    wp_register_style('eventkrake-frontend-css', $path . 'css/frontend.css');
+    wp_enqueue_style('eventkrake-frontend-css');
     // leaflet css
-    wp_register_style('eventkrake_leaflet', $path.'leaflet/leaflet.css');
-    wp_enqueue_style('eventkrake_leaflet');
+    wp_register_style('eventkrake-leaflet-css', $path . 'leaflet/leaflet.css');
+    wp_enqueue_style('eventkrake-leaflet-css');
 });
 
 
@@ -154,8 +175,9 @@ function eventkrake_restbuild_artist($artist) {
         'excerpt' => $artist->getExcerpt(),
         'image' =>  get_the_post_thumbnail_url($artist->ID, 'full'),
         'categories' => $artist->getCategories(),
-        'links' => $artist->getLinks(),
-        'tags' => $artist->getTags()
+        'wpcategories' => $artist->getWordpressCategories(),
+        'wptags' => $artist->getWordpressTags(),
+        'links' => $artist->getLinks()
     ];
 }
 function eventkrake_restbuild_location($location) {
@@ -172,8 +194,9 @@ function eventkrake_restbuild_location($location) {
         'excerpt' => $location->getExcerpt(),
         'image' =>  get_the_post_thumbnail_url($location->ID, 'full'),
         'categories' => $location->getCategories(),
-        'links' => $location->getLinks(),
-        'tags' => $location->getTags()
+        'wpcategories' => $location->getWordpressCategories(),
+        'wptags' => $location->getWordpressTags(),
+        'links' => $location->getLinks()
     ];
 }
 function eventkrake_restbuild_event($event) {
@@ -194,8 +217,9 @@ function eventkrake_restbuild_event($event) {
         'end' => $event->getEnd()->format($dateFormat),
         'artists' => $event->getArtistIds(),
         'categories' => $event->getCategories(),
+        'wpcategories' => $event->getWordpressCategories(),
+        'wptags' => $event->getWordpressTags(),
         'links' => $event->getLinks(),
-        'tags' => $event->getTags(),
         'icsUrl' => get_site_url(null, '/' . $event->icsParameter(), 'https')
     ];
 }

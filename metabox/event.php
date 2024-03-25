@@ -14,7 +14,7 @@ global $post;
 <th><?=__('Location for the event', 'eventkrake')?></th>
 
 <td>
-    <select class="eventkrake_formselect" name="eventkrake_locationid">
+    <select name="eventkrake_locationid">
         <option value="0">---</option>
         <?php
             $locations = Location::all();
@@ -172,14 +172,5 @@ _e('Select a location for the event. You can create
         value="<?=__('Add web link', 'eventkrake')?>" /></div>
 
 </td></tr><tr>
-
-<!-- tags -->
-<th><?=__('Additional informations', 'eventkrake')?></th>
-<td>
-    <input value="<?=Eventkrake::getSinglePostMeta($post->ID, 'tags')?>"
-        type="text" name="eventkrake_tags" class="regular-text" /><br />
-    <span class="description"><?=
-        __('A field containing any information about the event.', 'eventkrake')
-    ?></span>
     
 </td></tr></table>

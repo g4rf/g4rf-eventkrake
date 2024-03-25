@@ -105,6 +105,28 @@ class Location {
         return Eventkrake::getPostMeta($this->ID, 'categories');
     }
     
+    public function getWordpressCategories() {
+        $categories = get_the_category($this->ID);
+        if(empty($categories)) return [];
+        
+        $return = [];
+        foreach($categories as $category) {
+            $return[] = $category->name;
+        }
+        return $return;
+    }
+    
+    public function getWordpressTags() {
+        $tags = get_the_terms($this->ID, 'post_tag');
+        if(empty($tags)) return [];
+        
+        $return = [];
+        foreach($tags as $tag) {
+            $return[] = $tag->name;
+        }
+        return $return;
+    }
+    
     public function getAccessibility() {
         return Eventkrake::getSinglePostMeta($this->ID, 'accessibility');
     }
@@ -112,10 +134,6 @@ class Location {
     public function getAccessibilityInfo() {
         return Eventkrake::getSinglePostMeta($this->ID, 'accessibility-info');
     }
-    
-    public function getTags() {
-        return Eventkrake::getSinglePostMeta($this->ID, 'tags');
-    }    
     
     public function getEvents() {
         $posts = get_posts([
@@ -169,14 +187,6 @@ class Location {
         return Eventkrake::setPostMeta($this->ID, 'categories', $categories);
     }
     
-    /**
-     * 
-     * @param string $tags
-     */
-    public function setTags($tags) {
-        return Eventkrake::setSinglePostMeta($this->ID, 'tags', $tags);
-    }
-    
     public function setAccessibility($accessibility) {
         return Eventkrake::setSinglePostMeta(
             $this->ID, 'accessibility', $accessibility);
@@ -195,7 +205,7 @@ add_action('init', function () {
     register_post_type('eventkrake_location', [
         'public' => true,
         'has_archive' => true,
-        'taxonomies' => ['category', 'tag'],
+        'taxonomies' => ['category', 'post_tag'],
         'labels' => [
             'name' => __('Locations', 'eventkrake'),
             'singular_name' => __('Location', 'eventkrake'),
@@ -274,10 +284,7 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
         'eventkrake-accessibility-info' => FILTER_DEFAULT,
         
         // categories
-        'eventkrake_categories' => FILTER_DEFAULT,
-        
-        // tags
-        'eventkrake_tags' => FILTER_DEFAULT,
+        'eventkrake_categories' => FILTER_DEFAULT
         
     ]);
     
@@ -294,8 +301,8 @@ add_action('save_post_eventkrake_location', function($post_id, $post) {
     $location->setLng($properties['eventkrake_lng']);
     $location->setAddress($properties['eventkrake_address']);
     $location->setAccessibility($properties['eventkrake-accessibility']);
-    $location->setAccessibilityInfo($properties['eventkrake-accessibility-info']);
-    $location->setTags($properties['eventkrake_tags']);
+    $location->setAccessibilityInfo(
+        $properties['eventkrake-accessibility-info']);
     
     // links
     $linkNames = $properties['eventkrake-links-key'];
@@ -359,13 +366,18 @@ add_filter('the_content', function($content)
         </div>
         
         <!-- accessibility info -->
-        <div class="eventkrake-accessibility-info"><?=
+        <div class="eventkrake--location-accessibility-info"><?=
             $location->getAccessibilityInfo()
         ?></div>
         
-        <!-- tags -->
-        <div class="eventkrake-location-tags"><?=
-            $location->getTags();
+        <!-- wp tags -->
+        <div class="eventkrake-location-wp-tags"><?=
+            implode(', ', $location->getWordpressTags());
+        ?></div>
+        
+        <!-- wp categories -->
+        <div class="eventkrake-location-wp-categories"><?=
+            implode(', ', $location->getWordpressCategories());
         ?></div>
         
         <!-- categories -->
