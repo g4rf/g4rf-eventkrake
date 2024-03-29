@@ -81,6 +81,51 @@ class Eventkrake {
     }
     
     /**
+     * Formats DateTime to a locale string.
+     * @param DateTime $datetime
+     * @param IntlDateFormatter [$dateFormat=IntlDateFormatter::LONG]
+     * @param IntlDateFormatter [$timeFormat=IntlDateFormatter::SHORT]
+     * @return string 
+     */
+    public static function formatDateTime(
+        $datetime, 
+        $dateFormat = \IntlDateFormatter::LONG, 
+        $timeFormat = \IntlDateFormatter::SHORT)
+    {
+        // get locale
+        $locale = substr(get_locale(), 0, 2);
+        
+        // if WP MultiLang is installed
+        if(function_exists('wpm_get_language')) {
+            $locale = wpm_get_language();
+        }
+        
+        $formatter = new \IntlDateFormatter($locale, $dateFormat, $timeFormat);        
+        
+        return $formatter->format($datetime);
+    }
+    
+    /**
+     * Formats a DateTime to a locale date string.
+     * @param DateTime $datetime
+     * @return string
+     */
+    public static function formatDate($datetime) {
+        return self::formatDateTime($datetime, 
+            \IntlDateFormatter::LONG, \IntlDateFormatter::NONE);
+    }
+    
+    /**
+     * Formats a DateTime to a locale timestring.
+     * @param DateTime $datetime
+     * @return string
+     */
+    public static function formatTime($datetime) {
+        return self::formatDateTime($datetime, 
+            \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
+    }
+        
+    /**
      * @deprecated since version 5.01
      * Returns list of all events.
      * @param array [$filter=[]] More filter, @see https://developer.wordpress.org/reference/functions/get_posts/

@@ -16,6 +16,10 @@
         height: 1em;
     }
     
+    &-icon-before.eventkrake-icon-time::before {
+        background-image: url(../img/clock.png);
+    }
+    
     /**
      * accessibility
      */
@@ -40,16 +44,35 @@
         font-style: italic;
         font-size: 0.9em;
     }
+    
+    /**
+     * tags, categories
+     */
+    
+    &-tags {
+        font-size: 0.8em;
+        font-style: italic;
+    }
+    
+    /**
+     * ics
+     */
+    &-ics {
+        font-style: italic;
+        font-size: 0.8em;
+    }
 
     /**
      * Event
      */
+    
     &-event {
         display: grid;
         gap: 0;
         grid-template: 
             "location"
             "times"
+            "image"
             "content"
             "links"
             "artists"
@@ -60,6 +83,12 @@
         
         &-content {
             grid-area: content;
+        }
+        
+        &-image {
+            grid-area: image;
+            
+            margin: var(--wp--style--block-gap) auto;
         }
         
         &-location {
@@ -75,11 +104,6 @@
             &-address {
                 display: none;
             }
-        }
-        
-        &-wp-tags, &-categories, &-wp-categories {
-            font-size: 0.8em;
-            font-style: italic;
         }
         
         &-wp-tags {
@@ -111,7 +135,7 @@
         
         &-artist {
             display: grid;
-            gap: 15px;
+            gap: 0 15px;
             grid-template:
                 "image title" min-content
                 "image excerpt" min-content
@@ -160,20 +184,229 @@
             flex-direction: row;
             align-items: center;
             gap: 5px;
-            
-            &::before {
-                background-image: url(../img/clock.png);
-            }
         }
         
         &-end::before {
             content: " – ";
         }
-
-        &-ics {
-            font-style: italic;
-            font-size: small;
-        }
     }
 
+    /**
+     * Location
+     */
+    
+    &-location {
+        display: grid;
+        gap: 0;
+        grid-template: 
+            "wp-categories"
+            "categories"
+            "wp-tags"
+            "address"
+            "accessibility"
+            "image"
+            "content"
+            "links"
+            "events"            
+            / auto;
+        
+        &-content {
+            grid-area: content;
+        }
+        
+        &-image {
+            grid-area: image;
+            
+            margin: var(--wp--style--block-gap) auto;
+        }
+        
+        &-address, &-address-link {
+            grid-area: address;
+        }            
+        &-address {
+            display: none;
+        }
+        
+        &-accessibility-info {
+            grid-area: accessibility;
+        }
+        
+        &-wp-tags {
+            grid-area: wp-tags;
+        }
+        
+        &-categories {
+            grid-area: categories;
+        }
+        
+        &-wp-categories {
+            grid-area: wp-categories;
+        }
+        
+        &-links {
+            grid-area: links;
+            margin-bottom: 15px;
+        }
+        
+        &-events {
+            grid-area: events;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            
+            margin-top: var(--wp--style--block-gap);
+            margin-bottom: var(--wp--style--block-gap);
+        }
+        
+        &-event {
+            display: grid;
+            gap: 0 15px;
+            grid-template:
+                "image title" min-content
+                "image time" min-content
+                "image excerpt" min-content
+                / min-content auto;
+            
+            &-title, &-title-link {
+                grid-area: title;
+            }
+            &-title {
+                display: none;
+            }
+            
+            &-time {
+                grid-area: time;
+                font-size: 0.9em;
+            }
+            &-end, &-ics {
+                display: none;
+            }
+            &-end::before {
+                content: " – ";
+            }
+            
+            &-excerpt {
+                grid-area: excerpt;
+            }
+            
+            &-image {
+                grid-area: image;
+                height: 5em;
+                width: 5em;
+                
+                img {
+                    width: 5em;
+                    height: 5em;
+                    object-fit: cover;
+                    
+                    border-style: solid;
+                    border-width: 1px;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+    
+    /**
+     * Artist
+     */
+    
+    &-artist {
+        display: grid;
+        gap: 0;
+        grid-template: 
+            "image"
+            "wp-categories"
+            "categories"
+            "wp-tags"
+            "content"
+            "links"
+            "events"            
+            / auto;
+        
+        &-content {
+            grid-area: content;
+        }
+        
+        &-image {
+            grid-area: image;
+            
+            margin: var(--wp--style--block-gap) auto;
+        }
+                
+        &-wp-tags {
+            grid-area: wp-tags;
+        }
+        
+        &-categories {
+            grid-area: categories;
+        }
+        
+        &-wp-categories {
+            grid-area: wp-categories;
+        }
+        
+        &-links {
+            grid-area: links;
+            margin-bottom: 15px;
+        }
+        
+        &-events {
+            grid-area: events;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            
+            margin-top: var(--wp--style--block-gap);
+            margin-bottom: var(--wp--style--block-gap);
+        }
+        
+        &-event {
+            display: grid;
+            gap: 0 15px;
+            grid-template:
+                "image title" min-content
+                "image time" min-content
+                "image excerpt" min-content
+                / min-content auto;
+            
+            &-title, &-title-link {
+                grid-area: title;
+            }
+            &-title {
+                display: none;
+            }
+            
+            &-time {
+                grid-area: time;
+                font-size: 0.9em;
+            }
+            &-end, &-ics {
+                display: none;
+            }
+            &-end::before {
+                content: " – ";
+            }
+            
+            &-excerpt {
+                grid-area: excerpt;
+            }
+            
+            &-image {
+                grid-area: image;
+                height: 5em;
+                width: 5em;
+                
+                img {
+                    width: 5em;
+                    height: 5em;
+                    object-fit: cover;
+                    
+                    border-style: solid;
+                    border-width: 1px;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
 }

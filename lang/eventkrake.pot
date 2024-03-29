@@ -2,14 +2,14 @@
 # This file is distributed under the CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/.
 msgid ""
 msgstr ""
-"Project-Id-Version: Eventkrake 5.02beta\n"
+"Project-Id-Version: Eventkrake 5.03beta\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/g4rf-eventkrake\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-03-25T07:02:11+00:00\n"
+"POT-Creation-Date: 2024-03-29T10:25:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: eventkrake\n"
@@ -39,52 +39,62 @@ msgstr ""
 msgid "https://jankossick.de"
 msgstr ""
 
-#: Eventkrake/Artist.php:141
+#: Eventkrake/Artist.php:167
 msgid "Artists"
 msgstr ""
 
-#: Eventkrake/Artist.php:142
+#: Eventkrake/Artist.php:168
 msgid "Artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:143
-#: Eventkrake/Artist.php:148
+#: Eventkrake/Artist.php:169
+#: Eventkrake/Artist.php:174
 msgid "Add artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:145
+#: Eventkrake/Artist.php:171
 msgid "Add new artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:146
-#: Eventkrake/Artist.php:147
+#: Eventkrake/Artist.php:172
+#: Eventkrake/Artist.php:173
 msgid "Edit artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:149
+#: Eventkrake/Artist.php:175
 msgid "View artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:150
+#: Eventkrake/Artist.php:176
 msgid "Search for artist"
 msgstr ""
 
-#: Eventkrake/Artist.php:151
+#: Eventkrake/Artist.php:177
 msgid "No artist found"
 msgstr ""
 
-#: Eventkrake/Artist.php:153
+#: Eventkrake/Artist.php:179
 msgid "No artists in trash"
 msgstr ""
 
-#: Eventkrake/Artist.php:159
+#: Eventkrake/Artist.php:185
 msgid "Artists are persons or groups."
 msgstr ""
 
-#: Eventkrake/Artist.php:168
-#: Eventkrake/Event.php:525
-#: Eventkrake/Location.php:221
+#: Eventkrake/Artist.php:194
+#: Eventkrake/Event.php:555
+#: Eventkrake/Location.php:247
 msgid "Additional informations"
+msgstr ""
+
+#: Eventkrake/Artist.php:328
+msgid "Upcoming Events with %s"
+msgstr ""
+
+#: Eventkrake/Artist.php:375
+#: Eventkrake/Event.php:815
+#: Eventkrake/Location.php:470
+msgid "ics"
 msgstr ""
 
 #: Eventkrake/Config.php:28
@@ -143,101 +153,105 @@ msgstr ""
 msgid "Demonstration"
 msgstr ""
 
-#: Eventkrake/Event.php:498
+#: Eventkrake/Event.php:528
 #: metabox/artist.php:82
 msgid "Events"
 msgstr ""
 
-#: Eventkrake/Event.php:499
+#: Eventkrake/Event.php:529
 msgid "Event"
 msgstr ""
 
-#: Eventkrake/Event.php:500
-#: Eventkrake/Event.php:505
+#: Eventkrake/Event.php:530
+#: Eventkrake/Event.php:535
 msgid "Add event"
 msgstr ""
 
-#: Eventkrake/Event.php:502
+#: Eventkrake/Event.php:532
 msgid "Add new event"
 msgstr ""
 
-#: Eventkrake/Event.php:503
-#: Eventkrake/Event.php:504
+#: Eventkrake/Event.php:533
+#: Eventkrake/Event.php:534
 #: metabox/artist.php:112
 #: metabox/location.php:227
 msgid "Edit event"
 msgstr ""
 
-#: Eventkrake/Event.php:506
+#: Eventkrake/Event.php:536
 msgid "View event"
 msgstr ""
 
-#: Eventkrake/Event.php:507
+#: Eventkrake/Event.php:537
 msgid "Search for event"
 msgstr ""
 
-#: Eventkrake/Event.php:509
+#: Eventkrake/Event.php:539
 msgid "No events found"
 msgstr ""
 
-#: Eventkrake/Event.php:511
+#: Eventkrake/Event.php:541
 msgid "No even in trash"
 msgstr ""
 
-#: Eventkrake/Event.php:516
+#: Eventkrake/Event.php:546
 msgid "Events are temporary occurrences in one place."
 msgstr ""
 
-#: Eventkrake/Event.php:846
-msgid "ics"
+#: Eventkrake/Event.php:856
+msgid "Participating artists at %s"
 msgstr ""
 
-#: Eventkrake/Eventkrake.php:351
+#: Eventkrake/Eventkrake.php:396
 msgid "Remove time"
 msgstr ""
 
-#: Eventkrake/Eventkrake.php:383
+#: Eventkrake/Eventkrake.php:428
 msgid "The beginning must come before the end."
 msgstr ""
 
-#: Eventkrake/Location.php:196
+#: Eventkrake/Location.php:222
 msgid "Locations"
 msgstr ""
 
-#: Eventkrake/Location.php:197
+#: Eventkrake/Location.php:223
 msgid "Location"
 msgstr ""
 
-#: Eventkrake/Location.php:198
-#: Eventkrake/Location.php:199
-#: Eventkrake/Location.php:202
+#: Eventkrake/Location.php:224
+#: Eventkrake/Location.php:225
+#: Eventkrake/Location.php:228
 msgid "Add location"
 msgstr ""
 
-#: Eventkrake/Location.php:200
-#: Eventkrake/Location.php:201
+#: Eventkrake/Location.php:226
+#: Eventkrake/Location.php:227
 #: metabox/event.php:34
 msgid "Edit location"
 msgstr ""
 
-#: Eventkrake/Location.php:203
+#: Eventkrake/Location.php:229
 msgid "View location"
 msgstr ""
 
-#: Eventkrake/Location.php:204
+#: Eventkrake/Location.php:230
 msgid "Search for location"
 msgstr ""
 
-#: Eventkrake/Location.php:205
+#: Eventkrake/Location.php:231
 msgid "No location found"
 msgstr ""
 
-#: Eventkrake/Location.php:207
+#: Eventkrake/Location.php:233
 msgid "No locations in trash"
 msgstr ""
 
-#: Eventkrake/Location.php:213
+#: Eventkrake/Location.php:239
 msgid "Events take place at locations."
+msgstr ""
+
+#: Eventkrake/Location.php:423
+msgid "Upcoming Events at %s"
 msgstr ""
 
 #: Eventkrake/Widget/ShowNextEvents.php:13
@@ -268,35 +282,35 @@ msgstr ""
 msgid "Holds the main categories for events, locations and artists."
 msgstr ""
 
-#: g4rf-eventkrake.php:283
+#: g4rf-eventkrake.php:286
 msgid "Gives a minimal start date for the events. This parameter is checked against the start of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:289
+#: g4rf-eventkrake.php:292
 msgid "Gives a minimal end date for the events. This parameter is checked against the end of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:295
+#: g4rf-eventkrake.php:298
 msgid "Gives a maximal start date for the events. This parameter is checked against the start of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:301
+#: g4rf-eventkrake.php:304
 msgid "Gives a maximal end date for the events. This parameter is checked against the end of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:316
+#: g4rf-eventkrake.php:319
 msgid "The parameter earliestStart is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:327
+#: g4rf-eventkrake.php:330
 msgid "The parameter earliestEnd is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:338
+#: g4rf-eventkrake.php:341
 msgid "The parameter latestStart is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:349
+#: g4rf-eventkrake.php:352
 msgid "The parameter latestEnd is invalid."
 msgstr ""
 

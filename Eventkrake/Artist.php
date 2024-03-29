@@ -102,7 +102,7 @@ class Artist {
         return Eventkrake::getPostMeta($this->ID, 'categories');
     }
     
-    public function getEvents() {
+    public function getEvents($from = 'now', $to = '+10 years') {
         $posts = get_posts([
             'numberposts' => -1,
             'offset' => 0,
@@ -114,12 +114,24 @@ class Artist {
                 ]
             ]
         ]);
+        
+        $fromDate = new \DateTime($from);
+        $toDate = new \DateTime($to);
+        
         $events = [];
         foreach($posts as $post) {
-            $events = array_merge($events, Event::Factory($post));
+            foreach(Event::Factory($post) as $event) {
+                if($event->getEnd() <= $fromDate) continue;
+                if($event->getStart() >= $toDate) continue;
+                $events[] = $event;
+            }
         }
         
         return Event::sort($events);
+    }
+    
+    public function hideMeta() {
+        return Config::hideArtistMeta();
     }
     
     /*
@@ -274,23 +286,25 @@ add_filter('the_content', function($content)
     } catch(\Exception $ex) {
         return $content;
     }
+    
+    if($artist->hideMeta()) return $content;
 
     ob_start(); ?>
 
     <div class="eventkrake-artist">
         
         <!-- wp tags -->
-        <div class="eventkrake-artist-wp-tags"><?=
+        <div class="eventkrake-artist-wp-tags eventkrake-tags"><?=
             implode(', ', $artist->getWordpressTags());
         ?></div>
         
         <!-- wp categories -->
-        <div class="eventkrake-artist-wp-categories"><?=
+        <div class="eventkrake-artist-wp-categories eventkrake-tags"><?=
             implode(', ', $artist->getWordpressCategories());
         ?></div>
         
         <!-- categories -->
-        <div class="eventkrake-artist-categories"><?=
+        <div class="eventkrake-artist-categories eventkrake-tags"><?=
             implode(', ', $artist->getCategories());
         ?></div>
 
@@ -307,17 +321,62 @@ add_filter('the_content', function($content)
         </ul>
         
         <!-- events -->
-        <div class="eventkrake-artist-events"><?php
+        <div class="eventkrake-artist-events">
             
-            foreach($artist->getEvents() as $event) { ?>
+            <h3 class="eventkrake-artist-events-headline"><?=
+                sprintf(
+                    __('Upcoming Events with %s', 'eventkrake'), 
+                    $artist->getTitle()
+                ) 
+            ?></h3>
+            
+            <?php foreach($artist->getEvents() as $event) { ?>
             
                 <div class="eventkrake-artist-event">
                     
                     <!-- event name & link -->
-                    <div class="eventkrake-artist-event-title">
+                    <div class="eventkrake-artist-event-title-link">
                         <a href="<?= $event->getPermalink() ?>"><?=
                             $event->getTitle();
+                    ?></a></div>
+                    
+                    <!-- event name (without link) -->
+                    <div class="eventkrake-artist-event-title"><?=
+                        $event->getTitle();
                     ?></div>
+                    
+                    <!-- event time -->
+                    <div class="eventkrake-artist-event-time
+                                eventkrake-icon-before
+                                eventkrake-icon-time">
+
+                        <span class="eventkrake-artist-event-start">
+                            <span class="eventkrake-artist-event-start-date"><?=
+                                Eventkrake::formatDate($event->getStart())
+                            ?></span>
+                            <span class="eventkrake-artist-event-start-time"><?=
+                                Eventkrake::formatTime($event->getStart())
+                            ?></span>
+                        </span>
+
+                        <span class="eventkrake-artist-event-end">
+                            <?php if(! $event->isEndOnSameDay()) { ?>
+                                <span class="eventkrake-artist-event-end-date"><?=
+                                    Eventkrake::formatDate($event->getEnd())
+                                ?></span>
+                            <?php } ?>
+                            <span class="eventkrake-artist-event-end-time"><?=
+                                Eventkrake::formatTime($event->getEnd())
+                            ?></span>
+                        </span>
+
+                        <span class="eventkrake-artist-event-ics eventkrake-ics">
+                            <a href="/<?=$event->icsParameter()?>"><?=
+                                __('ics', 'eventkrake')
+                            ?></a>
+                        </span>
+
+                    </div><!-- /time -->
                     
                     <!-- event excerpt -->
                     <div class="eventkrake-artist-event-excerpt"><?=
@@ -335,6 +394,13 @@ add_filter('the_content', function($content)
             <?php }
         ?></div>
 
+        <!-- artist image -->
+        <div class="eventkrake-artist-image"><?php
+            if (has_post_thumbnail($artist->ID)) {
+                print get_the_post_thumbnail($artist->ID, 'large');
+            }
+        ?></div>
+        
         <!-- content -->
         <div class="eventkrake-artist-content"><?=
             $content

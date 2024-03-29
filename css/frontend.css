@@ -7,7 +7,19 @@
    * accessibility
    */
   /**
+   * tags, categories
+   */
+  /**
+   * ics
+   */
+  /**
    * Event
+   */
+  /**
+   * Location
+   */
+  /**
+   * Artist
    */
 }
 .eventkrake-icon-before::before {
@@ -20,6 +32,9 @@
   background-position: left bottom;
   width: 1.4em;
   height: 1em;
+}
+.eventkrake-icon-before.eventkrake-icon-time::before {
+  background-image: url(../img/clock.png);
 }
 .eventkrake-accessibility- .eventkrake-icon-before.eventkrake-wheelchair::before {
   display: none;
@@ -37,13 +52,25 @@
   font-style: italic;
   font-size: 0.9em;
 }
+.eventkrake-tags {
+  font-size: 0.8em;
+  font-style: italic;
+}
+.eventkrake-ics {
+  font-style: italic;
+  font-size: 0.8em;
+}
 .eventkrake-event {
   display: grid;
   gap: 0;
-  grid-template: "location" "times" "content" "links" "artists" "wp-categories" "categories" "wp-tags"/auto;
+  grid-template: "location" "times" "image" "content" "links" "artists" "wp-categories" "categories" "wp-tags"/auto;
 }
 .eventkrake-event-content {
   grid-area: content;
+}
+.eventkrake-event-image {
+  grid-area: image;
+  margin: var(--wp--style--block-gap) auto;
 }
 .eventkrake-event-location {
   grid-area: location;
@@ -56,10 +83,6 @@
 }
 .eventkrake-event-location-address {
   display: none;
-}
-.eventkrake-event-wp-tags, .eventkrake-event-categories, .eventkrake-event-wp-categories {
-  font-size: 0.8em;
-  font-style: italic;
 }
 .eventkrake-event-wp-tags {
   grid-area: wp-tags;
@@ -84,7 +107,7 @@
 }
 .eventkrake-event-artist {
   display: grid;
-  gap: 15px;
+  gap: 0 15px;
   grid-template: "image title" min-content "image excerpt" min-content/min-content auto;
 }
 .eventkrake-event-artist-title, .eventkrake-event-artist-title-link {
@@ -123,15 +146,157 @@
   align-items: center;
   gap: 5px;
 }
-.eventkrake-event-time::before {
-  background-image: url(../img/clock.png);
-}
 .eventkrake-event-end::before {
   content: " – ";
 }
-.eventkrake-event-ics {
-  font-style: italic;
-  font-size: small;
+.eventkrake-location {
+  display: grid;
+  gap: 0;
+  grid-template: "wp-categories" "categories" "wp-tags" "address" "accessibility" "image" "content" "links" "events"/auto;
+}
+.eventkrake-location-content {
+  grid-area: content;
+}
+.eventkrake-location-image {
+  grid-area: image;
+  margin: var(--wp--style--block-gap) auto;
+}
+.eventkrake-location-address, .eventkrake-location-address-link {
+  grid-area: address;
+}
+.eventkrake-location-address {
+  display: none;
+}
+.eventkrake-location-accessibility-info {
+  grid-area: accessibility;
+}
+.eventkrake-location-wp-tags {
+  grid-area: wp-tags;
+}
+.eventkrake-location-categories {
+  grid-area: categories;
+}
+.eventkrake-location-wp-categories {
+  grid-area: wp-categories;
+}
+.eventkrake-location-links {
+  grid-area: links;
+  margin-bottom: 15px;
+}
+.eventkrake-location-events {
+  grid-area: events;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: var(--wp--style--block-gap);
+  margin-bottom: var(--wp--style--block-gap);
+}
+.eventkrake-location-event {
+  display: grid;
+  gap: 0 15px;
+  grid-template: "image title" min-content "image time" min-content "image excerpt" min-content/min-content auto;
+}
+.eventkrake-location-event-title, .eventkrake-location-event-title-link {
+  grid-area: title;
+}
+.eventkrake-location-event-title {
+  display: none;
+}
+.eventkrake-location-event-time {
+  grid-area: time;
+  font-size: 0.9em;
+}
+.eventkrake-location-event-end, .eventkrake-location-event-ics {
+  display: none;
+}
+.eventkrake-location-event-end::before {
+  content: " – ";
+}
+.eventkrake-location-event-excerpt {
+  grid-area: excerpt;
+}
+.eventkrake-location-event-image {
+  grid-area: image;
+  height: 5em;
+  width: 5em;
+}
+.eventkrake-location-event-image img {
+  width: 5em;
+  height: 5em;
+  object-fit: cover;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50%;
+}
+.eventkrake-artist {
+  display: grid;
+  gap: 0;
+  grid-template: "image" "wp-categories" "categories" "wp-tags" "content" "links" "events"/auto;
+}
+.eventkrake-artist-content {
+  grid-area: content;
+}
+.eventkrake-artist-image {
+  grid-area: image;
+  margin: var(--wp--style--block-gap) auto;
+}
+.eventkrake-artist-wp-tags {
+  grid-area: wp-tags;
+}
+.eventkrake-artist-categories {
+  grid-area: categories;
+}
+.eventkrake-artist-wp-categories {
+  grid-area: wp-categories;
+}
+.eventkrake-artist-links {
+  grid-area: links;
+  margin-bottom: 15px;
+}
+.eventkrake-artist-events {
+  grid-area: events;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: var(--wp--style--block-gap);
+  margin-bottom: var(--wp--style--block-gap);
+}
+.eventkrake-artist-event {
+  display: grid;
+  gap: 0 15px;
+  grid-template: "image title" min-content "image time" min-content "image excerpt" min-content/min-content auto;
+}
+.eventkrake-artist-event-title, .eventkrake-artist-event-title-link {
+  grid-area: title;
+}
+.eventkrake-artist-event-title {
+  display: none;
+}
+.eventkrake-artist-event-time {
+  grid-area: time;
+  font-size: 0.9em;
+}
+.eventkrake-artist-event-end, .eventkrake-artist-event-ics {
+  display: none;
+}
+.eventkrake-artist-event-end::before {
+  content: " – ";
+}
+.eventkrake-artist-event-excerpt {
+  grid-area: excerpt;
+}
+.eventkrake-artist-event-image {
+  grid-area: image;
+  height: 5em;
+  width: 5em;
+}
+.eventkrake-artist-event-image img {
+  width: 5em;
+  height: 5em;
+  object-fit: cover;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50%;
 }
 
 /*# sourceMappingURL=frontend.css.map */

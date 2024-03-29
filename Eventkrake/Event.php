@@ -262,6 +262,18 @@ class Event {
         return $this->end;
     }    
     
+    /**
+     * Calculates, if the end is on the same day by respecting a "midnight shift".
+     * @return bool
+     */
+    public function isEndOnSameDay() {
+        $dayChange = Config::dayChange(); // time of "midnight"
+        
+        return $this->start->sub($dayChange)->format('Y-m-d')
+                == $this->end->sub($dayChange)->format('Y-m-d');
+    }
+
+    
     public function getLocation() {
         try {
             return new Location($this->getLocationId());
@@ -290,6 +302,10 @@ class Event {
     
     public function getCategories() {
         return Eventkrake::getPostMeta($this->ID, 'categories');
+    }
+    
+    public function hideMeta() {
+        return Config::hideEventMeta();
     }
     
     /*
@@ -696,68 +712,6 @@ add_filter('post_class', function($classes, $class, $post_id) {
     return $classes;
 }, 10, 3);
 
-
-/*
- * add event location and dates to event post excerpt 
- */
-add_filter( 'get_the_excerpt', function( $excerpt, $post ) {
-    if(is_admin()) return $excerpt;
-
-    if(get_post_type($post->ID) != 'eventkrake_event') return $excerpt;
-    
-    if (!(is_single() || in_the_loop())) {
-        return $excerpt; 
-    }
-    
-    // times
-    $times = Event::Factory($post->ID);
-    if(count($times) == 0) return $excerpt;
-
-    // no location
-    if(empty($times[0]->getLocationId())) return $excerpt;
-    
-    // locale
-    $locale = substr(get_locale(), 0, 2);
-    // if WP Multilang is installed
-    if(function_exists('wpm_get_language')) {
-        $locale = wpm_get_language();
-    }
-
-    // date+time formatter
-    $dateFormatter = new \IntlDateFormatter(
-        $locale, \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE);
-    $timeFormatter = new \IntlDateFormatter(
-        $locale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
-
-    // list start datetimes
-    $list = [];
-    $actualDate = 0; $string = '';
-    foreach($times as $time) {
-
-        // check if we are still on the same date
-        if($actualDate == $time->getStart()->format('Ymd')) {
-            // add time to previous date
-            $string .= ', ' . $timeFormatter->format($time->getStart());
-            continue;
-        }
-        
-        if(! empty($string)) $list[] = $string;
-        $string = '';
-        
-        $actualDate = $time->getStart()->format('Ymd');
-        $string .= $dateFormatter->format($time->getStart()) . ' ';
-        $string .= $timeFormatter->format($time->getStart());
-    }
-    $list[] = $string;
-    
-    return implode(' // ', $list) .
-        ' @ ' . get_the_title($times[0]->getLocationId()) 
-        . ": $excerpt";
-    
-// with 20 we do it after core stuff
-}, 20, 2);
-
-
 /*
  * add event location, dates and other meta to event post content 
  */
@@ -770,7 +724,7 @@ add_filter('the_content', function($content)
         return $content; 
     }
     
-    if(Config::disableEventMeta()) return $content;
+    if(Config::hideEventMeta()) return $content;
     
     try {
         $times = Event::Factory(get_the_ID());
@@ -781,6 +735,8 @@ add_filter('the_content', function($content)
     if(count($times) == 0) return $content;
     
     $event = $times[0];
+    
+    if($event->hideMeta()) return $content;
     
     ob_start(); ?>
 
@@ -825,51 +781,36 @@ add_filter('the_content', function($content)
 
         </div>
 
-        <!-- times --><?php            
-        $locale = substr(get_locale(), 0, 2);
-        // if WP MultiLang is installed
-        if(function_exists('wpm_get_language')) {
-            $locale = wpm_get_language();
-        }
+        <!-- times -->
+        <div class="eventkrake-event-times"><?php
 
-        $dateFormatter = new \IntlDateFormatter(
-            $locale, \IntlDateFormatter::LONG, \IntlDateFormatter::NONE);        
-        $timeFormatter = new \IntlDateFormatter(
-            $locale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
+            foreach($times as $time) { ?>
 
-        ?><div class="eventkrake-event-times"><?php
-
-            foreach($times as $time) { 
-
-                $showEndDate =
-                    $time->getStart()->sub(Config::dayChange())->format('Y-m-d')
-                    != $time->getEnd()->sub(Config::dayChange())->format('Y-m-d');                    
-
-                ?>
-
-                <div class="eventkrake-event-time eventkrake-icon-before">
+                <div class="eventkrake-event-time
+                            eventkrake-icon-before
+                            eventkrake-icon-time">
 
                     <span class="eventkrake-event-start">
                         <span class="eventkrake-event-start-date"><?=
-                            $dateFormatter->format($time->getStart())
+                            Eventkrake::formatDate($time->getStart())
                         ?></span>
                         <span class="eventkrake-event-start-time"><?=
-                            $timeFormatter->format($time->getStart())
+                            Eventkrake::formatTime($time->getStart())
                         ?></span>
                     </span>
 
                     <span class="eventkrake-event-end">
-                        <?php if($showEndDate) { ?>
+                        <?php if(! $time->isEndOnSameDay()) { ?>
                             <span class="eventkrake-event-end-date"><?=
-                                $dateFormatter->format($time->getEnd())
+                                Eventkrake::formatDate($time->getEnd())
                             ?></span>
                         <?php } ?>
                         <span class="eventkrake-event-end-time"><?=
-                            $timeFormatter->format($time->getEnd())
+                            Eventkrake::formatTime($time->getEnd())
                         ?></span>
                     </span>
 
-                    <span class="eventkrake-event-ics">
+                    <span class="eventkrake-event-ics eventkrake-ics">
                         <a href="/<?=$time->icsParameter()?>"><?=
                             __('ics', 'eventkrake')
                         ?></a>
@@ -881,17 +822,17 @@ add_filter('the_content', function($content)
         ?></div>
 
         <!-- wp tags -->
-        <div class="eventkrake-event-wp-tags"><?=
+        <div class="eventkrake-event-wp-tags eventkrake-tags"><?=
             implode(', ', $event->getWordpressTags());
         ?></div>
         
         <!-- wp categories -->
-        <div class="eventkrake-event-wp-categories"><?=
+        <div class="eventkrake-event-wp-categories eventkrake-tags"><?=
             implode(', ', $event->getWordpressCategories());
         ?></div>
         
         <!-- categories -->
-        <div class="eventkrake-event-categories"><?=
+        <div class="eventkrake-event-categories eventkrake-tags"><?=
             implode(', ', $event->getCategories());
         ?></div>
         
@@ -908,9 +849,16 @@ add_filter('the_content', function($content)
         </ul>
         
         <!-- artists -->
-        <div class="eventkrake-event-artists"><?php
-
-            foreach($event->getArtists() as $artist) { ?>
+        <div class="eventkrake-event-artists">
+            
+            <h3 class="eventkrake-event-artists-headline"><?= 
+                sprintf(
+                    __('Participating artists at %s', 'eventkrake'), 
+                    $event->getTitle()
+                ) 
+            ?></h3>
+            
+            <?php foreach($event->getArtists() as $artist) { ?>
 
                 <div class="eventkrake-event-artist">
 
@@ -942,6 +890,13 @@ add_filter('the_content', function($content)
             <?php }
             ?></div>
 
+        <!-- event image -->
+        <div class="eventkrake-event-image"><?php
+            if (has_post_thumbnail($event->ID)) {
+                print get_the_post_thumbnail($event->ID, 'large');
+            }
+        ?></div>
+        
         <!-- content -->
         <div class="eventkrake-event-content"><?=
             $content
@@ -1017,3 +972,76 @@ add_action('template_redirect', function() {
     
     exit;
 });
+
+
+/**
+ * @deprecated
+ * add event location and dates to event post excerpt 
+ */
+add_filter( 'get_the_excerpt', function( $excerpt, $post ) {
+    /**
+     * We don't use it, as excerpts should be clean. In addition it leads to
+     * double informations when events are listed at locations and artists.
+     * 
+     * Just leave it here for reference, how it *may* be done.
+     */
+    return $excerpt;
+    
+    if(is_admin()) return $excerpt;
+
+    if(get_post_type($post->ID) != 'eventkrake_event') return $excerpt;
+    
+    if (!(is_single() || in_the_loop())) {
+        return $excerpt; 
+    }
+
+    // TODO: Function does not exist.
+    if(Config::hideEventExcerptMeta()) return $excerpt;
+    
+    // times
+    $times = Event::Factory($post->ID);
+    if(count($times) == 0) return $excerpt;
+
+    // no location
+    if(empty($times[0]->getLocationId())) return $excerpt;
+    
+    // locale
+    $locale = substr(get_locale(), 0, 2);
+    // if WP Multilang is installed
+    if(function_exists('wpm_get_language')) {
+        $locale = wpm_get_language();
+    }
+
+    // date+time formatter
+    $dateFormatter = new \IntlDateFormatter(
+        $locale, \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE);
+    $timeFormatter = new \IntlDateFormatter(
+        $locale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
+
+    // list start datetimes
+    $list = [];
+    $actualDate = 0; $string = '';
+    foreach($times as $time) {
+
+        // check if we are still on the same date
+        if($actualDate == $time->getStart()->format('Ymd')) {
+            // add time to previous date
+            $string .= ', ' . $timeFormatter->format($time->getStart());
+            continue;
+        }
+        
+        if(! empty($string)) $list[] = $string;
+        $string = '';
+        
+        $actualDate = $time->getStart()->format('Ymd');
+        $string .= $dateFormatter->format($time->getStart()) . ' ';
+        $string .= $timeFormatter->format($time->getStart());
+    }
+    $list[] = $string;
+    
+    return implode(' // ', $list) .
+        ' @ ' . get_the_title($times[0]->getLocationId()) 
+        . ": $excerpt";
+    
+// with 20 we do it after core stuff
+}, 20, 2);

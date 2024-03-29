@@ -135,7 +135,7 @@ class Location {
         return Eventkrake::getSinglePostMeta($this->ID, 'accessibility-info');
     }
     
-    public function getEvents() {
+    public function getEvents($from = 'now', $to = '+10 years') {
         $posts = get_posts([
             'numberposts' => -1,
             'offset' => 0,
@@ -147,12 +147,24 @@ class Location {
                 ]
             ]
         ]);
+        
+        $fromDate = new \DateTime($from);
+        $toDate = new \DateTime($to);
+        
         $events = [];
-        foreach($posts as $post) {
-            $events = array_merge($events, Event::Factory($post));
+        foreach($posts as $post) {            
+            foreach(Event::Factory($post) as $event) {
+                if($event->getEnd() <= $fromDate) continue;
+                if($event->getStart() >= $toDate) continue;
+                $events[] = $event;
+            }
         }
         
         return Event::sort($events);
+    }
+    
+    public function hideMeta() {
+        return Config::hideLocationMeta();
     }
     
     /*
@@ -349,6 +361,9 @@ add_filter('the_content', function($content)
     } catch(\Exception $ex) {
         return $content;
     }
+    
+    if($location->hideMeta()) return $content;
+    
     ob_start(); ?>
 
     <div class="eventkrake-location">
@@ -359,37 +374,40 @@ add_filter('the_content', function($content)
         ?></div>
         
         <!-- address with link -->
-        <div class="eventkrake-location-address-with-link">
+        <div class="eventkrake-location-address-link">
             <a href="<?= $location->getAddressUrl() ?>"><?=
                 $location->getAddress()
             ?></a>
         </div>
         
         <!-- accessibility info -->
-        <div class="eventkrake--location-accessibility-info"><?=
+        <div class="eventkrake-location-accessibility-info
+                    eventkrake-accessibility-info
+                    eventkrake-icon-before
+                    eventkrake-wheelchair"><?=
             $location->getAccessibilityInfo()
         ?></div>
         
         <!-- wp tags -->
-        <div class="eventkrake-location-wp-tags"><?=
+        <div class="eventkrake-location-wp-tags eventkrake-tags"><?=
             implode(', ', $location->getWordpressTags());
         ?></div>
         
         <!-- wp categories -->
-        <div class="eventkrake-location-wp-categories"><?=
+        <div class="eventkrake-location-wp-categories eventkrake-tags"><?=
             implode(', ', $location->getWordpressCategories());
         ?></div>
         
         <!-- categories -->
-        <div class="eventkrake-event-categories"><?=
+        <div class="eventkrake-location-categories eventkrake-tags"><?=
             implode(', ', $location->getCategories());
         ?></div>
 
         <!-- links -->
-        <ul class="eventkrake-event-links">
+        <ul class="eventkrake-location-links">
             <?php foreach($location->getLinks() as $link) { ?>
             
-                <li><a class="eventkrake-event-link"
+                <li><a class="eventkrake-location-link"
                    href="<?= $link->url ?>"><?=
                         $link->name
                 ?></a></li>
@@ -398,17 +416,62 @@ add_filter('the_content', function($content)
         </ul>
         
         <!-- events -->
-        <div class="eventkrake-location-events"><?php
+        <div class="eventkrake-location-events">
             
-            foreach($location->getEvents() as $event) { ?>
+            <h3 class="eventkrake-location-events-headline"><?=
+                sprintf(
+                    __('Upcoming Events at %s', 'eventkrake'), 
+                    $location->getTitle()
+                ) 
+            ?></h3>
+                
+            <?php foreach($location->getEvents() as $event) { ?>
             
                 <div class="eventkrake-location-event">
                     
                     <!-- event name & link -->
-                    <div class="eventkrake-location-event-title">
+                    <div class="eventkrake-location-event-title-link">
                         <a href="<?= $event->getPermalink() ?>"><?=
                             $event->getTitle();
                     ?></a></div>
+                    
+                    <!-- event name (without link) -->
+                    <div class="eventkrake-location-event-title"><?=
+                        $event->getTitle();
+                    ?></div>
+                    
+                    <!-- event time -->
+                    <div class="eventkrake-location-event-time
+                                eventkrake-icon-before
+                                eventkrake-icon-time">
+
+                        <span class="eventkrake-location-event-start">
+                            <span class="eventkrake-location-event-start-date"><?=
+                                Eventkrake::formatDate($event->getStart())
+                            ?></span>
+                            <span class="eventkrake-location-event-start-time"><?=
+                                Eventkrake::formatTime($event->getStart())
+                            ?></span>
+                        </span>
+
+                        <span class="eventkrake-location-event-end">
+                            <?php if(! $event->isEndOnSameDay()) { ?>
+                                <span class="eventkrake-location-event-end-date"><?=
+                                    Eventkrake::formatDate($event->getEnd())
+                                ?></span>
+                            <?php } ?>
+                            <span class="eventkrake-location-event-end-time"><?=
+                                Eventkrake::formatTime($event->getEnd())
+                            ?></span>
+                        </span>
+
+                        <span class="eventkrake-location-event-ics eventkrake-ics">
+                            <a href="/<?=$event->icsParameter()?>"><?=
+                                __('ics', 'eventkrake')
+                            ?></a>
+                        </span>
+
+                    </div><!-- /time -->
                     
                     <!-- event excerpt -->
                     <div class="eventkrake-location-event-excerpt"><?=
@@ -424,6 +487,13 @@ add_filter('the_content', function($content)
                 </div>
             
             <?php }
+        ?></div>
+        
+        <!-- location image -->
+        <div class="eventkrake-location-image"><?php
+            if (has_post_thumbnail($location->ID)) {
+                print get_the_post_thumbnail($location->ID, 'large');
+            }
         ?></div>
 
         <!-- content -->

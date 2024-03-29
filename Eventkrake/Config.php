@@ -42,7 +42,15 @@ class Config {
         ];
     }
         
-    public static function disableEventMeta() {
+    public static function hideEventMeta() {
+        return false;
+    }
+    
+    public static function hideLocationMeta() {
+        return false;
+    }
+    
+    public static function hideArtistMeta() {
         return false;
     }
 }
