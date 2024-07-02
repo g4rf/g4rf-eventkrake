@@ -79,7 +79,7 @@
             "wp-categories"
             "categories"
             "wp-tags"
-            / auto;
+            / minmax(0, 1fr);
         
         &-content {
             grid-area: content;
@@ -139,7 +139,7 @@
             grid-template:
                 "image title" min-content
                 "image excerpt" min-content
-                / min-content auto;
+                / min-content minmax(0, 1fr);
             
             &-title, &-title-link {
                 grid-area: title;
@@ -208,7 +208,7 @@
             "content"
             "links"
             "events"            
-            / auto;
+            / minmax(0, 1fr);
         
         &-content {
             grid-area: content;
@@ -265,7 +265,7 @@
                 "image title" min-content
                 "image time" min-content
                 "image excerpt" min-content
-                / min-content auto;
+                / min-content minmax(0, 1fr);
             
             &-title, &-title-link {
                 grid-area: title;
@@ -322,7 +322,7 @@
             "content"
             "links"
             "events"            
-            / auto;
+            / minmax(0, 1fr);
         
         &-content {
             grid-area: content;
@@ -368,7 +368,7 @@
                 "image title" min-content
                 "image time" min-content
                 "image excerpt" min-content
-                / min-content auto;
+                / min-content minmax(0, 1fr);
             
             &-title, &-title-link {
                 grid-area: title;
