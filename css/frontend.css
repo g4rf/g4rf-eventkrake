@@ -63,7 +63,7 @@
 .eventkrake-event {
   display: grid;
   gap: 0;
-  grid-template: "location" "times" "image" "content" "links" "artists" "wp-categories" "categories" "wp-tags"/auto;
+  grid-template: "location" "times" "image" "content" "links" "artists" "wp-categories" "categories" "wp-tags"/minmax(0, 1fr);
 }
 .eventkrake-event-content {
   grid-area: content;
@@ -108,7 +108,7 @@
 .eventkrake-event-artist {
   display: grid;
   gap: 0 15px;
-  grid-template: "image title" min-content "image excerpt" min-content/min-content auto;
+  grid-template: "image title" min-content "image excerpt" min-content/min-content minmax(0, 1fr);
 }
 .eventkrake-event-artist-title, .eventkrake-event-artist-title-link {
   grid-area: title;
@@ -152,7 +152,7 @@
 .eventkrake-location {
   display: grid;
   gap: 0;
-  grid-template: "wp-categories" "categories" "wp-tags" "address" "accessibility" "image" "content" "links" "events"/auto;
+  grid-template: "wp-categories" "categories" "wp-tags" "address" "accessibility" "image" "content" "links" "events"/minmax(0, 1fr);
 }
 .eventkrake-location-content {
   grid-area: content;
@@ -194,7 +194,7 @@
 .eventkrake-location-event {
   display: grid;
   gap: 0 15px;
-  grid-template: "image title" min-content "image time" min-content "image excerpt" min-content/min-content auto;
+  grid-template: "image title" min-content "image time" min-content "image excerpt" min-content/min-content minmax(0, 1fr);
 }
 .eventkrake-location-event-title, .eventkrake-location-event-title-link {
   grid-area: title;
@@ -231,7 +231,7 @@
 .eventkrake-artist {
   display: grid;
   gap: 0;
-  grid-template: "image" "wp-categories" "categories" "wp-tags" "content" "links" "events"/auto;
+  grid-template: "image" "wp-categories" "categories" "wp-tags" "content" "links" "events"/minmax(0, 1fr);
 }
 .eventkrake-artist-content {
   grid-area: content;
@@ -264,7 +264,7 @@
 .eventkrake-artist-event {
   display: grid;
   gap: 0 15px;
-  grid-template: "image title" min-content "image time" min-content "image excerpt" min-content/min-content auto;
+  grid-template: "image title" min-content "image time" min-content "image excerpt" min-content/min-content minmax(0, 1fr);
 }
 .eventkrake-artist-event-title, .eventkrake-artist-event-title-link {
   grid-area: title;
