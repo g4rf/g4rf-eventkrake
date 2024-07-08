@@ -43,14 +43,17 @@ class Config {
     }
         
     public static function hideEventMeta() {
-        return false;
+        $options = get_option('eventkrake-settings');
+        return (bool)$options['hide-event-meta'];
     }
     
     public static function hideLocationMeta() {
-        return false;
+        $options = get_option('eventkrake-settings');
+        return (bool)$options['hide-location-meta'];
     }
     
     public static function hideArtistMeta() {
-        return false;
+        $options = get_option('eventkrake-settings');
+        return (bool)$options['hide-artist-meta'];
     }
 }

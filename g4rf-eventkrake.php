@@ -4,7 +4,7 @@
  * Plugin URI:      https://github.com/g4rf/g4rf-eventkrake
  * Description:     A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
  * Author:          Jan Kossick
- * Version:         5.03beta
+ * Version:         5.04beta
  * License:         CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
  * Author URI:      https://jankossick.de
  * Min WP Version:  6.1
@@ -159,6 +159,141 @@ add_shortcode('eventkrake', function($atts, $content = null) {
     ?><div class="eventkrake-data"<?=$dataAtts?>></div><?php
 });
 
+
+/*
+ * settings page
+ */
+
+if (is_admin()) {
+    // add menu
+    add_action('admin_menu', function() {
+        add_options_page(
+            __('Eventkrake Settings', 'eventkrake'), // option page title
+            __('Eventkrake', 'eventkrake'), // menu name
+            'manage_options', // capability
+            'eventkrake-settings', function() {
+                include('settings/settings.php');
+            });
+    });
+    
+    // add options
+    add_action('admin_init', function() {
+        register_setting(
+            'eventkrake-settings', 'eventkrake-settings',
+            function($data) // validate options
+            {                
+                // if checkboxes are unchecked, $data is null
+                if(empty($data)) $data = [];
+            
+                // if no settings saved so far, $settings is null
+                $settings = get_option('eventkrake-settings');
+                if(empty($settings)) $settings = [];
+                
+                // event meta
+                if(empty($data['hide-event-meta'])) {
+                    $settings['hide-event-meta'] = false;
+                } else {
+                    $settings['hide-event-meta'] = true;
+                }
+                
+                // location meta
+                if(empty($data['hide-location-meta'])) {
+                    $settings['hide-location-meta'] = false;
+                } else {
+                    $settings['hide-location-meta'] = true;
+                }
+                
+                // artist meta
+                if(empty($data['hide-artist-meta'])) {
+                    $settings['hide-artist-meta'] = false;
+                } else {
+                    $settings['hide-artist-meta'] = true;
+                }
+                
+                return $settings;
+            }
+        );
+        
+        add_settings_section(
+            'eventkrake-main', // unique id for the section
+            __('Settings', 'eventkrake'),
+            function() {
+                // display the purpose of the section
+                ?><p><?=
+                    __('Settings for displaying events, artists and locations.',
+                        'eventkrake')
+                ?><?php
+            }, 
+            'eventkrake' // has to match the do_settings_sections
+        );
+            
+        // hide event meta
+        add_settings_field(
+            'eventkrake-option-hide-event-meta', // unique id
+            __('Hide event meta', 'eventkrake'), // title
+            function() { // display the setting
+                // has to match the second parameter of register_setting
+                $options = get_option('eventkrake-settings');
+                ?><label>
+                    <input id="eventkrake-option-hide-event-meta"
+                           name="eventkrake-settings[hide-event-meta]"
+                           type="checkbox"<?php
+                        if($options['hide-event-meta'] == true) {
+                            ?> checked <?php
+                        }
+                    ?>><?=__('Don\'t show infos on event pages.', 
+                        'eventkrake')
+                ?></label><?php
+            }, 
+            'eventkrake', // same as do_settings_section
+            'eventkrake-main' // same as add_settings_section
+        );
+            
+        // hide location meta
+        add_settings_field(
+            'eventkrake-option-hide-location-meta', // unique id
+            __('Hide location meta', 'eventkrake'), // title
+            function() { // display the setting
+                // has to match the second parameter of register_setting
+                $options = get_option('eventkrake-settings');
+                ?><label>
+                    <input id="eventkrake-option-hide-location-meta"
+                           name="eventkrake-settings[hide-location-meta]"
+                           type="checkbox"<?php
+                        if($options['hide-location-meta'] == true) {
+                            ?> checked <?php
+                        }
+                    ?>><?=__('Don\'t show infos on location pages.', 
+                        'eventkrake')
+                ?></label><?php
+            }, 
+            'eventkrake', // same as do_settings_section
+            'eventkrake-main' // same as add_settings_section
+        );
+            
+        // hide artist meta
+        add_settings_field(
+            'eventkrake-option-hide-artist-meta', // unique id
+            __('Hide artist meta', 'eventkrake'), // title
+            function() { // display the setting
+                // has to match the second parameter of register_setting
+                $options = get_option('eventkrake-settings');
+                ?><label>
+                    <input id="eventkrake-option-hide-artist-meta"
+                           name="eventkrake-settings[hide-artist-meta]"
+                           type="checkbox"<?php
+                        if($options['hide-artist-meta'] == true) {
+                            ?> checked <?php
+                        }
+                    ?>><?=__('Don\'t show infos on artist pages.', 
+                        'eventkrake')
+                ?></label><?php
+            }, 
+            'eventkrake', // same as do_settings_section
+            'eventkrake-main' // same as add_settings_section
+        );
+    });
+}
 
 /*
  * REST API for events, locations and artists
