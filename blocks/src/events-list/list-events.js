@@ -1,10 +1,8 @@
 import { InspectorControls } from '@wordpress/block-editor';
 import { ToggleControl, PanelBody } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 import * as Controls from './controls';
-
-import metadata from './block.json';
-
 
 /**
  * Loads the events data into the list.
@@ -15,11 +13,10 @@ import metadata from './block.json';
  *      {string} end: PHP date definition, default "+10 years"
  * @returns {null}
  */
-export function load(
-        { block, isEditor = false, start = 'now', end = '+10 years' } )
-{
+export function load( { block, isEditor = false } )
+{   
     const $ = jQuery;
-    
+   
     // prevent double loading (especially in editor)
     if($(block).data("loading")) return;    
     $(block).data("loading", true);
@@ -28,22 +25,37 @@ export function load(
     const template = "g4rf-eventkrake-events-list-template";
     const list = $(prefix + "-list", block);
     
+    const start = $(prefix + "-list", block).attr("data-start");
+    const end = $(prefix + "-list", block).attr("data-end");
+    
+    console.log(start, end);
+    
     // remove old blocks
     $(".g4rf-eventkrake-events-list-event", list).not("." + template).remove();
-        
+    
+    // hide noevents message
+    $(".g4rf-eventkrake-noevents", list).hide();
+    
     // show spinner
     $(".g4rf-eventkrake-spinner", list).show();    
     
     $.getJSON("/wp-json/eventkrake/v3/events", {
-        earliestStart: start,
+        earliestEnd: start,
         latestStart: end
     }, function(data) { 
+        
         // hide spinner
         $(".g4rf-eventkrake-spinner", list).hide();
+        
+        // show noevents message
+        $(".g4rf-eventkrake-noevents", list).show();
         
         // crawl events
         $.each(data.events, function(index, eventData)
         {
+            // hide noevents message
+            $(".g4rf-eventkrake-noevents", list).hide();
+    
             const eventHtml = $(prefix + "-event." + template, list)
                     .clone()
                     .removeClass(template)
@@ -113,9 +125,9 @@ export function load(
             if(!isEditor) {
                 $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
             }
-
-            $(block).data("loading", false);
         });
+    }).always(function() {
+        $(block).data("loading", false);
     });
 }
 
@@ -133,9 +145,14 @@ export function html({ attributes }) {
     attributes.template = template;
     
     return (
-        <div className={ prefix + "-list" }>
+        <div className={ prefix + "-list" } 
+             data-start={ attributes.dateStart }
+             data-end={ attributes.dateEnd } >
             
             <div className="g4rf-eventkrake-spinner"></div>
+            <div className="g4rf-eventkrake-noevents">{ 
+                __('No events at this time.', 'g4rf-eventkrake') 
+            }</div>
             
             <div className={ prefix + "-event " + template } >
 

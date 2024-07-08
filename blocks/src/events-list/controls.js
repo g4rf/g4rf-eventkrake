@@ -1,5 +1,3 @@
-import metadata from './block.json';
-
 export function Image({ attributes }) {
     const { showImage, prefix } = attributes;
     if(! showImage) return (<></>);

@@ -9,6 +9,8 @@ import * as Controls from './controls';
 export default function Edit({ attributes, setAttributes }) 
 {
     const {
+        dateStart,
+        dateEnd,
         showImage,
         showTitle,
         showExcerpt,
@@ -36,6 +38,37 @@ export default function Edit({ attributes, setAttributes })
         <div { ...useBlockProps() } ref={list} >
             
             <InspectorControls>
+                <PanelBody title={ __( 'Date Range', 'g4rf-eventkrake' ) }>
+                    {/* date from */}
+                    <TextControl
+                        label={ __('Start date', 'g4rf-eventkrake') }
+                        value={ dateStart }
+                        onChange={ ( value ) => {
+                            setAttributes( {
+                                dateStart: value,
+                            } );
+                            List.load({
+                                block: list.current,
+                                isEditor: true
+                            }); 
+                        }}
+                    />
+                    {/* date to */}
+                    <TextControl
+                        label={ __('End date', 'g4rf-eventkrake') }
+                        value={ dateEnd }
+                        onChange={ ( value ) => {
+                            setAttributes( {
+                                dateEnd: value,
+                            } );
+                            List.load({
+                                block: list.current,
+                                isEditor: true
+                            }); 
+                        }}
+                    />
+                </PanelBody>
+                
                 <PanelBody title={ __( 'Show', 'g4rf-eventkrake' ) }>
                     {/* title */}
                     <ToggleControl

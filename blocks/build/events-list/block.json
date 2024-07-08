@@ -2,12 +2,26 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "g4rf-eventkrake/events-list",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Eventkrake Events list",
   "description": "Shows events in a list.",
   "example": {},
   "category": "design",
   "attributes": {
+    "dateStart": {
+      "type": "string",
+      "source": "attribute",
+      "selector": ".g4rf-eventkrake-events-list-list",
+      "attribute": "data-start",
+      "default": "now"
+    },
+    "dateEnd": {
+      "type": "string",
+      "source": "attribute",
+      "selector": ".g4rf-eventkrake-events-list-list",
+      "attribute": "data-end",
+      "default": "+10 years"
+    },
     "showImage": {
       "type": "boolean",
       "default": true
