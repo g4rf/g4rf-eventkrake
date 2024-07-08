@@ -1,5 +1,5 @@
 <div class="wrap">
-    <h2><?=__('Eventkrake Settings', 'eventkrake')?></h2>
+    <h2><?=__('Eventkrake Settings', 'g4rf-eventkrake')?></h2>
 
     <form action="options.php" method="post">
         <?php settings_fields('eventkrake-settings'); ?>
