@@ -7,7 +7,7 @@
  * Version:         5.05beta
  * License:         CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/
  * Author URI:      https://jankossick.de
- * Min WP Version:  6.6
+ * Min WP Version:  6.5
  * Text Domain:     eventkrake
  * Domain Path:     /lang
  * 
