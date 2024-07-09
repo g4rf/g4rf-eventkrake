@@ -4,19 +4,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Eventkrake 5.01beta\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/g4rf-eventkrake\n"
-"POT-Creation-Date: 2024-03-29T10:25:07+00:00\n"
-"PO-Revision-Date: 2024-03-29 19:27+0900\n"
+"POT-Creation-Date: 2024-07-09T11:13:26+00:00\n"
+"PO-Revision-Date: 2024-07-09 13:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Domain: eventkrake\n"
 
 #. Plugin Name of the plugin
-#: g4rf-eventkrake.php
+#: g4rf-eventkrake.php g4rf-eventkrake.php:173
 msgid "Eventkrake"
 msgstr "Eventkrake"
 
@@ -94,8 +94,12 @@ msgstr "Weiter Informationen"
 msgid "Upcoming Events with %s"
 msgstr "Veranstaltungen von %s"
 
-#: Eventkrake/Artist.php:375 Eventkrake/Event.php:815
-#: Eventkrake/Location.php:470
+#: Eventkrake/Artist.php:340 Eventkrake/Location.php:435
+msgid "No upcoming events."
+msgstr "Keine bevorstehende Veranstaltungen."
+
+#: Eventkrake/Artist.php:387 Eventkrake/Event.php:817
+#: Eventkrake/Location.php:482
 msgid "ics"
 msgstr "ics"
 
@@ -196,7 +200,7 @@ msgstr "Keine gelöschten Veranstaltungen"
 msgid "Events are temporary occurrences in one place."
 msgstr "Veranstaltungen sind zeitlich beschränkte Ereignisse an einem Ort."
 
-#: Eventkrake/Event.php:856
+#: Eventkrake/Event.php:862
 msgid "Participating artists at %s"
 msgstr "Teilnehmende Künstler·innen"
 
@@ -212,7 +216,7 @@ msgstr "Der Beginn muss vor dem Ende liegen."
 msgid "Locations"
 msgstr "Orte"
 
-#: Eventkrake/Location.php:223
+#: Eventkrake/Location.php:223 blocks/src/events-list/edit.js:176
 msgid "Location"
 msgstr "Ort"
 
@@ -273,49 +277,86 @@ msgstr "Format für die Startzeit:"
 msgid "Date format for end date:"
 msgstr "Format für die Endzeit:"
 
-#: g4rf-eventkrake.php:64
+#: g4rf-eventkrake.php:65
 msgid "Holds the main categories for events, locations and artists."
 msgstr ""
 "Elternkategorie für die Hauptkategorien der Veranstaltungen, Orte und "
 "Künstler·innen."
 
-#: g4rf-eventkrake.php:286
+#: g4rf-eventkrake.php:172 settings/settings.php:2
+msgid "Eventkrake Settings"
+msgstr "Eventkrake Einstellungen"
+
+#: g4rf-eventkrake.php:220
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: g4rf-eventkrake.php:224
+msgid "Settings for displaying events, artists and locations."
+msgstr ""
+"Einstellungen für die Anzeige der Veranstaltungen, Künstler·innen und Orte."
+
+#: g4rf-eventkrake.php:234
+msgid "Hide event meta"
+msgstr "Blende Eventinfos aus"
+
+#: g4rf-eventkrake.php:245
+msgid "Don't show infos on event pages."
+msgstr "Keine Infos auf den Veranstaltungsseiten anzeigen."
+
+#: g4rf-eventkrake.php:256
+msgid "Hide location meta"
+msgstr "Blende Ortsinfos aus"
+
+#: g4rf-eventkrake.php:267
+msgid "Don't show infos on location pages."
+msgstr "Verstecke Infos auf den Ortsseiten."
+
+#: g4rf-eventkrake.php:278
+msgid "Hide artist meta"
+msgstr "Blende Infos bei Künstler·innen aus"
+
+#: g4rf-eventkrake.php:289
+msgid "Don't show infos on artist pages."
+msgstr "Verstecke Infos auf den Künstler·innenseiten."
+
+#: g4rf-eventkrake.php:422
 msgid ""
 "Gives a minimal start date for the events. This parameter is checked against "
 "the start of an event."
 msgstr "Enthält die frühste Startzeit für eine Veranstaltung."
 
-#: g4rf-eventkrake.php:292
+#: g4rf-eventkrake.php:428
 msgid ""
 "Gives a minimal end date for the events. This parameter is checked against "
 "the end of an event."
 msgstr "Enthält die frühste Schlusszeit für eine Veranstaltung."
 
-#: g4rf-eventkrake.php:298
+#: g4rf-eventkrake.php:434
 msgid ""
 "Gives a maximal start date for the events. This parameter is checked against "
 "the start of an event."
 msgstr "Enthält die späteste Startzeit für eine Veranstaltung."
 
-#: g4rf-eventkrake.php:304
+#: g4rf-eventkrake.php:440
 msgid ""
 "Gives a maximal end date for the events. This parameter is checked against "
 "the end of an event."
 msgstr "Enthält die späteste Schlusszeit für eine Veranstaltung."
 
-#: g4rf-eventkrake.php:319
+#: g4rf-eventkrake.php:455
 msgid "The parameter earliestStart is invalid."
 msgstr "Der Parameter earliestStart ist ungültig."
 
-#: g4rf-eventkrake.php:330
+#: g4rf-eventkrake.php:466
 msgid "The parameter earliestEnd is invalid."
 msgstr "Der Parameter earliestEnd ist ungültig."
 
-#: g4rf-eventkrake.php:341
+#: g4rf-eventkrake.php:477
 msgid "The parameter latestStart is invalid."
 msgstr "Der Parameter latestStart ist ungültig."
 
-#: g4rf-eventkrake.php:352
+#: g4rf-eventkrake.php:488
 msgid "The parameter latestEnd is invalid."
 msgstr "Der Parameter earliestEnd ist ungültig."
 
@@ -467,6 +508,96 @@ msgstr ""
 #: metabox/location.php:206
 msgid "Events for this location"
 msgstr "Veranstaltungen an diesem Ort"
+
+#: blocks/src/events-list/edit.js:41
+msgid "Date Range"
+msgstr "Zeitraum"
+
+#: blocks/src/events-list/edit.js:44
+msgid "Start date"
+msgstr "Startdatum"
+
+#: blocks/src/events-list/edit.js:58
+msgid "End date"
+msgstr "Enddatum"
+
+#: blocks/src/events-list/edit.js:72
+msgid "Show"
+msgstr "Anzeige"
+
+#: blocks/src/events-list/edit.js:76
+msgid "Show title"
+msgstr "Zeige Titel"
+
+#: blocks/src/events-list/edit.js:90
+msgid "Show excerpt"
+msgstr "Zeige Textauszug"
+
+#: blocks/src/events-list/edit.js:104
+msgid "Show content"
+msgstr "Zeige Inhalt"
+
+#: blocks/src/events-list/edit.js:117
+msgid "Date"
+msgstr "Datum"
+
+#: blocks/src/events-list/edit.js:121
+msgid "Show date"
+msgstr "Datum anzeigen"
+
+#: blocks/src/events-list/edit.js:135
+msgid "Show start date"
+msgstr "Start anzeigen"
+
+#: blocks/src/events-list/edit.js:149
+msgid "Show end date"
+msgstr "Ende anzeigen"
+
+#: blocks/src/events-list/edit.js:163
+msgid "Show ics link"
+msgstr "ICS-Link anzeigen"
+
+#: blocks/src/events-list/edit.js:180
+msgid "Show location"
+msgstr "Ort anzeigen"
+
+#: blocks/src/events-list/edit.js:194
+msgid "Link location to location page"
+msgstr "Ort zur Ortsseite verlinken"
+
+#: blocks/src/events-list/edit.js:209
+msgid "Show location address"
+msgstr "Adresse anzeigen"
+
+#: blocks/src/events-list/edit.js:222
+msgid "Image"
+msgstr "Bild"
+
+#: blocks/src/events-list/edit.js:226
+msgid "Show image"
+msgstr "Bild anzeigen"
+
+#: blocks/src/events-list/edit.js:239
+msgid "Seperator"
+msgstr "Trenner"
+
+#: blocks/src/events-list/edit.js:244
+msgid "Show event seperator"
+msgstr "Trenner anzeigen"
+
+#: blocks/src/events-list/list-events.js:154
+msgid "No events at this time."
+msgstr "Derzeit keine Veranstaltungen."
+
+#: blocks/src/events-list/block.json
+msgctxt "block title"
+msgid "Eventkrake Events list"
+msgstr "Eventkrake Veranstaltungsliste"
+
+#: blocks/src/events-list/block.json
+msgctxt "block description"
+msgid "Shows events in a list."
+msgstr "Zeige Veranstaltungen als Liste."
 
 #~ msgid "A field containing any additional information."
 #~ msgstr "Beliebige weitere Informationen."

@@ -53,6 +53,7 @@ use Eventkrake\Artist as Artist;
 /*
  * Installation
  */
+
 register_activation_hook( __FILE__, function() {
     // look if category `eventkrake` is already set
     if(term_exists('eventkrake', 'category') != null) return;
@@ -168,8 +169,8 @@ if (is_admin()) {
     // add menu
     add_action('admin_menu', function() {
         add_options_page(
-            __('Eventkrake Settings', 'g4rf-eventkrake'), // option page title
-            __('Eventkrake', 'g4rf-eventkrake'), // menu name
+            __('Eventkrake Settings', 'eventkrake'), // option page title
+            __('Eventkrake', 'eventkrake'), // menu name
             'manage_options', // capability
             'eventkrake-settings', function() {
                 include('settings/settings.php');
@@ -216,12 +217,12 @@ if (is_admin()) {
         
         add_settings_section(
             'eventkrake-main', // unique id for the section
-            __('Settings', 'g4rf-eventkrake'),
+            __('Settings', 'eventkrake'),
             function() {
                 // display the purpose of the section
                 ?><p><?=
                     __('Settings for displaying events, artists and locations.',
-                        'g4rf-eventkrake')
+                        'eventkrake')
                 ?><?php
             }, 
             'eventkrake' // has to match the do_settings_sections
@@ -230,7 +231,7 @@ if (is_admin()) {
         // hide event meta
         add_settings_field(
             'eventkrake-option-hide-event-meta', // unique id
-            __('Hide event meta', 'g4rf-eventkrake'), // title
+            __('Hide event meta', 'eventkrake'), // title
             function() { // display the setting
                 // has to match the second parameter of register_setting
                 $options = get_option('eventkrake-settings');
@@ -242,7 +243,7 @@ if (is_admin()) {
                             ?> checked <?php
                         }
                     ?>><?=__('Don\'t show infos on event pages.', 
-                        'g4rf-eventkrake')
+                        'eventkrake')
                 ?></label><?php
             }, 
             'eventkrake', // same as do_settings_section
@@ -252,7 +253,7 @@ if (is_admin()) {
         // hide location meta
         add_settings_field(
             'eventkrake-option-hide-location-meta', // unique id
-            __('Hide location meta', 'g4rf-eventkrake'), // title
+            __('Hide location meta', 'eventkrake'), // title
             function() { // display the setting
                 // has to match the second parameter of register_setting
                 $options = get_option('eventkrake-settings');
@@ -264,7 +265,7 @@ if (is_admin()) {
                             ?> checked <?php
                         }
                     ?>><?=__('Don\'t show infos on location pages.', 
-                        'g4rf-eventkrake')
+                        'eventkrake')
                 ?></label><?php
             }, 
             'eventkrake', // same as do_settings_section
@@ -274,7 +275,7 @@ if (is_admin()) {
         // hide artist meta
         add_settings_field(
             'eventkrake-option-hide-artist-meta', // unique id
-            __('Hide artist meta', 'g4rf-eventkrake'), // title
+            __('Hide artist meta', 'eventkrake'), // title
             function() { // display the setting
                 // has to match the second parameter of register_setting
                 $options = get_option('eventkrake-settings');
@@ -286,7 +287,7 @@ if (is_admin()) {
                             ?> checked <?php
                         }
                     ?>><?=__('Don\'t show infos on artist pages.', 
-                        'g4rf-eventkrake')
+                        'eventkrake')
                 ?></label><?php
             }, 
             'eventkrake', // same as do_settings_section

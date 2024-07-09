@@ -724,7 +724,7 @@ add_filter('the_content', function($content)
         return $content; 
     }
     
-    if(Config::hideEventMeta()) return $content;
+    if($event->hideMeta()) return $content;
     
     try {
         $times = Event::Factory(get_the_ID());
@@ -736,49 +736,51 @@ add_filter('the_content', function($content)
     
     $event = $times[0];
     
-    if($event->hideMeta()) return $content;
-    
     ob_start(); ?>
 
     <div class="eventkrake-event">    
 
-        <!-- location --><?php
-        $location = $event->getLocation(); ?>
-        <div class="eventkrake-event-location">
+        <!-- location -->
+        <div class="eventkrake-event-location"><?php
+            
+            $location = $event->getLocation(); 
+            
+            if($location !== false) { ?>
 
-            <!-- location title with link -->
-            <div class="eventkrake-event-location-title-link
-                        eventkrake-icon-before
-                        eventkrake-wheelchair">
-                <a href="<?= $location->getPermalink() ?>"><?=
-                    $location->getTitle();
-                ?></a>
-            </div>
+                <!-- location title with link -->
+                <div class="eventkrake-event-location-title-link
+                            eventkrake-icon-before
+                            eventkrake-wheelchair">
+                    <a href="<?= $location->getPermalink() ?>"><?=
+                        $location->getTitle();
+                    ?></a>
+                </div>
 
-            <!-- location title (without link) -->
-            <div class="eventkrake-event-location-title
-                        eventkrake-icon-before
-                        eventkrake-wheelchair"><?=
-                    $location->getTitle();
-            ?></div>
+                <!-- location title (without link) -->
+                <div class="eventkrake-event-location-title
+                            eventkrake-icon-before
+                            eventkrake-wheelchair"><?=
+                        $location->getTitle();
+                ?></div>
 
-            <!-- location address with link -->
-            <div class="eventkrake-event-location-address-link">
-                <a href="<?= $location->getAddressUrl() ?>"><?=
+                <!-- location address with link -->
+                <div class="eventkrake-event-location-address-link">
+                    <a href="<?= $location->getAddressUrl() ?>"><?=
+                        $location->getAddress();
+                    ?></a>
+                </div>
+
+                <!-- location address (without link) -->
+                <div class="eventkrake-event-location-address"><?=
                     $location->getAddress();
-                ?></a>
-            </div>
+                ?></div>
 
-            <!-- location address (without link) -->
-            <div class="eventkrake-event-location-address"><?=
-                $location->getAddress();
-            ?></div>
-
-            <!-- location accessibility info -->
-            <div class="eventkrake-accessibility-info"><?=
-                $location->getAccessibilityInfo();
-            ?></div>
-
+                <!-- location accessibility info -->
+                <div class="eventkrake-accessibility-info"><?=
+                    $location->getAccessibilityInfo();
+                ?></div>
+                
+            <?php } ?>
         </div>
 
         <!-- times -->
@@ -849,46 +851,52 @@ add_filter('the_content', function($content)
         </ul>
         
         <!-- artists -->
-        <div class="eventkrake-event-artists">
-            
-            <h3 class="eventkrake-event-artists-headline"><?= 
-                sprintf(
-                    __('Participating artists at %s', 'eventkrake'), 
-                    $event->getTitle()
-                ) 
-            ?></h3>
-            
-            <?php foreach($event->getArtists() as $artist) { ?>
+        <div class="eventkrake-event-artists"><?php 
+        
+            $eventArtists = $event->getArtists();
 
-                <div class="eventkrake-event-artist">
+            if(! empty($eventArtists)) { ?>
+        
+                <h3 class="eventkrake-event-artists-headline"><?= 
+                    sprintf(
+                        __('Participating artists at %s', 'eventkrake'), 
+                        $event->getTitle()
+                    ) 
+                ?></h3>
 
-                    <!-- artist name & link -->
-                    <div class="eventkrake-event-artist-title-link">
-                        <a href="<?= $artist->getPermalink() ?>"><?=
+                <?php foreach($eventArtists as $artist) { ?>
+
+                    <div class="eventkrake-event-artist">
+
+                        <!-- artist name & link -->
+                        <div class="eventkrake-event-artist-title-link">
+                            <a href="<?= $artist->getPermalink() ?>"><?=
+                                $artist->getTitle();
+                        ?></a></div>
+
+                        <!-- artist name (without link) -->
+                        <div class="eventkrake-event-artist-title"><?=
                             $artist->getTitle();
-                    ?></a></div>
-                    
-                    <!-- artist name (without link) -->
-                    <div class="eventkrake-event-artist-title"><?=
-                        $artist->getTitle();
-                    ?></div>
+                        ?></div>
 
 
-                    <!-- artist excerpt -->
-                    <div class="eventkrake-event-artist-excerpt"><?=
-                        wpautop($artist->getExcerpt())
-                    ?></div>
+                        <!-- artist excerpt -->
+                        <div class="eventkrake-event-artist-excerpt"><?=
+                            wpautop($artist->getExcerpt())
+                        ?></div>
 
-                    <!-- artist image -->
-                    <div class="eventkrake-event-artist-image"><?php
-                        if (has_post_thumbnail($artist->ID)) {
-                            print get_the_post_thumbnail($artist->ID, 'large');
-                        }
-                    ?></div>
-                </div>
+                        <!-- artist image -->
+                        <div class="eventkrake-event-artist-image"><?php
+                            if (has_post_thumbnail($artist->ID)) {
+                                print get_the_post_thumbnail($artist->ID, 'large');
+                            }
+                        ?></div>
+                    </div>
 
-            <?php }
-            ?></div>
+                <?php }
+            } ?>
+        </div>
+        
 
         <!-- event image -->
         <div class="eventkrake-event-image"><?php

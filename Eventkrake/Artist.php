@@ -330,7 +330,19 @@ add_filter('the_content', function($content)
                 ) 
             ?></h3>
             
-            <?php foreach($artist->getEvents() as $event) { ?>
+            <?php
+            
+            $artistEvents = $artist->getEvents();
+            
+            // no events
+            if(empty($artistEvents)) { ?>
+                <div class="g4rf-eventkrake-noevents"><?=
+                    __('No upcoming events.', 'eventkrake');
+                ?></div>
+            <?php }
+            
+            // loop through events if any
+            foreach($artistEvents as $event) { ?>
             
                 <div class="eventkrake-artist-event">
                     

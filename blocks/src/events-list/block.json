@@ -100,7 +100,7 @@
 		}
 	},
 	
-    "textdomain": "g4rf-eventkrake",
+    "textdomain": "eventkrake",
     
 	"editorScript": "file:./index.js",
     "viewScript": "file:./view.js",

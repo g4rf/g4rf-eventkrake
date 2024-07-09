@@ -151,7 +151,7 @@ export function html({ attributes }) {
             
             <div className="g4rf-eventkrake-spinner"></div>
             <div className="g4rf-eventkrake-noevents">{ 
-                __('No events at this time.', 'g4rf-eventkrake') 
+                __('No events at this time.', 'eventkrake') 
             }</div>
             
             <div className={ prefix + "-event " + template } >

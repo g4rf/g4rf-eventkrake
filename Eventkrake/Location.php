@@ -425,7 +425,19 @@ add_filter('the_content', function($content)
                 ) 
             ?></h3>
                 
-            <?php foreach($location->getEvents() as $event) { ?>
+            <?php 
+            
+            $locationEvents = $location->getEvents();
+            
+            // no events
+            if(empty($locationEvents)) { ?>
+                <div class="g4rf-eventkrake-noevents"><?=
+                    __('No upcoming events.', 'eventkrake');
+                ?></div>
+            <?php }
+            
+            // loop through events if any
+            foreach($locationEvents as $event) { ?>
             
                 <div class="eventkrake-location-event">
                     

@@ -38,10 +38,10 @@ export default function Edit({ attributes, setAttributes })
         <div { ...useBlockProps() } ref={list} >
             
             <InspectorControls>
-                <PanelBody title={ __( 'Date Range', 'g4rf-eventkrake' ) }>
+                <PanelBody title={ __( 'Date Range', 'eventkrake' ) }>
                     {/* date from */}
                     <TextControl
-                        label={ __('Start date', 'g4rf-eventkrake') }
+                        label={ __('Start date', 'eventkrake') }
                         value={ dateStart }
                         onChange={ ( value ) => {
                             setAttributes( {
@@ -55,7 +55,7 @@ export default function Edit({ attributes, setAttributes })
                     />
                     {/* date to */}
                     <TextControl
-                        label={ __('End date', 'g4rf-eventkrake') }
+                        label={ __('End date', 'eventkrake') }
                         value={ dateEnd }
                         onChange={ ( value ) => {
                             setAttributes( {
@@ -69,11 +69,11 @@ export default function Edit({ attributes, setAttributes })
                     />
                 </PanelBody>
                 
-                <PanelBody title={ __( 'Show', 'g4rf-eventkrake' ) }>
+                <PanelBody title={ __( 'Show', 'eventkrake' ) }>
                     {/* title */}
                     <ToggleControl
                         checked={ !! showTitle }
-                        label={ __('Show title', 'g4rf-eventkrake') }
+                        label={ __('Show title', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showTitle: ! showTitle,
@@ -87,7 +87,7 @@ export default function Edit({ attributes, setAttributes })
                     {/* excerpt */}
                     <ToggleControl
                         checked={ !! showExcerpt }
-                        label={ __('Show excerpt', 'g4rf-eventkrake') }
+                        label={ __('Show excerpt', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showExcerpt: ! showExcerpt,
@@ -101,7 +101,7 @@ export default function Edit({ attributes, setAttributes })
                     {/* content */}
                     <ToggleControl
                         checked={ !! showContent }
-                        label={ __('Show content', 'g4rf-eventkrake') }
+                        label={ __('Show content', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showContent: ! showContent,
@@ -114,11 +114,11 @@ export default function Edit({ attributes, setAttributes })
                     />
                 </PanelBody>
                 
-                <PanelBody title={ __( 'Date', 'g4rf-eventkrake' ) }>
+                <PanelBody title={ __( 'Date', 'eventkrake' ) }>
                     {/* date */}
                     <ToggleControl
                         checked={ !! showDate }
-                        label={ __('Show date', 'g4rf-eventkrake') }
+                        label={ __('Show date', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showDate: ! showDate,
@@ -132,7 +132,7 @@ export default function Edit({ attributes, setAttributes })
                     {/* start date */}
                     <ToggleControl
                         checked={ !! showDateStart }
-                        label={ __('Show start date', 'g4rf-eventkrake') }
+                        label={ __('Show start date', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showDateStart: ! showDateStart,
@@ -146,7 +146,7 @@ export default function Edit({ attributes, setAttributes })
                     {/* end date */}
                     <ToggleControl
                         checked={ !! showDateEnd }
-                        label={ __('Show end date', 'g4rf-eventkrake') }
+                        label={ __('Show end date', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showDateEnd: ! showDateEnd,
@@ -160,7 +160,7 @@ export default function Edit({ attributes, setAttributes })
                     {/* date ics */}
                     <ToggleControl
                         checked={ !! showDateIcs }
-                        label={ __('Show ics link', 'g4rf-eventkrake') }
+                        label={ __('Show ics link', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showDateIcs: ! showDateIcs,
@@ -173,11 +173,11 @@ export default function Edit({ attributes, setAttributes })
                     />
                 </PanelBody>
                 
-                <PanelBody title={ __( 'Location', 'g4rf-eventkrake' ) }>
+                <PanelBody title={ __( 'Location', 'eventkrake' ) }>
                     {/* location */}
                     <ToggleControl
                         checked={ !! showLocation }
-                        label={ __('Show location', 'g4rf-eventkrake') }
+                        label={ __('Show location', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showLocation: ! showLocation,
@@ -192,7 +192,7 @@ export default function Edit({ attributes, setAttributes })
                     <ToggleControl
                         checked={ !! showLocationWithLink }
                         label={ __('Link location to location page', 
-                                                        'g4rf-eventkrake') }
+                                                        'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showLocationWithLink: ! showLocationWithLink,
@@ -206,7 +206,7 @@ export default function Edit({ attributes, setAttributes })
                     {/* location address */}
                     <ToggleControl
                         checked={ !! showLocationAddress }
-                        label={ __('Show location address', 'g4rf-eventkrake') }
+                        label={ __('Show location address', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showLocationAddress: ! showLocationAddress,
@@ -219,11 +219,11 @@ export default function Edit({ attributes, setAttributes })
                     />
                 </PanelBody>
                 
-                <PanelBody title={ __( 'Image', 'g4rf-eventkrake' ) }>
+                <PanelBody title={ __( 'Image', 'eventkrake' ) }>
                     {/* image */}
                     <ToggleControl
                         checked={ !! showImage }
-                        label={ __('Show image', 'g4rf-eventkrake') }
+                        label={ __('Show image', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showImage: ! showImage,
@@ -236,12 +236,12 @@ export default function Edit({ attributes, setAttributes })
                     />
                 </PanelBody>
                 
-                <PanelBody title={ __( 'Seperator', 'g4rf-eventkrake' ) }>
+                <PanelBody title={ __( 'Seperator', 'eventkrake' ) }>
 
                     {/* seperator */}
                     <ToggleControl
                         checked={ !! showSeperator }
-                        label={ __('Show event seperator', 'g4rf-eventkrake') }
+                        label={ __('Show event seperator', 'eventkrake') }
                         onChange={ () => {
                             setAttributes( {
                                 showSeperator: ! showSeperator,
