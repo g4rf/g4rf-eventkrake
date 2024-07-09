@@ -724,8 +724,6 @@ add_filter('the_content', function($content)
         return $content; 
     }
     
-    if($event->hideMeta()) return $content;
-    
     try {
         $times = Event::Factory(get_the_ID());
     } catch(\Exception $ex) {
@@ -735,6 +733,8 @@ add_filter('the_content', function($content)
     if(count($times) == 0) return $content;
     
     $event = $times[0];
+    
+    if($event->hideMeta()) return $content;
     
     ob_start(); ?>
 
