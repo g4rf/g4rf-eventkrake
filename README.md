@@ -6,11 +6,13 @@ endpoint.
 * doc: https://www.eventkrake.de
 
 In its present form, the plugin only extends the admin area and adds three
-[Custom Post Types](https://codex.wordpress.org/Post_Types).
+[Custom Post Types](https://codex.wordpress.org/Post_Types). Every post type 
+gets a hook injection at `the_content` to add meta infos like location, dates,
+participating artists and so on.
 
-The theme is responsible for the presentation in the frontend, which receives 
-the data via the [REST API](http://www.eventkrake.de/api/) or directly by 
-calling the Eventkrake classes.
+It's also possible, that the theme is using the data via the 
+[REST API](http://www.eventkrake.de/api/) or directly by calling the Eventkrake 
+classes.
 
 
 ## Structure
@@ -43,17 +45,29 @@ functions.
 
 ### \Eventkrake\Event
 
-Represents individual events. To create them, the static function
-`Event::Factory($id)` should be used, as this creates one event per date and 
-returns all events as an array.
+Represents individual events and the additional info display and the admin meta
+box generation.
+
+To create single Events use the static function `Event::Factory($id)` as this 
+creates one event per date and returns all events as an array.
 
 ### \Eventkrake\Location
 
-Creates a location object.
+Creates a location object and the additional info display and the admin meta
+box generation.
 
 ### \EventKrake\Artist
 
-Creates an Artist object.
+Creates an Artist object and the additional info display and the admin meta
+box generation.
+
+
+## Block Editor blocks
+
+### Eventkrake Events List
+
+Shows an events list. Offers several settings like date range and display of
+title, content and image.
 
 
 ## Shortcodes
