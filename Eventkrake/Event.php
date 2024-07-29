@@ -705,6 +705,10 @@ add_filter('post_class', function($classes, $class, $post_id) {
     }
     
     $event = Event::Factory($post_id)[0];
+    
+    // bug: in block editor is_admin() is not working properly
+    if(empty($event)) return $classes;
+    
     if(($location = $event->getLocation()) !== false) {
         $classes[] = "eventkrake-accessibility-{$location->getAccessibility()}";
     }

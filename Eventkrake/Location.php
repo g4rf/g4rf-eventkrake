@@ -529,6 +529,10 @@ add_filter('post_class', function($classes, $class, $post_id) {
     }
     
     $location = new Location($post_id);
+    
+    // bug: in block editor is_admin() is not working properly
+    if(empty($location)) return $classes;
+    
     $classes[] = "eventkrake-accessibility-{$location->getAccessibility()}";
 
     return $classes;
