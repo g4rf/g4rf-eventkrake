@@ -10,7 +10,6 @@ var Eventkrake = {
      * @returns {string} The converted and concatened string.
      */
     cssClass: function(s, pre) {
-        console.log(s.toString(), pre);
         let converted = s.toString().replace(/[^a-z0-9]/ig, "-");
         if(typeof pre == "string") {
             converted = pre + "-" + converted;
