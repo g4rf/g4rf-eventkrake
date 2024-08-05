@@ -3,6 +3,21 @@
 var Leaflet = L.noConflict();
 
 var Eventkrake = {
+    /**
+     * Converts a string to use it as a css class by replacing all characters other than `a-z` and `0-9` with a dash `-`.
+     * @param {string} s The string
+     * @param {string} [pre=""] An optional string to prepend. Will be added with a dash `-`.
+     * @returns {string} The converted and concatened string.
+     */
+    cssClass: function(s, pre) {
+        console.log(s.toString(), pre);
+        let converted = s.toString().replace(/[^a-z0-9]/ig, "-");
+        if(typeof pre == "string") {
+            converted = pre + "-" + converted;
+        }
+        return converted;
+    },
+    
     load: function(o) {
         var submitdata = {
             "eventkrake": jQuery(o).data()

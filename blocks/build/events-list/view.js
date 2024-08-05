@@ -197,14 +197,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   html: () => (/* binding */ html),
 /* harmony export */   load: () => (/* binding */ load)
 /* harmony export */ });
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _controls__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controls */ "./src/events-list/controls.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _controls__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./controls */ "./src/events-list/controls.js");
+
 
 
 
@@ -219,7 +221,6 @@ __webpack_require__.r(__webpack_exports__);
  *      {string} end: PHP date definition, default "+10 years"
  * @returns {null}
  */
-
 function load({
   block,
   isEditor = false
@@ -234,7 +235,6 @@ function load({
   const list = $(prefix + "-list", block);
   const start = $(prefix + "-list", block).attr("data-start");
   const end = $(prefix + "-list", block).attr("data-end");
-  console.log(start, end);
 
   // remove old blocks
   $(".g4rf-eventkrake-events-list-event", list).not("." + template).remove();
@@ -318,6 +318,94 @@ function load({
       if (!isEditor) {
         $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
       }
+
+      // classes; show them only in frontend
+      if (!isEditor) {
+        let classes = [];
+
+        // id
+        classes.push(Eventkrake.cssClass(eventData.id, "g4rf-eventkrake-id"));
+        // uid
+        classes.push(Eventkrake.cssClass(eventData.uid, "g4rf-eventkrake-uid"));
+        // title
+        classes.push(Eventkrake.cssClass(eventData.title, "g4rf-eventkrake-title"));
+
+        // location id
+        classes.push(Eventkrake.cssClass(location.id, "g4rf-eventkrake-location-id"));
+        // location name
+        classes.push(Eventkrake.cssClass(location.title, "g4rf-eventkrake-location-title"));
+
+        // start day
+        classes.push(Eventkrake.cssClass(start.getDate(), "g4rf-eventkrake-start-day"));
+        // start month
+        classes.push(Eventkrake.cssClass(start.getMonth() + 1, "g4rf-eventkrake-start-month"));
+        // start year
+        classes.push(Eventkrake.cssClass(start.getFullYear(), "g4rf-eventkrake-start-year"));
+        // start weekday
+        classes.push(Eventkrake.cssClass(start.getDay(), "g4rf-eventkrake-start-weekday"));
+        // start hour
+        classes.push(Eventkrake.cssClass(start.getHours(), "g4rf-eventkrake-start-hour"));
+        // start minute
+        classes.push(Eventkrake.cssClass(start.getMinutes(), "g4rf-eventkrake-start-minute"));
+
+        // end day
+        classes.push(Eventkrake.cssClass(end.getDate(), "g4rf-eventkrake-end-day"));
+        // end month
+        classes.push(Eventkrake.cssClass(end.getMonth() + 1, "g4rf-eventkrake-end-month"));
+        // end year
+        classes.push(Eventkrake.cssClass(end.getFullYear(), "g4rf-eventkrake-end-year"));
+        // end weekday
+        classes.push(Eventkrake.cssClass(end.getDay(), "g4rf-eventkrake-end-weekday"));
+        // end hour
+        classes.push(Eventkrake.cssClass(end.getHours(), "g4rf-eventkrake-end-hour"));
+        // end minute
+        classes.push(Eventkrake.cssClass(end.getMinutes(), "g4rf-eventkrake-end-minute"));
+
+        // artists
+        if (eventData.artists.length > 0) {
+          // has artists
+          classes.push("g4rf-eventkrake-has-artists");
+          eventData.artists.forEach(function (artistId) {
+            const artist = data.artists[artistId];
+
+            // artist id
+            classes.push(Eventkrake.cssClass(artist.id, "g4rf-eventkrake-artist-id"));
+            // artist name
+            classes.push(Eventkrake.cssClass(artist.title, "g4rf-eventkrake-artist-title"));
+          });
+        }
+
+        // eventkrake categories
+        if (eventData.categories.length > 0) {
+          // has eventkrake categories
+          classes.push("g4rf-eventkrake-has-categories");
+          eventData.categories.forEach(function (category) {
+            // eventkrake category
+            classes.push(Eventkrake.cssClass(category, "g4rf-eventkrake-category"));
+          });
+        }
+
+        // wp categories
+        if (eventData.wpcategories.length > 0) {
+          // has wp categories
+          classes.push("g4rf-eventkrake-has-wpcategories");
+          eventData.wpcategories.forEach(function (wpCategory) {
+            // wp category
+            classes.push(Eventkrake.cssClass(wpCategory, "g4rf-eventkrake-wpcategory"));
+          });
+        }
+
+        // wp tags
+        if (eventData.wptags.length > 0) {
+          // has wp tags
+          classes.push("g4rf-eventkrake-has-wptags");
+          eventData.wptags.forEach(function (wpTag) {
+            // wp tag
+            classes.push(Eventkrake.cssClass(wpTag, "g4rf-eventkrake-wptag"));
+          });
+        }
+        eventHtml.addClass(classes);
+      }
     });
   }).always(function () {
     $(block).data("loading", false);
@@ -337,37 +425,33 @@ function html({
   const template = prefix + "-template";
   attributes.prefix = prefix;
   attributes.template = template;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: prefix + "-list",
     "data-start": attributes.dateStart,
-    "data-end": attributes.dateEnd,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-      className: "g4rf-eventkrake-spinner"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-      className: "g4rf-eventkrake-noevents",
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('No events at this time.', 'eventkrake')
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: prefix + "-event " + template,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_controls__WEBPACK_IMPORTED_MODULE_3__.Image, {
-        attributes: attributes
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: prefix + "-info",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_controls__WEBPACK_IMPORTED_MODULE_3__.Title, {
-          attributes: attributes
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_controls__WEBPACK_IMPORTED_MODULE_3__.Date, {
-          attributes: attributes
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_controls__WEBPACK_IMPORTED_MODULE_3__.Location, {
-          attributes: attributes
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_controls__WEBPACK_IMPORTED_MODULE_3__.Excerpt, {
-          attributes: attributes
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_controls__WEBPACK_IMPORTED_MODULE_3__.Content, {
-          attributes: attributes
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_controls__WEBPACK_IMPORTED_MODULE_3__.Seperator, {
-        attributes: attributes
-      })]
-    })]
-  });
+    "data-end": attributes.dateEnd
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "g4rf-eventkrake-spinner"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "g4rf-eventkrake-noevents"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No events at this time.', 'eventkrake')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-event " + template
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_4__.Image, {
+    attributes: attributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-info"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_4__.Title, {
+    attributes: attributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_4__.Date, {
+    attributes: attributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_4__.Location, {
+    attributes: attributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_4__.Excerpt, {
+    attributes: attributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_4__.Content, {
+    attributes: attributes
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls__WEBPACK_IMPORTED_MODULE_4__.Seperator, {
+    attributes: attributes
+  })));
 }
 
 /***/ }),

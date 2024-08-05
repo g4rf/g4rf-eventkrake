@@ -28,8 +28,6 @@ export function load( { block, isEditor = false } )
     const start = $(prefix + "-list", block).attr("data-start");
     const end = $(prefix + "-list", block).attr("data-end");
     
-    console.log(start, end);
-    
     // remove old blocks
     $(".g4rf-eventkrake-events-list-event", list).not("." + template).remove();
     
@@ -124,6 +122,144 @@ export function load( { block, isEditor = false } )
             // ics
             if(!isEditor) {
                 $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
+            }
+            
+            // classes; show them only in frontend
+            if( ! isEditor )
+            {   
+                let classes =[];
+
+                // id
+                classes.push(Eventkrake.cssClass(
+                        eventData.id, "g4rf-eventkrake-id"
+                ));
+                // uid
+                classes.push(Eventkrake.cssClass(
+                        eventData.uid, "g4rf-eventkrake-uid"
+                ));
+                // title
+                classes.push(Eventkrake.cssClass(
+                        eventData.title, "g4rf-eventkrake-title"
+                ));
+                
+                // location id
+                classes.push(Eventkrake.cssClass(
+                        location.id, "g4rf-eventkrake-location-id"
+                ));
+                // location name
+                classes.push(Eventkrake.cssClass(
+                        location.title, "g4rf-eventkrake-location-title"
+                ));
+                
+                // start day
+                classes.push(Eventkrake.cssClass(
+                        start.getDate(), "g4rf-eventkrake-start-day"
+                ));
+                // start month
+                classes.push(Eventkrake.cssClass(
+                        start.getMonth() + 1, "g4rf-eventkrake-start-month"
+                ));
+                // start year
+                classes.push(Eventkrake.cssClass(
+                        start.getFullYear(), "g4rf-eventkrake-start-year"
+                ));
+                // start weekday
+                classes.push(Eventkrake.cssClass(
+                        start.getDay(), "g4rf-eventkrake-start-weekday"
+                ));        
+                // start hour
+                classes.push(Eventkrake.cssClass(
+                        start.getHours(), "g4rf-eventkrake-start-hour"
+                ));        
+                // start minute
+                classes.push(Eventkrake.cssClass(
+                        start.getMinutes(), "g4rf-eventkrake-start-minute"
+                ));
+                
+                // end day
+                classes.push(Eventkrake.cssClass(
+                        end.getDate(), "g4rf-eventkrake-end-day"
+                ));
+                // end month
+                classes.push(Eventkrake.cssClass(
+                        end.getMonth() + 1, "g4rf-eventkrake-end-month"
+                ));
+                // end year
+                classes.push(Eventkrake.cssClass(
+                        end.getFullYear(), "g4rf-eventkrake-end-year"
+                ));
+                // end weekday
+                classes.push(Eventkrake.cssClass(
+                        end.getDay(), "g4rf-eventkrake-end-weekday"
+                ));        
+                // end hour
+                classes.push(Eventkrake.cssClass(
+                        end.getHours(), "g4rf-eventkrake-end-hour"
+                ));        
+                // end minute
+                classes.push(Eventkrake.cssClass(
+                        end.getMinutes(), "g4rf-eventkrake-end-minute"
+                ));
+
+                // artists
+                if(eventData.artists.length > 0) {
+                    // has artists
+                    classes.push("g4rf-eventkrake-has-artists");
+                    
+                    eventData.artists.forEach(function(artistId) {
+                        const artist = data.artists[artistId];
+                        
+                        // artist id
+                        classes.push(Eventkrake.cssClass(
+                            artist.id, "g4rf-eventkrake-artist-id"
+                        ));
+                        // artist name
+                        classes.push(Eventkrake.cssClass(
+                            artist.title, "g4rf-eventkrake-artist-title"
+                        ));
+                    });                    
+                }
+
+                // eventkrake categories
+                if(eventData.categories.length > 0) {
+                    // has eventkrake categories
+                    classes.push("g4rf-eventkrake-has-categories");
+                    
+                    eventData.categories.forEach(function(category) {
+                        // eventkrake category
+                        classes.push(Eventkrake.cssClass(
+                            category, "g4rf-eventkrake-category"
+                        ));
+                    });                    
+                }
+                
+                // wp categories
+                if(eventData.wpcategories.length > 0) {
+                    // has wp categories
+                    classes.push("g4rf-eventkrake-has-wpcategories");
+                    
+                    eventData.wpcategories.forEach(function(wpCategory) {
+                        // wp category
+                        classes.push(Eventkrake.cssClass(
+                            wpCategory, "g4rf-eventkrake-wpcategory"
+                        ));
+                    });                    
+                }
+                
+                // wp tags
+                if(eventData.wptags.length > 0) {
+                    // has wp tags
+                    classes.push("g4rf-eventkrake-has-wptags");
+                    
+                    eventData.wptags.forEach(function(wpTag) {
+                        // wp tag
+                        classes.push(Eventkrake.cssClass(
+                            wpTag, "g4rf-eventkrake-wptag"
+                        ));
+                    });                    
+                }
+                
+                eventHtml.addClass(classes);
             }
         });
     }).always(function() {
