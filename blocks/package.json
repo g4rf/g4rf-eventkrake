@@ -1,6 +1,6 @@
 {
 	"name": "g4rf-eventkrake-blocks",
-	"version": "0.3.0",
+	"version": "0.3.2",
 	"description": "Blocks for the Eventkrake plugin.",
 	"author": "Jan Kossick",
 	"license": "GPL-2.0-or-later",
