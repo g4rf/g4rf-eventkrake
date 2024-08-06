@@ -39,7 +39,7 @@ class Location {
     public function __construct($post) {
         $p = get_post($post);
         
-        if($p == null) throw new \Exception('Post does not exist.');
+        if($p == null) return false; //throw new \Exception('Post does not exist.');
         if($p->post_type != 'eventkrake_location') 
             throw new \Exception('Post type is not `eventkrake_location`.');
         
