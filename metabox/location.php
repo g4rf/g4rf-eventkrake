@@ -181,8 +181,8 @@ __('You can type an address into the address field and click on "Address search"
         /* translators: Placeholders are just tags. */
         sprintf(
             __('Accessibility is indicated with a traffic light system. Here,
-%2$sred%1$s means no accessibility at all, %3$yellow%1$s that e.g. a ramp is 
-available and %4$green%1$s that there is a wheelchair-accessible toilet next 
+%2$sred%1$s means no accessibility at all, %3$syellow%1$s that e.g. a ramp is 
+available and %4$sgreen%1$s that there is a wheelchair-accessible toilet next 
 to the ramp.%5$s Further information can be noted in the text field.', 
                 'eventkrake'),
             '</span>', 
