@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	
     "name": "g4rf-eventkrake/events-list",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	
     "title": "Eventkrake Events list",
 	"description": "Shows events in a list.",

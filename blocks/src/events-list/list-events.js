@@ -35,9 +35,17 @@ export function load( { block, isEditor = false } )
     $(".g4rf-eventkrake-noevents", list).hide();
     
     // show spinner
-    $(".g4rf-eventkrake-spinner", list).show();    
+    $(".g4rf-eventkrake-spinner", list).show();
     
-    $.getJSON("/wp-json/eventkrake/v3/events", {
+    // add compatibility with WP Multilang
+    let language = "";
+    const bodyClasses = $("body").attr("class");
+    const languages = bodyClasses.match(/language-(?<language>[a-z]{2})/);
+    if(languages) {
+        language = "/" + languages.groups.language;
+    }
+    
+    $.getJSON(language + "/wp-json/eventkrake/v3/events", {
         earliestEnd: start,
         latestStart: end
     }, function(data) { 
