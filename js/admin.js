@@ -1,6 +1,7 @@
 /* global Leaflet */
 
 jQuery(window).on("load", function() {
+    
     /* Map für die Auswahl des Ortes */
     if(document.getElementById(Eventkrake.Admin.mapId)) {
         var lat = parseFloat(jQuery("#" + Eventkrake.Admin.latId).val());
@@ -134,25 +135,50 @@ jQuery(window).on("load", function() {
         }
     });    
     
-    // search for select
-    jQuery(".eventkrake-select-search").on("keyup", function() {
-        var select = jQuery(this).next(".eventkrake-select-multiple");
+    // search for artist
+    jQuery(".eventkrake-artist-select-search").on("keyup", function() {
+        var select = jQuery(this).next(".eventkrake-artist-select");
         var search = jQuery(this).val().toLowerCase();
         
         if(search.length > 0) { // search something
             
-            jQuery("label", select).each(function(i, label) {                
-                if(jQuery(label).text().toLowerCase().indexOf(search) > -1) {
-                    jQuery(label).show();
+            jQuery("div", select).each(function(i, div) {                
+                if(jQuery(div).text().toLowerCase().indexOf(search) > -1) {
+                    jQuery(div).show();
                 } else {
-                    jQuery(label).hide();
+                    jQuery(div).hide();
                 }
             });
             return;
         } 
         
         // show all
-        jQuery("label", select).show();
+        jQuery("div", select).show();
+    });
+    
+    // click artist in select
+    jQuery(".eventkrake-artist-select div").on("click", function() {
+        const id = jQuery(this).data("id");
+        const title = jQuery(this).text();
+        // TODO: at the moment can be only one order area
+        const order = jQuery(".eventkrake-artist-order");
+        const button = jQuery(".eventkrake-order-artist.eventkrake-template", order)
+                .clone()
+                .removeClass("eventkrake-template")
+                .data("id", id)
+                .appendTo(order);
+        jQuery(".eventkrake-order-artist-title", button).empty().append(title);
+        jQuery(".eventkrake-order-artist-hidden", button).attr("value", id);
+    });
+    
+    // remove artist from order
+    jQuery("body").on("click", ".eventkrake-order-artist-delete", function() {
+        jQuery(this).parent().remove();
+    });
+    
+    // make artist order list sortable
+    jQuery(".eventkrake-artist-order").sortable({
+        cursor: "grabbing"
     });
 });
 

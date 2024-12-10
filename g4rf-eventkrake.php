@@ -93,6 +93,8 @@ add_action('widgets_init', function() {
 add_action('admin_enqueue_scripts', function() {
     $path = plugin_dir_url(__FILE__);
 
+    // jquery sortable
+    wp_enqueue_script('jquery-ui-sortable');
     // leaflet
     wp_register_script('eventkrake-leaflet-js',  $path . 'leaflet/leaflet.js',
         ['jquery']);

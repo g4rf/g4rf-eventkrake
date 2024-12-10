@@ -340,9 +340,6 @@ class Event {
      * @return mixed
      */
     public function setArtists($artists) {
-        // nothing to save
-        if(empty($artists)) return false;
-        
         $ids = [];
         foreach($artists as $artist)
         {
@@ -689,7 +686,9 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     $event->setLocation($properties['eventkrake_locationid']);
 
     // artists
-    $event->setArtists($properties['eventkrake_artists']);
+    // array_filter filters empty values (like the template)
+    $artists = array_filter($properties['eventkrake_artists']);
+    $event->setArtists($artists);
     
 }, 1, 2);
 

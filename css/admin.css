@@ -35,14 +35,14 @@
   margin: 10px;
   padding: 5px 10px;
 }
-.eventkrake-select-search {
+.eventkrake-artist-select-search {
   width: 100%;
   max-width: 50em;
   border: solid 1px #ccc;
   padding: 5px;
   margin: 5px;
 }
-.eventkrake-select-multiple {
+.eventkrake-artist-select, .eventkrake-artist-order {
   display: flex;
   flex-direction: column;
   height: 200px;
@@ -52,15 +52,42 @@
   overflow: auto;
   border: solid 1px #ccc;
 }
-.eventkrake-select-multiple label {
+.eventkrake-artist-select div, .eventkrake-artist-order div {
   display: block;
   white-space: nowrap;
   margin-right: 10px;
   vertical-align: middle;
-  cursor: pointer;
 }
-.eventkrake-select-multiple label:hover {
+.eventkrake-artist-select div.eventkrake-list-artist, .eventkrake-artist-order div.eventkrake-list-artist {
+  cursor: pointer;
+  padding: 5px;
+}
+.eventkrake-artist-select div.eventkrake-list-artist:hover, .eventkrake-artist-order div.eventkrake-list-artist:hover {
   color: #0073aa;
+}
+.eventkrake-artist-select div.eventkrake-order-artist, .eventkrake-artist-order div.eventkrake-order-artist {
+  cursor: grab;
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: #eee;
+  border: solid 1px #555;
+  border-radius: 15px;
+  font-weight: bold;
+}
+.eventkrake-artist-select div.eventkrake-order-artist:hover, .eventkrake-artist-order div.eventkrake-order-artist:hover {
+  background-color: #ddd;
+}
+.eventkrake-artist-select div.eventkrake-order-artist.ui-sortable-helper, .eventkrake-artist-order div.eventkrake-order-artist.ui-sortable-helper {
+  opacity: 0.5;
+}
+.eventkrake-artist-select div.eventkrake-order-artist .eventkrake-order-artist-delete, .eventkrake-artist-order div.eventkrake-order-artist .eventkrake-order-artist-delete {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.eventkrake-artist-select div.eventkrake-order-artist .eventkrake-order-artist-delete:hover, .eventkrake-artist-order div.eventkrake-order-artist .eventkrake-order-artist-delete:hover {
+  background-color: #000;
 }
 .eventkrake-cat-suggestion {
   color: #0073aa;

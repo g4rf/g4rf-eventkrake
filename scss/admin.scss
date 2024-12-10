@@ -36,14 +36,14 @@
         padding: 5px 10px;
     }
 
-    &-select-search {
+    &-artist-select-search {
         width: 100%;
         max-width: 50em;
         border: solid 1px #ccc;
         padding: 5px;
         margin: 5px;
     }
-    &-select-multiple {
+    &-artist-select, &-artist-order {
         display: flex;
         flex-direction: column;
 
@@ -56,15 +56,47 @@
 
         border: solid 1px #ccc;
 
-        label {
+        div {
             display: block;
             white-space: nowrap;
             margin-right: 10px;
             vertical-align: middle;
-            cursor: pointer;
-
-            &:hover {
-                color: #0073aa;
+            
+            &.eventkrake-list-artist {
+                cursor: pointer;
+                padding: 5px;
+                
+                &:hover {
+                    color: #0073aa;
+                }
+            }
+            &.eventkrake-order-artist {
+                cursor: grab;
+                padding: 10px;
+                margin-bottom: 5px;
+                background-color: #eee;
+                border: solid 1px #555;
+                border-radius: 15px;
+                font-weight: bold;
+                
+                &:hover {
+                    background-color: #ddd;
+                }
+                
+                &.ui-sortable-helper {
+                    opacity: 0.5;
+                }
+                    
+                .eventkrake-order-artist-delete {
+                    cursor: pointer;
+                    padding: 5px;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                    
+                    &:hover {
+                        background-color: #000;
+                    }
+                }
             }
         }
     }

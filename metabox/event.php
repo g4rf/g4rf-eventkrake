@@ -87,27 +87,60 @@ _e('Select a location for the event. You can create
 <th><?=__('Participating artists', 'eventkrake')?></th>
 
 <td>
-    <input type="text" class="eventkrake-select-search"
+    <span class="description"><?php
+        _e('Select the artists taking part in the event:', 'eventkrake');
+    ?></span><br />
+    
+    <!-- artist search -->
+    <input type="text" class="eventkrake-artist-select-search"
            placeholder="<?=__('Search', 'eventkrake')?>">
-    <div class="eventkrake-select-multiple">
+    
+    <!-- select artists -->
+    <div class="eventkrake-artist-select">
         <?php
             $artists = Artist::all();
-            $artistIds = Eventkrake::getPostMeta($post->ID, 'artists');
-            foreach($artists as $a) { 
-                $selected = in_array($a->ID, $artistIds); ?>
-                <label style="<?= $selected ? 'order:-1;' : '' ?>">
-                    <input type="checkbox" name="eventkrake_artists[]"
-                        value="<?= $a->ID ?>" <?=
-                        $selected ? 'checked' : ''
-                    ?> />
-                    <?= get_the_title($a->ID) ?>
-                </label>
+            foreach($artists as $a) { ?> 
+                <div class="eventkrake-list-artist" data-id="<?=$a->ID?>"><?=
+                    $a->getTitle() 
+                ?></div>
             <?php }
         ?>
     </div>
+    
+    <br />
     <span class="description"><?php
-        _e('Select the artists taking part in the event.', 'eventkrake');
-   ?></span>
+        _e('Order the artists here:', 'eventkrake');
+    ?></span><br />
+    
+    <!-- order artists -->
+    <div class="eventkrake-artist-order">
+        <div class="eventkrake-order-artist eventkrake-template" data-id="">
+            <span class="eventkrake-order-artist-delete">&#10060;</span>
+            <span class="eventkrake-order-artist-title"></span>
+            <input type="hidden" name="eventkrake_artists[]" value=""
+                   class="eventkrake-order-artist-hidden" />
+        </div>
+        <?php
+            // selected artists
+            $artistIds = Eventkrake::getPostMeta($post->ID, 'artists');
+            foreach($artistIds as $id) {
+                try {
+                    $a = new Artist($id);
+                } catch (Exception $ex) {
+                    continue;
+                } ?>        
+                
+                <div class="eventkrake-order-artist" data-id="<?=$id?>">
+                    <span class="eventkrake-order-artist-delete">&#10060;</span>
+                    <span class="eventkrake-order-artist-title"><?=
+                        $a->getTitle() 
+                    ?></span>
+                    <input type="hidden" name="eventkrake_artists[]"
+                        value="<?= $a->ID ?>" />
+                </div>
+            <?php }
+        ?>
+    </div>
 
 </td></tr><tr>
 
