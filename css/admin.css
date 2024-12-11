@@ -42,10 +42,15 @@
   padding: 5px;
   margin: 5px;
 }
+.eventkrake-artist-select {
+  height: 100px;
+}
+.eventkrake-artist-order {
+  height: 400px;
+}
 .eventkrake-artist-select, .eventkrake-artist-order {
   display: flex;
   flex-direction: column;
-  height: 200px;
   max-width: 50em;
   padding: 5px;
   margin: 5px;

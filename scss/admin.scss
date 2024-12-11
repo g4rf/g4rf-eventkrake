@@ -43,11 +43,16 @@
         padding: 5px;
         margin: 5px;
     }
+    &-artist-select {
+        height: 100px;
+    }
+    &-artist-order {
+        height: 400px;
+    }
     &-artist-select, &-artist-order {
         display: flex;
         flex-direction: column;
 
-        height: 200px;
         max-width: 50em;
         padding: 5px;
         margin: 5px;
