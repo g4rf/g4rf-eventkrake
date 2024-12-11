@@ -109,7 +109,7 @@ _e('Select a location for the event. You can create
     
     <br />
     <span class="description"><?php
-        _e('Order the artists here:', 'eventkrake');
+        _e('Sort artists here via drag and drop:', 'eventkrake');
     ?></span><br />
     
     <!-- order artists -->
