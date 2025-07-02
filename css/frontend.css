@@ -13,6 +13,9 @@
    * ics
    */
   /**
+   * door
+   */
+  /**
    * Event
    */
   /**
@@ -59,6 +62,12 @@
 .eventkrake-ics {
   font-style: italic;
   font-size: 0.8em;
+}
+.eventkrake-door::before {
+  content: "(";
+}
+.eventkrake-door::after {
+  content: ")";
 }
 .eventkrake-event {
   display: grid;

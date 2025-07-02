@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-02T09:33:27+00:00\n"
+"POT-Creation-Date: 2025-07-02T13:31:23+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: eventkrake\n"
 
 #. Plugin Name of the plugin
 #: g4rf-eventkrake.php
-#: g4rf-eventkrake.php:175
+#: g4rf-eventkrake.php:177
 msgid "Eventkrake"
 msgstr ""
 
@@ -83,14 +83,14 @@ msgid "Artists are persons or groups."
 msgstr ""
 
 #: Eventkrake/Artist.php:194
-#: Eventkrake/Event.php:552
+#: Eventkrake/Event.php:610
 #: Eventkrake/Location.php:247
 msgid "Additional informations"
 msgstr ""
 
 #: Eventkrake/Artist.php:319
-#: Eventkrake/Event.php:852
-#: Eventkrake/Location.php:414
+#: Eventkrake/Event.php:956
+#: Eventkrake/Location.php:415
 msgid "Further information"
 msgstr ""
 
@@ -100,13 +100,25 @@ msgid "Upcoming Events with %s"
 msgstr ""
 
 #: Eventkrake/Artist.php:355
-#: Eventkrake/Location.php:450
+#: Eventkrake/Location.php:451
 msgid "No upcoming events."
 msgstr ""
 
-#: Eventkrake/Artist.php:402
-#: Eventkrake/Event.php:820
-#: Eventkrake/Location.php:497
+#: Eventkrake/Artist.php:404
+#: Eventkrake/Event.php:913
+#: Eventkrake/Eventkrake.php:431
+#: Eventkrake/Location.php:500
+#: blocks/build/events-list/index.js:649
+#: blocks/build/events-list/view.js:323
+#: blocks/src/events-list/list-events.js:135
+#: blocks/build/events-list/index.js:567
+#: blocks/build/events-list/view.js:287
+msgid "Doors:"
+msgstr ""
+
+#: Eventkrake/Artist.php:414
+#: Eventkrake/Event.php:924
+#: Eventkrake/Location.php:510
 msgid "ics"
 msgstr ""
 
@@ -166,61 +178,61 @@ msgstr ""
 msgid "Demonstration"
 msgstr ""
 
-#: Eventkrake/Event.php:525
+#: Eventkrake/Event.php:583
 #: metabox/artist.php:82
 msgid "Events"
 msgstr ""
 
-#: Eventkrake/Event.php:526
+#: Eventkrake/Event.php:584
 msgid "Event"
 msgstr ""
 
-#: Eventkrake/Event.php:527
-#: Eventkrake/Event.php:532
+#: Eventkrake/Event.php:585
+#: Eventkrake/Event.php:590
 msgid "Add event"
 msgstr ""
 
-#: Eventkrake/Event.php:529
+#: Eventkrake/Event.php:587
 msgid "Add new event"
 msgstr ""
 
-#: Eventkrake/Event.php:530
-#: Eventkrake/Event.php:531
+#: Eventkrake/Event.php:588
+#: Eventkrake/Event.php:589
 #: metabox/artist.php:112
 #: metabox/location.php:227
 msgid "Edit event"
 msgstr ""
 
-#: Eventkrake/Event.php:533
+#: Eventkrake/Event.php:591
 msgid "View event"
 msgstr ""
 
-#: Eventkrake/Event.php:534
+#: Eventkrake/Event.php:592
 msgid "Search for event"
 msgstr ""
 
-#: Eventkrake/Event.php:536
+#: Eventkrake/Event.php:594
 msgid "No events found"
 msgstr ""
 
-#: Eventkrake/Event.php:538
+#: Eventkrake/Event.php:596
 msgid "No even in trash"
 msgstr ""
 
-#: Eventkrake/Event.php:543
+#: Eventkrake/Event.php:601
 msgid "Events are temporary occurrences in one place."
 msgstr ""
 
 #. translators: Placeholder is event title
-#: Eventkrake/Event.php:880
+#: Eventkrake/Event.php:984
 msgid "Participating artists at %s"
 msgstr ""
 
-#: Eventkrake/Eventkrake.php:396
+#: Eventkrake/Eventkrake.php:397
 msgid "Remove time"
 msgstr ""
 
-#: Eventkrake/Eventkrake.php:428
+#: Eventkrake/Eventkrake.php:450
 msgid "The beginning must come before the end."
 msgstr ""
 
@@ -229,9 +241,9 @@ msgid "Locations"
 msgstr ""
 
 #: Eventkrake/Location.php:223
-#: blocks/build/events-list/index.js:368
+#: blocks/build/events-list/index.js:362
 #: blocks/src/events-list/edit.js:176
-#: blocks/build/events-list/index.js:317
+#: blocks/build/events-list/index.js:328
 msgid "Location"
 msgstr ""
 
@@ -268,7 +280,7 @@ msgid "Events take place at locations."
 msgstr ""
 
 #. translators: Placeholder is location title
-#: Eventkrake/Location.php:438
+#: Eventkrake/Location.php:439
 msgid "Upcoming Events at %s"
 msgstr ""
 
@@ -300,77 +312,77 @@ msgstr ""
 msgid "Holds the main categories for events, locations and artists."
 msgstr ""
 
-#: g4rf-eventkrake.php:174
+#: g4rf-eventkrake.php:176
 #: settings/settings.php:2
 msgid "Eventkrake Settings"
 msgstr ""
 
-#: g4rf-eventkrake.php:222
+#: g4rf-eventkrake.php:224
 msgid "Settings"
 msgstr ""
 
-#: g4rf-eventkrake.php:226
+#: g4rf-eventkrake.php:228
 msgid "Settings for displaying events, artists and locations."
 msgstr ""
 
-#: g4rf-eventkrake.php:236
+#: g4rf-eventkrake.php:238
 msgid "Hide event meta"
 msgstr ""
 
-#: g4rf-eventkrake.php:247
+#: g4rf-eventkrake.php:249
 msgid "Don't show infos on event pages."
 msgstr ""
 
-#: g4rf-eventkrake.php:258
+#: g4rf-eventkrake.php:260
 msgid "Hide location meta"
 msgstr ""
 
-#: g4rf-eventkrake.php:269
+#: g4rf-eventkrake.php:271
 msgid "Don't show infos on location pages."
 msgstr ""
 
-#: g4rf-eventkrake.php:280
+#: g4rf-eventkrake.php:282
 msgid "Hide artist meta"
 msgstr ""
 
-#: g4rf-eventkrake.php:291
+#: g4rf-eventkrake.php:293
 msgid "Don't show infos on artist pages."
 msgstr ""
 
-#: g4rf-eventkrake.php:424
+#: g4rf-eventkrake.php:433
 msgid "Gives a minimal start date for the events. This parameter is checked against the start of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:430
+#: g4rf-eventkrake.php:439
 msgid "Gives a minimal end date for the events. This parameter is checked against the end of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:436
+#: g4rf-eventkrake.php:445
 msgid "Gives a maximal start date for the events. This parameter is checked against the start of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:442
+#: g4rf-eventkrake.php:451
 msgid "Gives a maximal end date for the events. This parameter is checked against the end of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:457
+#: g4rf-eventkrake.php:466
 msgid "The parameter earliestStart is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:468
+#: g4rf-eventkrake.php:477
 msgid "The parameter earliestEnd is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:479
+#: g4rf-eventkrake.php:488
 msgid "The parameter latestStart is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:490
+#: g4rf-eventkrake.php:499
 msgid "The parameter latestEnd is invalid."
 msgstr ""
 
 #: metabox/artist.php:13
-#: metabox/event.php:148
+#: metabox/event.php:152
 #: metabox/location.php:126
 msgid "Categories"
 msgstr ""
@@ -380,19 +392,19 @@ msgid "Note categories here, separated by commas, e.g:"
 msgstr ""
 
 #: metabox/artist.php:31
-#: metabox/event.php:166
+#: metabox/event.php:170
 #: metabox/location.php:78
 msgid "Web links"
 msgstr ""
 
 #: metabox/artist.php:35
-#: metabox/event.php:170
+#: metabox/event.php:174
 #: metabox/location.php:82
 msgid "Provide web links to the website and social networks."
 msgstr ""
 
 #: metabox/artist.php:73
-#: metabox/event.php:205
+#: metabox/event.php:209
 #: metabox/location.php:121
 msgid "Add web link"
 msgstr ""
@@ -412,27 +424,27 @@ msgstr ""
 msgid "Dates & Times"
 msgstr ""
 
-#: metabox/event.php:77
+#: metabox/event.php:81
 msgid "Add time"
 msgstr ""
 
-#: metabox/event.php:87
+#: metabox/event.php:91
 msgid "Participating artists"
 msgstr ""
 
-#: metabox/event.php:91
+#: metabox/event.php:95
 msgid "Select the artists taking part in the event:"
 msgstr ""
 
-#: metabox/event.php:96
+#: metabox/event.php:100
 msgid "Search"
 msgstr ""
 
-#: metabox/event.php:112
+#: metabox/event.php:116
 msgid "Sort artists here via drag and drop:"
 msgstr ""
 
-#: metabox/event.php:154
+#: metabox/event.php:158
 #: metabox/location.php:132
 msgid "Note categories separated by commas, e.g:"
 msgstr ""
@@ -510,125 +522,125 @@ msgstr ""
 msgid "Events for this location"
 msgstr ""
 
-#: blocks/build/events-list/index.js:251
+#: blocks/build/events-list/index.js:245
 #: blocks/src/events-list/edit.js:41
-#: blocks/build/events-list/index.js:182
+#: blocks/build/events-list/index.js:193
 msgid "Date Range"
 msgstr ""
 
-#: blocks/build/events-list/index.js:253
+#: blocks/build/events-list/index.js:247
 #: blocks/src/events-list/edit.js:44
-#: blocks/build/events-list/index.js:185
+#: blocks/build/events-list/index.js:196
 msgid "Start date"
 msgstr ""
 
-#: blocks/build/events-list/index.js:265
+#: blocks/build/events-list/index.js:259
 #: blocks/src/events-list/edit.js:58
-#: blocks/build/events-list/index.js:199
+#: blocks/build/events-list/index.js:210
 msgid "End date"
 msgstr ""
 
-#: blocks/build/events-list/index.js:278
+#: blocks/build/events-list/index.js:272
 #: blocks/src/events-list/edit.js:72
-#: blocks/build/events-list/index.js:213
+#: blocks/build/events-list/index.js:224
 msgid "Show"
 msgstr ""
 
-#: blocks/build/events-list/index.js:281
+#: blocks/build/events-list/index.js:275
 #: blocks/src/events-list/edit.js:76
-#: blocks/build/events-list/index.js:217
+#: blocks/build/events-list/index.js:228
 msgid "Show title"
 msgstr ""
 
-#: blocks/build/events-list/index.js:293
+#: blocks/build/events-list/index.js:287
 #: blocks/src/events-list/edit.js:90
-#: blocks/build/events-list/index.js:231
+#: blocks/build/events-list/index.js:242
 msgid "Show excerpt"
 msgstr ""
 
-#: blocks/build/events-list/index.js:305
+#: blocks/build/events-list/index.js:299
 #: blocks/src/events-list/edit.js:104
-#: blocks/build/events-list/index.js:245
+#: blocks/build/events-list/index.js:256
 msgid "Show content"
 msgstr ""
 
-#: blocks/build/events-list/index.js:317
+#: blocks/build/events-list/index.js:311
 #: blocks/src/events-list/edit.js:117
-#: blocks/build/events-list/index.js:258
+#: blocks/build/events-list/index.js:269
 msgid "Date"
 msgstr ""
 
-#: blocks/build/events-list/index.js:320
+#: blocks/build/events-list/index.js:314
 #: blocks/src/events-list/edit.js:121
-#: blocks/build/events-list/index.js:262
+#: blocks/build/events-list/index.js:273
 msgid "Show date"
 msgstr ""
 
-#: blocks/build/events-list/index.js:332
+#: blocks/build/events-list/index.js:326
 #: blocks/src/events-list/edit.js:135
-#: blocks/build/events-list/index.js:276
+#: blocks/build/events-list/index.js:287
 msgid "Show start date"
 msgstr ""
 
-#: blocks/build/events-list/index.js:344
+#: blocks/build/events-list/index.js:338
 #: blocks/src/events-list/edit.js:149
-#: blocks/build/events-list/index.js:290
+#: blocks/build/events-list/index.js:301
 msgid "Show end date"
 msgstr ""
 
-#: blocks/build/events-list/index.js:356
+#: blocks/build/events-list/index.js:350
 #: blocks/src/events-list/edit.js:163
-#: blocks/build/events-list/index.js:304
+#: blocks/build/events-list/index.js:315
 msgid "Show ics link"
 msgstr ""
 
-#: blocks/build/events-list/index.js:371
+#: blocks/build/events-list/index.js:365
 #: blocks/src/events-list/edit.js:180
-#: blocks/build/events-list/index.js:321
+#: blocks/build/events-list/index.js:332
 msgid "Show location"
 msgstr ""
 
-#: blocks/build/events-list/index.js:383
+#: blocks/build/events-list/index.js:377
 #: blocks/src/events-list/edit.js:194
-#: blocks/build/events-list/index.js:335
+#: blocks/build/events-list/index.js:346
 msgid "Link location to location page"
 msgstr ""
 
-#: blocks/build/events-list/index.js:395
+#: blocks/build/events-list/index.js:389
 #: blocks/src/events-list/edit.js:209
-#: blocks/build/events-list/index.js:350
+#: blocks/build/events-list/index.js:361
 msgid "Show location address"
 msgstr ""
 
-#: blocks/build/events-list/index.js:407
+#: blocks/build/events-list/index.js:401
 #: blocks/src/events-list/edit.js:222
-#: blocks/build/events-list/index.js:363
+#: blocks/build/events-list/index.js:374
 msgid "Image"
 msgstr ""
 
-#: blocks/build/events-list/index.js:410
+#: blocks/build/events-list/index.js:404
 #: blocks/src/events-list/edit.js:226
-#: blocks/build/events-list/index.js:367
+#: blocks/build/events-list/index.js:378
 msgid "Show image"
 msgstr ""
 
-#: blocks/build/events-list/index.js:422
+#: blocks/build/events-list/index.js:416
 #: blocks/src/events-list/edit.js:239
-#: blocks/build/events-list/index.js:380
+#: blocks/build/events-list/index.js:391
 msgid "Seperator"
 msgstr ""
 
-#: blocks/build/events-list/index.js:425
+#: blocks/build/events-list/index.js:419
 #: blocks/src/events-list/edit.js:244
-#: blocks/build/events-list/index.js:385
+#: blocks/build/events-list/index.js:396
 msgid "Show event seperator"
 msgstr ""
 
-#: blocks/build/events-list/index.js:770
-#: blocks/build/events-list/view.js:444
-#: blocks/src/events-list/list-events.js:298
-#: blocks/build/events-list/index.js:719
-#: blocks/build/events-list/view.js:439
+#: blocks/build/events-list/index.js:781
+#: blocks/build/events-list/view.js:455
+#: blocks/src/events-list/list-events.js:321
+#: blocks/build/events-list/index.js:753
+#: blocks/build/events-list/view.js:473
 msgid "No events at this time."
 msgstr ""
 

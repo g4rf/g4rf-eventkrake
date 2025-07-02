@@ -8,6 +8,7 @@ class Event {
     var $index; // counts the occurences of this event
     var $start;
     var $end;    
+    var $door;
     
     /*
      * static
@@ -30,12 +31,16 @@ class Event {
         $events = [];
         $starts = self::getStarts($p->ID);
         $ends = self::getEnds($p->ID);
+        $doors = self::getDoors($p->ID);
         
         for($i = 0; $i < count($starts); $i++) {
             $start = new \DateTimeImmutable($starts[$i]);
             $end = new \DateTimeImmutable($ends[$i]);
             
-            $events[] = new self($post, $start, $end, $i);
+            $door = '';
+            if(! empty($doors[$i])) $door = new \DateTimeImmutable($doors[$i]);
+            
+            $events[] = new self($post, $start, $end, $door, $i);
         }
         
         return $events;
@@ -97,7 +102,7 @@ class Event {
     }
     
     /**
-     * Get starts for a post id.
+     * Get ends for a post id.
      * @param mixed $post ID or WP_Post
      * @return array
      */
@@ -112,6 +117,30 @@ class Event {
         }
         
         return Eventkrake::getPostMeta($id, 'end');
+    }
+    
+    /**
+     * Get doors for a post id.
+     * @param mixed $post ID or WP_Post
+     * @return array
+     */
+    public static function getDoors($post) {
+        if(is_scalar($post)) 
+        {
+            $id = $post;
+        }
+        elseif(! empty($post->ID))
+        {
+            $id = $post->ID;
+        }
+        
+        $doors = Eventkrake::getPostMeta($id, 'door');
+        
+        // if doors not set yet, simulate empty doors
+        if(count($doors) == 0) $doors = array_fill(0, 
+            count(Eventkrake::getPostMeta($id, 'start')), '');
+        
+        return $doors;
     }
     
     /**
@@ -148,6 +177,29 @@ class Event {
         return Eventkrake::setPostMeta($id, 'end', $ends);
     }
     
+    /**
+     * 
+     * @param mixed $post ID or WP_Post or Eventkrake\Event
+     * @param array $doors Array of DateTime objects
+     * @return mixed
+     */
+    public static function setDoors($post, $doors) {
+        // do nothing
+        if(empty($post)) return false;
+        
+        if(is_scalar($post)) $id = $post;
+        elseif(! empty($post->ID)) $id = $post->ID;
+        else return false;
+        
+        return Eventkrake::setPostMeta($id, 'door', $doors);
+    }
+    
+    /**
+     * 
+     * @param type $categories
+     * @param type $url
+     * @return type
+     */
     public static function icsAll($categories = [], $url = '') {
         $ics = ['BEGIN:VCALENDAR', 
             'VERSION:2.0',
@@ -176,12 +228,13 @@ class Event {
     /**
      * Creates an event.
      * @param type $post The corresponding post or post id.
-     * @param type $start DateTimeImmutable start date
-     * @param type $end DateTimeImmutable end date
+     * @param DateTimeImmutable $start start date
+     * @param DateTimeImmutable $end end date
+     * @param DateTimeImmutable $door door time
      * @param type [$index=0] If the correponding post has more than one date, every date get's an index.
      * @throws \Exception If the post does not exists or is not of type `eventkrake_event`.
      */
-    public function __construct($post, $start, $end, $index = 0) {
+    public function __construct($post, $start, $end, $door, $index = 0) {
         $p = get_post($post);
         
         if($p === null) throw new \Exception('Post does not exist.');
@@ -191,6 +244,7 @@ class Event {
         $this->ID = $p->ID;
         $this->start = $start;
         $this->end = $end;
+        $this->door = $door;
         $this->index = $index;
     }
     
@@ -261,6 +315,10 @@ class Event {
     public function getEnd() {
         return $this->end;
     }    
+    
+    public function getDoor() {
+        return $this->door;
+    }
     
     /**
      * Calculates, if the end is on the same day by respecting a "midnight shift".
@@ -605,6 +663,14 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
             'filter' => FILTER_DEFAULT,
             'flags'  => FILTER_REQUIRE_ARRAY,
         ],
+        'eventkrake_doorhour' => [
+            'filter' => FILTER_DEFAULT,
+            'flags'  => FILTER_REQUIRE_ARRAY,
+        ],
+        'eventkrake_doorminute' => [
+            'filter' => FILTER_DEFAULT,
+            'flags'  => FILTER_REQUIRE_ARRAY,
+        ],
         
         // artists
         'eventkrake_artists' => [
@@ -634,7 +700,7 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     if(empty($properties)) return;
     
     $event = new Event($post_id, new \DateTimeImmutable(), 
-        new \DateTimeImmutable());
+        new \DateTimeImmutable(), new \DateTimeImmutable);
     
     // dates & times
     $startDates = $properties['eventkrake_startdate'];
@@ -643,17 +709,34 @@ add_action('save_post_eventkrake_event', function($post_id, $post) {
     $endDates = $properties['eventkrake_enddate'];
     $endHours = $properties['eventkrake_endhour'];
     $endMinutes = $properties['eventkrake_endminute'];
+    $doorHours = $properties['eventkrake_doorhour'];
+    $doorMinutes = $properties['eventkrake_doorminute'];
     $starts = [];
     $ends = [];
+    $doors = [];
     // index 0 is the template
-    for($i = 1; $i < count($startDates); $i++) {
+    for($i = 1; $i < count($startDates); $i++) 
+    {
+        // start
         $starts[] = 
             "{$startDates[$i]}T{$startHours[$i]}:{$startMinutes[$i]}:00";
+        
+        // end
         $ends[] = 
             "{$endDates[$i]}T{$endHours[$i]}:{$endMinutes[$i]}:00";
+        
+        // door
+        if(empty($doorHours[$i])) {
+            $doors[] =  '';
+        } else {
+            if(empty($doorMinutes[$i])) $doorMinutes[$i] = '00';
+            $doors[] = 
+                "{$startDates[$i]}T{$doorHours[$i]}:{$doorMinutes[$i]}:00";
+        }
     }
     Event::setStarts($post_id, $starts);
     Event::setEnds($post_id, $ends);
+    Event::setDoors($post_id, $doors);
     
     // links
     $linkNames = $properties['eventkrake-links-key'];
@@ -801,6 +884,7 @@ add_filter('the_content', function($content)
                             eventkrake-icon-before
                             eventkrake-icon-time">
                     
+                    <!-- start -->
                     <span class="eventkrake-event-start">
                         <span class="eventkrake-event-start-date"><?=
                             Eventkrake::formatDate($time->getStart())
@@ -810,6 +894,7 @@ add_filter('the_content', function($content)
                         ?></span>
                     </span>
 
+                    <!-- end -->
                     <span class="eventkrake-event-end">
                         <?php if(! $time->isEndOnSameDay()) { ?>
                             <span class="eventkrake-event-end-date"><?=
@@ -820,7 +905,20 @@ add_filter('the_content', function($content)
                             Eventkrake::formatTime($time->getEnd())
                         ?></span>
                     </span>
+                    
+                    <!-- door -->
+                    <?php if(! empty($time->getDoor())) { ?>
+                    
+                        <span class="eventkrake-door">
+                            <?=__('Doors:', 'eventkrake')?>
+                            <span class="eventkrake-door-time"><?=
+                                Eventkrake::formatTime($time->getDoor())
+                            ?></span>
+                        </span>
+                    
+                    <?php } ?>
 
+                    <!-- ics -->
                     <span class="eventkrake-event-ics eventkrake-ics">
                         <a href="/<?=$time->icsParameter()?>"><?=
                             __('ics', 'eventkrake')

@@ -105,7 +105,8 @@ add_action('admin_enqueue_scripts', function() {
     wp_enqueue_script('eventkrake-js');
     // admin scripts
     wp_register_script('eventkrake-admin-js', $path . 'js/admin.js',
-        ['jquery', 'eventkrake-js']);
+        ['jquery', 'eventkrake-js', 'wp-blocks', 'react', 'wp-i18n',
+            'wp-block-editor']);
     wp_enqueue_script('eventkrake-admin-js');
 
     // admin css
@@ -126,7 +127,8 @@ add_action('wp_enqueue_scripts', function() {
     wp_enqueue_script('eventkrake-leaflet-js');
     // general scripts
     wp_register_script('eventkrake-js',  $path . 'js/plugin.js',
-        ['eventkrake-leaflet-js']);
+        ['eventkrake-leaflet-js', 'wp-blocks', 'react', 'wp-i18n',
+            'wp-block-editor']);
     wp_enqueue_script('eventkrake-js');
 
     // frontend css
@@ -145,6 +147,9 @@ add_action('wp_enqueue_scripts', function() {
 add_action( 'init', function() {
     // events list
     register_block_type( __DIR__ . '/blocks/build/events-list' );
+    // translation
+    wp_set_script_translations(
+        'listevents', 'eventkrake', plugin_dir_path( __FILE__ ) . 'lang' );
 });
 
 
@@ -339,6 +344,12 @@ function eventkrake_restbuild_location($location) {
 }
 function eventkrake_restbuild_event($event) {
     $dateFormat = 'Y-m-d\TH:i:s';
+    
+    // doors
+    $door = '';
+    if(!empty($event->getDoor())) 
+        $door = $event->getDoor()->format($dateFormat);
+    
     return [
         'id' => $event->ID,
         'uid' => $event->getUID(),
@@ -353,6 +364,7 @@ function eventkrake_restbuild_event($event) {
         'locationId' => $event->getLocationId(),
         'start' => $event->getStart()->format($dateFormat),
         'end' => $event->getEnd()->format($dateFormat),
+        'door' => $door,
         'artists' => $event->getArtistIds(),
         'categories' => $event->getCategories(),
         'wpcategories' => $event->getWordpressCategories(),

@@ -55,6 +55,14 @@
   font-weight: bold;
 }
 
+.g4rf-eventkrake-events-list-door-label::before {
+  content: "(";
+}
+
+.g4rf-eventkrake-events-list-door-time::after {
+  content: ")";
+}
+
 .g4rf-eventkrake-events-list-date-ics {
   font-style: italic;
   font-size: small;

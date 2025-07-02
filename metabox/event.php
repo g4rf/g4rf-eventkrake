@@ -55,19 +55,23 @@ _e('Select a location for the event. You can create
     $templateDate = new DateTime();
     $templateDate->setTime(12, 0, 0);
 
-    Eventkrake::printDatePeriodPicker($templateDate, $templateDate,
+    Eventkrake::printDatePeriodPicker($templateDate, $templateDate, '',
             'eventkrake-template');
     ?>
 
     <?php // dates
     $startDates = Eventkrake::getPostMeta($post->ID, 'start');
     $endDates = Eventkrake::getPostMeta($post->ID, 'end');
+    $doors = Eventkrake::getPostMeta($post->ID, 'door');
 
     for($i = 0; $i < count($startDates); $i++) {
         $startDate = new DateTime($startDates[$i]);
         $endDate = new DateTime($endDates[$i]);
+        
+        $door = '';
+        if(! empty($doors[$i])) $door = new DateTime($doors[$i]);
 
-        Eventkrake::printDatePeriodPicker($startDate, $endDate);
+        Eventkrake::printDatePeriodPicker($startDate, $endDate, $door);
     }
     ?>
 

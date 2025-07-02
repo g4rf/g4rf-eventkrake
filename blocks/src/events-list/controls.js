@@ -50,6 +50,16 @@ export function Date({ attributes }) {
         );
     }
     
+    let door = <></>;
+    if(showDateStart) {
+        door = (
+            <>
+                <span className={ prefix + "-door-label" }></span>
+                <span className={ prefix + "-door-time" }></span>
+            </>
+        );
+    }
+    
     let seperator = <></>;
     if(showDateStart && showDateEnd) {
         seperator = <span className={ prefix + "-date-separator" }>–</span>;
@@ -65,6 +75,7 @@ export function Date({ attributes }) {
             { start }
             { seperator }
             { end }
+            { door }
             { ics }
         </div>
     );

@@ -105,7 +105,10 @@
 .eventkrake-dates {
   margin: 10px 0;
 }
-.eventkrake-date-start, .eventkrake-date-end, .eventkrake-remove-date {
+.eventkrake-date-start, 
+.eventkrake-date-end, 
+.eventkrake-remove-date,
+.eventkrake-date-doors {
   display: inline-block;
 }
 .eventkrake-remove-date {

@@ -18,7 +18,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Seperator: () => (/* binding */ Seperator),
 /* harmony export */   Title: () => (/* binding */ Title)
 /* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 function Image({
   attributes
@@ -27,15 +28,14 @@ function Image({
     showImage,
     prefix
   } = attributes;
-  if (!showImage) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
+  if (!showImage) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     className: prefix + "-image",
-    href: "",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
-      src: "",
-      alt: ""
-    })
-  });
+    href: ""
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: "",
+    alt: ""
+  }));
 }
 function Title({
   attributes
@@ -44,15 +44,12 @@ function Title({
     showTitle,
     prefix
   } = attributes;
-  if (!showTitle) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-    className: prefix + "-title",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
-        href: ""
-      })
-    })
-  });
+  if (!showTitle) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-title"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: ""
+  })));
 }
 function Date({
   attributes
@@ -64,46 +61,47 @@ function Date({
     showDateIcs,
     prefix
   } = attributes;
-  if (!showDate) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
-  let start = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
+  if (!showDate) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  let start = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
   if (showDateStart) {
-    start = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-        className: prefix + "-start-date"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-        className: prefix + "-start-time"
-      })]
-    });
+    start = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-start-date"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-start-time"
+    }));
   }
-  let end = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
+  let end = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
   if (showDateEnd) {
-    end = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-        className: prefix + "-end-date"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-        className: prefix + "-end-time"
-      })]
-    });
+    end = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-end-date"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-end-time"
+    }));
   }
-  let seperator = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
+  let door = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  if (showDateStart) {
+    door = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-door-label"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-door-time"
+    }));
+  }
+  let seperator = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
   if (showDateStart && showDateEnd) {
-    seperator = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      className: prefix + "-date-separator",
-      children: "\u2013"
-    });
+    seperator = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-date-separator"
+    }, "\u2013");
   }
-  let ics = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
+  let ics = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
   if (showDateIcs) {
-    ics = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
+    ics = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
       className: prefix + "-date-ics",
-      href: "",
-      children: "ics"
-    });
+      href: ""
+    }, "ics");
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-    className: prefix + "-date",
-    children: [start, seperator, end, ics]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-date"
+  }, start, seperator, end, door, ics);
 }
 function Location({
   attributes
@@ -114,37 +112,34 @@ function Location({
     showLocationAddress,
     prefix
   } = attributes;
-  if (!showLocation) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
-  let title = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
+  if (!showLocation) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  let title = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
   if (showLocationWithLink) {
-    title = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      className: prefix + "-location-title-with-link",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
-        href: ""
-      })
-    });
+    title = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-location-title-with-link"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: ""
+    }));
   } else {
-    title = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+    title = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: prefix + "-location-title"
     });
   }
-  let address = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
+  let address = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
   if (showLocationAddress) {
-    address = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+    address = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: prefix + "-location-address"
     });
   }
-  let seperator = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
+  let seperator = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
   if (showLocationAddress) {
-    seperator = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      className: prefix + "-location-seperator",
-      children: "//"
-    });
+    seperator = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: prefix + "-location-seperator"
+    }, "//");
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-    className: prefix + "-location",
-    children: [title, seperator, address]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-location"
+  }, title, seperator, address);
 }
 function Excerpt({
   attributes
@@ -153,11 +148,10 @@ function Excerpt({
     showExcerpt,
     prefix
   } = attributes;
-  if (!showExcerpt) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-    className: prefix + "-excerpt",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", {})
-  });
+  if (!showExcerpt) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: prefix + "-excerpt"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null));
 }
 function Content({
   attributes
@@ -166,8 +160,8 @@ function Content({
     showContent,
     prefix
   } = attributes;
-  if (!showContent) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+  if (!showContent) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: prefix + "-content"
   });
 }
@@ -178,8 +172,8 @@ function Seperator({
     showSeperator,
     prefix
   } = attributes;
-  if (!showSeperator) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {});
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("hr", {
+  if (!showSeperator) return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
     className: prefix + "-seperator"
   });
 }
@@ -626,6 +620,8 @@ function load({
       // dates
       const start = new Date(eventData.start);
       const end = new Date(eventData.end);
+      let door = false;
+      if (eventData.door != false) door = new Date(eventData.door);
       const dateOptions = {
         weekday: "short",
         day: "numeric",
@@ -648,6 +644,14 @@ function load({
         $(prefix + "-end-date", eventHtml).append(end.toLocaleDateString(undefined, dateOptions));
       }
       $(prefix + "-end-time", eventHtml).append(end.toLocaleTimeString(undefined, timeOptions));
+      //door
+      if (door != false) {
+        $(prefix + "-door-label", eventHtml).append((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Doors:', 'eventkrake'));
+        $(prefix + "-door-time", eventHtml).append(door.toLocaleTimeString(undefined, timeOptions));
+      } else {
+        $(prefix + "-door-label", eventHtml).hide();
+        $(prefix + "-door-time", eventHtml).hide();
+      }
       // ics
       if (!isEditor) {
         $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
@@ -694,6 +698,13 @@ function load({
         classes.push(Eventkrake.cssClass(end.getHours(), "g4rf-eventkrake-end-hour"));
         // end minute
         classes.push(Eventkrake.cssClass(end.getMinutes(), "g4rf-eventkrake-end-minute"));
+        // door
+        if (door != false) {
+          // door hour
+          classes.push(Eventkrake.cssClass(door.getHours(), "g4rf-eventkrake-door-hour"));
+          // door minute
+          classes.push(Eventkrake.cssClass(door.getMinutes(), "g4rf-eventkrake-door-minute"));
+        }
 
         // artists
         if (eventData.artists.length > 0) {
@@ -2246,7 +2257,7 @@ module.exports = window["wp"]["i18n"];
   \************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"g4rf-eventkrake/events-list","version":"0.3.3","title":"Eventkrake Events list","description":"Shows events in a list.","example":{},"category":"design","attributes":{"dateStart":{"type":"string","source":"attribute","selector":".g4rf-eventkrake-events-list-list","attribute":"data-start","default":"now"},"dateEnd":{"type":"string","source":"attribute","selector":".g4rf-eventkrake-events-list-list","attribute":"data-end","default":"+10 years"},"showImage":{"type":"boolean","default":true},"showTitle":{"type":"boolean","default":true},"showExcerpt":{"type":"boolean","default":true},"showContent":{"type":"boolean","default":false},"showSeperator":{"type":"boolean","default":true},"showDate":{"type":"boolean","default":true},"showDateStart":{"type":"boolean","default":true},"showDateEnd":{"type":"boolean","default":false},"showDateIcs":{"type":"boolean","default":true},"showLocation":{"type":"boolean","default":true},"showLocationWithLink":{"type":"boolean","default":true},"showLocationAddress":{"type":"boolean","default":true}},"supports":{"html":false,"anchor":true,"color":{"background":true,"gradients":true,"link":true,"text":true},"spacing":{"margin":true,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true}},"textdomain":"eventkrake","editorScript":"file:./index.js","viewScript":"file:./view.js","style":"file:./style-index.css"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"g4rf-eventkrake/events-list","version":"0.4.0","title":"Eventkrake Events list","description":"Shows events in a list.","example":{},"category":"design","attributes":{"dateStart":{"type":"string","source":"attribute","selector":".g4rf-eventkrake-events-list-list","attribute":"data-start","default":"now"},"dateEnd":{"type":"string","source":"attribute","selector":".g4rf-eventkrake-events-list-list","attribute":"data-end","default":"+10 years"},"showImage":{"type":"boolean","default":true},"showTitle":{"type":"boolean","default":true},"showExcerpt":{"type":"boolean","default":true},"showContent":{"type":"boolean","default":false},"showSeperator":{"type":"boolean","default":true},"showDate":{"type":"boolean","default":true},"showDateStart":{"type":"boolean","default":true},"showDateEnd":{"type":"boolean","default":false},"showDateIcs":{"type":"boolean","default":true},"showLocation":{"type":"boolean","default":true},"showLocationWithLink":{"type":"boolean","default":true},"showLocationAddress":{"type":"boolean","default":true}},"supports":{"html":false,"anchor":true,"color":{"background":true,"gradients":true,"link":true,"text":true},"spacing":{"margin":true,"padding":true},"__experimentalBorder":{"color":true,"radius":true,"style":true,"width":true}},"textdomain":"eventkrake","editorScript":"file:./index.js","viewScript":"file:./view.js","style":"file:./style-index.css"}');
 
 /***/ })
 

@@ -396,6 +396,18 @@ add_filter('the_content', function($content)
                                 Eventkrake::formatTime($event->getEnd())
                             ?></span>
                         </span>
+                        
+                        <!-- door -->
+                        <?php if(! empty($event->getDoor())) { ?>
+
+                            <span class="eventkrake-door">
+                                <?=__('Doors:', 'eventkrake')?>
+                                <span class="eventkrake-door-time"><?=
+                                    Eventkrake::formatTime($event->getDoor())
+                                ?></span>
+                            </span>
+
+                        <?php } ?>
 
                         <span class="eventkrake-artist-event-ics eventkrake-ics">
                             <a href="/<?=$event->icsParameter()?>"><?=

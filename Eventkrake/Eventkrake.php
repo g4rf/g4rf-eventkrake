@@ -385,8 +385,9 @@ class Eventkrake {
      * @param type $classes
      * @param type $removable
      */
-    public static function printDatePeriodPicker($startDate, $endDate,
-            $classes = '', $removable = true) {
+    public static function printDatePeriodPicker($startDate, $endDate, 
+        $door, $classes = '', $removable = true) 
+    {
         ?>
         <div class="eventkrake-dates <?=$classes?>">
 
@@ -424,12 +425,32 @@ class Eventkrake {
                 ?>
             </div>
             
+            <!-- doors -->
+            <div class="eventkrake-date-doors">
+                
+                <span >&nbsp;<?=__('Doors:', 'eventkrake')?>&nbsp;</span>
+                
+                <?php
+                
+                $doorHour = '';
+                $doorMinute = '';
+                if($door instanceOf \DateTime || $door instanceof \DateTimeImmutable) 
+                {
+                    $doorHour = $door->format('H');
+                    $doorMinute = $door->format('i');
+                }
+                Eventkrake::printTimePicker(
+                    'eventkrake_doorhour[]', 'eventkrake_doorminute[]',
+                    $doorHour, $doorMinute, true);
+                
+                ?>
+            </div>
+            
             <div class="eventkrake-date-warning">⚠️ <?=
                 __('The beginning must come before the end.', 'eventkrake');
             ?></div>
 
-        </div>
-        <?php
+        </div><?php
     }
 
     /**
@@ -440,22 +461,40 @@ class Eventkrake {
      * @param int $selHour Die selektierte Stunde.
      * @param int $selMin Die selektierte Minute.
      */
-    public static function printTimePicker($nameHour, $nameMin, $selHour = 0,
-            $selMin = 0) { ?>
+    public static function printTimePicker($nameHour, $nameMin, $selHour = '',
+            $selMin = '', $withEmpty = false) 
+    { ?>
+        
         <select name="<?=$nameHour?>" class="eventkrake-hour"><?php
-            for($i = 0; $i < 24; $i++) {
+            
+            if($withEmpty) { ?>
+                <option value=""></option>
+            <?php }
+            
+            for($i = 0; $i < 24; $i++) 
+            {
                 $h = substr("0$i", -2); ?>
                 <option value="<?=$h?>"<?=$selHour == $i ? ' selected' : ''?>>
                     <?=$h?>
                 </option>
+            
             <?php } ?>
+                
         </select>:<select name="<?=$nameMin?>" class="eventkrake-minute"><?php
-            for($i = 0; $i < 60; $i+=1) {
+            
+            if($withEmpty) { ?>
+                <option value=""></option>
+            <?php }
+            
+            for($i = 0; $i < 60; $i+=1)
+            {
                 $m = substr("0$i", -2); ?>
                 <option value="<?=$m?>"<?=$selMin == $i ? ' selected' : ''?>>
                     <?=$m?>
                 </option>
+                
             <?php } ?>
+                
         </select>
     <?php }
 

@@ -61,6 +61,16 @@
         font-style: italic;
         font-size: 0.8em;
     }
+    
+    /**
+     * door
+     */
+    &-door::before {
+        content: "(";
+    }
+    &-door::after {
+        content: ")";
+    }
 
     /**
      * Event

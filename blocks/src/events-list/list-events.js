@@ -101,6 +101,8 @@ export function load( { block, isEditor = false } )
             // dates
             const start = new Date(eventData.start);
             const end = new Date(eventData.end);
+            let door = false;
+            if(eventData.door != false) door = new Date(eventData.door);
             const dateOptions = {
                 weekday: "short",
                 day: "numeric",
@@ -127,6 +129,16 @@ export function load( { block, isEditor = false } )
             }
             $(prefix + "-end-time", eventHtml).append(
                     end.toLocaleTimeString(undefined, timeOptions));
+            //door
+            if(door != false) {
+                $(prefix + "-door-label", eventHtml).append(
+                                        __('Doors:', 'eventkrake'));
+                $(prefix + "-door-time", eventHtml).append(
+                    door.toLocaleTimeString(undefined, timeOptions));
+            } else {
+                $(prefix + "-door-label", eventHtml).hide();
+                $(prefix + "-door-time", eventHtml).hide();
+            }
             // ics
             if(!isEditor) {
                 $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
@@ -208,6 +220,17 @@ export function load( { block, isEditor = false } )
                 classes.push(Eventkrake.cssClass(
                         end.getMinutes(), "g4rf-eventkrake-end-minute"
                 ));
+                // door
+                if(door != false) {
+                    // door hour
+                    classes.push(Eventkrake.cssClass(
+                            door.getHours(), "g4rf-eventkrake-door-hour"
+                    ));        
+                    // door minute
+                    classes.push(Eventkrake.cssClass(
+                            door.getMinutes(), "g4rf-eventkrake-door-minute"
+                    ));
+                }
 
                 // artists
                 if(eventData.artists.length > 0) {
