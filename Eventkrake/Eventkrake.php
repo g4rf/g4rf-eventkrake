@@ -89,7 +89,7 @@ class Eventkrake {
      */
     public static function formatDateTime(
         $datetime, 
-        $dateFormat = \IntlDateFormatter::LONG, 
+        $dateFormat = \IntlDateFormatter::RELATIVE_FULL, 
         $timeFormat = \IntlDateFormatter::SHORT)
     {
         // get locale
@@ -112,7 +112,7 @@ class Eventkrake {
      */
     public static function formatDate($datetime) {
         return self::formatDateTime($datetime, 
-            \IntlDateFormatter::LONG, \IntlDateFormatter::NONE);
+            \IntlDateFormatter::RELATIVE_FULL, \IntlDateFormatter::NONE);
     }
     
     /**
