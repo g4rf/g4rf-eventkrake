@@ -739,16 +739,19 @@ add_filter('the_content', function($content)
     
     if($event->hideMeta()) return $content;
     
+    $location = $event->getLocation();
+    
     ob_start(); ?>
-
-    <div class="eventkrake-event">    
+    
+    <div class="eventkrake-event
+                eventkrake-accessibility-<?=$location instanceof Location ? 
+                                        $location->getAccessibility() : '' ?>">    
 
         <!-- location -->
         <div class="eventkrake-event-location"><?php
+                        
             
-            $location = $event->getLocation(); 
-            
-            if($location !== false) { ?>
+            if($location instanceof Location) { ?>
 
                 <!-- location title with link -->
                 <div class="eventkrake-event-location-title-link

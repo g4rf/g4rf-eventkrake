@@ -366,7 +366,8 @@ add_filter('the_content', function($content)
     
     ob_start(); ?>
 
-    <div class="eventkrake-location">
+    <div class="eventkrake-location
+                eventkrake-accessibility-<?=$location->getAccessibility()?>">
 
         <!-- address (without link) -->
         <div class="eventkrake-location-address"><?=
