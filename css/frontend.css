@@ -72,6 +72,10 @@
   grid-area: image;
   margin: var(--wp--style--block-gap) auto;
 }
+.eventkrake-event-image img {
+  max-width: 100%;
+  height: auto;
+}
 .eventkrake-event-location {
   grid-area: location;
 }
@@ -161,6 +165,10 @@
   grid-area: image;
   margin: var(--wp--style--block-gap) auto;
 }
+.eventkrake-location-image img {
+  max-width: 100%;
+  height: auto;
+}
 .eventkrake-location-address, .eventkrake-location-address-link {
   grid-area: address;
 }
@@ -239,6 +247,10 @@
 .eventkrake-artist-image {
   grid-area: image;
   margin: var(--wp--style--block-gap) auto;
+}
+.eventkrake-artist-image img {
+  max-width: 100%;
+  height: auto;
 }
 .eventkrake-artist-wp-tags {
   grid-area: wp-tags;

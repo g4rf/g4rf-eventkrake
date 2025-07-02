@@ -89,6 +89,11 @@
             grid-area: image;
             
             margin: var(--wp--style--block-gap) auto;
+            
+            img {
+                max-width: 100%;
+                height: auto;
+            }
         }
         
         &-location {
@@ -218,6 +223,11 @@
             grid-area: image;
             
             margin: var(--wp--style--block-gap) auto;
+            
+            img {
+                max-width: 100%;
+                height: auto;
+            }
         }
         
         &-address, &-address-link {
@@ -332,6 +342,11 @@
             grid-area: image;
             
             margin: var(--wp--style--block-gap) auto;
+            
+            img {
+                max-width: 100%;
+                height: auto;
+            }
         }
                 
         &-wp-tags {
