@@ -99,7 +99,7 @@
 }
 .eventkrake-event-links {
   grid-area: links;
-  margin-bottom: 15px;
+  margin-bottom: 1em;
 }
 .eventkrake-event-artists {
   grid-area: artists;
@@ -141,8 +141,8 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 .eventkrake-event-time {
   display: flex;
@@ -189,7 +189,7 @@
 }
 .eventkrake-location-links {
   grid-area: links;
-  margin-bottom: 15px;
+  margin-bottom: 1em;
 }
 .eventkrake-location-events {
   grid-area: events;
@@ -263,7 +263,7 @@
 }
 .eventkrake-artist-links {
   grid-area: links;
-  margin-bottom: 15px;
+  margin-bottom: 1em;
 }
 .eventkrake-artist-events {
   grid-area: events;
