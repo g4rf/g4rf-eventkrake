@@ -178,8 +178,8 @@ __('You can type an address into the address field and click on "Address search"
     /><br />
 
     <span class="description"><?=
-        /* translators: Placeholders are just tags. */
         sprintf(
+            /* translators: Placeholders are just html tags. */
             __('Accessibility is indicated with a traffic light system. Here,
 %2$sred%1$s means no accessibility at all, %3$syellow%1$s that e.g. a ramp is 
 available and %4$sgreen%1$s that there is a wheelchair-accessible toilet next 

@@ -404,22 +404,37 @@ add_filter('the_content', function($content)
         ?></div>
 
         <!-- links -->
-        <ul class="eventkrake-location-links">
-            <?php foreach($location->getLinks() as $link) { ?>
+        <div class="eventkrake-location-links"><?php
             
-                <li><a class="eventkrake-location-link"
-                   href="<?= $link->url ?>"><?=
-                        $link->name
-                ?></a></li>
-                            
+            $locationLinks = $location->getLinks();
+            
+            if(! empty($locationLinks)) { ?>
+        
+                <h3 class="eventkrake-location-links-headline"><?= 
+                    __('Further information', 'eventkrake')
+                ?></h3>
+            
+                <ul>            
+                    <?php foreach($locationLinks as $link) { ?>
+
+                        <li><a class="eventkrake-location-link"
+                           href="<?= $link->url ?>"><?=
+                                $link->name
+                        ?></a></li>
+
+                    <?php } ?>
+                </ul>
+            
             <?php } ?>
-        </ul>
+        
+        </div>
         
         <!-- events -->
         <div class="eventkrake-location-events">
             
             <h3 class="eventkrake-location-events-headline"><?=
                 sprintf(
+                    /* translators: Placeholder is location title */
                     __('Upcoming Events at %s', 'eventkrake'), 
                     $location->getTitle()
                 ) 

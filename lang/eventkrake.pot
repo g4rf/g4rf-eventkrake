@@ -1,22 +1,22 @@
-# Copyright (C) 2024 Jan Kossick
-# This file is distributed under the CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/.
+# Copyright (C) 2025 Jan Kossick
+# This file is distributed under the GNU GENERAL PUBLIC LICENSE Version 3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Eventkrake 5.11beta\n"
+"Project-Id-Version: Eventkrake 6.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/g4rf-eventkrake\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-08-22T15:34:03+00:00\n"
+"POT-Creation-Date: 2025-07-02T09:33:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: eventkrake\n"
 
 #. Plugin Name of the plugin
 #: g4rf-eventkrake.php
-#: g4rf-eventkrake.php:173
+#: g4rf-eventkrake.php:175
 msgid "Eventkrake"
 msgstr ""
 
@@ -83,23 +83,30 @@ msgid "Artists are persons or groups."
 msgstr ""
 
 #: Eventkrake/Artist.php:194
-#: Eventkrake/Event.php:555
+#: Eventkrake/Event.php:552
 #: Eventkrake/Location.php:247
 msgid "Additional informations"
 msgstr ""
 
-#: Eventkrake/Artist.php:328
+#: Eventkrake/Artist.php:319
+#: Eventkrake/Event.php:852
+#: Eventkrake/Location.php:414
+msgid "Further information"
+msgstr ""
+
+#. translators: Placeholder is artist name
+#: Eventkrake/Artist.php:343
 msgid "Upcoming Events with %s"
 msgstr ""
 
-#: Eventkrake/Artist.php:340
-#: Eventkrake/Location.php:435
+#: Eventkrake/Artist.php:355
+#: Eventkrake/Location.php:450
 msgid "No upcoming events."
 msgstr ""
 
-#: Eventkrake/Artist.php:387
-#: Eventkrake/Event.php:821
-#: Eventkrake/Location.php:482
+#: Eventkrake/Artist.php:402
+#: Eventkrake/Event.php:820
+#: Eventkrake/Location.php:497
 msgid "ics"
 msgstr ""
 
@@ -159,52 +166,53 @@ msgstr ""
 msgid "Demonstration"
 msgstr ""
 
-#: Eventkrake/Event.php:528
+#: Eventkrake/Event.php:525
 #: metabox/artist.php:82
 msgid "Events"
 msgstr ""
 
-#: Eventkrake/Event.php:529
+#: Eventkrake/Event.php:526
 msgid "Event"
 msgstr ""
 
-#: Eventkrake/Event.php:530
-#: Eventkrake/Event.php:535
+#: Eventkrake/Event.php:527
+#: Eventkrake/Event.php:532
 msgid "Add event"
 msgstr ""
 
-#: Eventkrake/Event.php:532
+#: Eventkrake/Event.php:529
 msgid "Add new event"
 msgstr ""
 
-#: Eventkrake/Event.php:533
-#: Eventkrake/Event.php:534
+#: Eventkrake/Event.php:530
+#: Eventkrake/Event.php:531
 #: metabox/artist.php:112
 #: metabox/location.php:227
 msgid "Edit event"
 msgstr ""
 
-#: Eventkrake/Event.php:536
+#: Eventkrake/Event.php:533
 msgid "View event"
 msgstr ""
 
-#: Eventkrake/Event.php:537
+#: Eventkrake/Event.php:534
 msgid "Search for event"
 msgstr ""
 
-#: Eventkrake/Event.php:539
+#: Eventkrake/Event.php:536
 msgid "No events found"
 msgstr ""
 
-#: Eventkrake/Event.php:541
+#: Eventkrake/Event.php:538
 msgid "No even in trash"
 msgstr ""
 
-#: Eventkrake/Event.php:546
+#: Eventkrake/Event.php:543
 msgid "Events are temporary occurrences in one place."
 msgstr ""
 
-#: Eventkrake/Event.php:866
+#. translators: Placeholder is event title
+#: Eventkrake/Event.php:880
 msgid "Participating artists at %s"
 msgstr ""
 
@@ -259,7 +267,8 @@ msgstr ""
 msgid "Events take place at locations."
 msgstr ""
 
-#: Eventkrake/Location.php:423
+#. translators: Placeholder is location title
+#: Eventkrake/Location.php:438
 msgid "Upcoming Events at %s"
 msgstr ""
 
@@ -291,77 +300,77 @@ msgstr ""
 msgid "Holds the main categories for events, locations and artists."
 msgstr ""
 
-#: g4rf-eventkrake.php:172
+#: g4rf-eventkrake.php:174
 #: settings/settings.php:2
 msgid "Eventkrake Settings"
 msgstr ""
 
-#: g4rf-eventkrake.php:220
+#: g4rf-eventkrake.php:222
 msgid "Settings"
 msgstr ""
 
-#: g4rf-eventkrake.php:224
+#: g4rf-eventkrake.php:226
 msgid "Settings for displaying events, artists and locations."
 msgstr ""
 
-#: g4rf-eventkrake.php:234
+#: g4rf-eventkrake.php:236
 msgid "Hide event meta"
 msgstr ""
 
-#: g4rf-eventkrake.php:245
+#: g4rf-eventkrake.php:247
 msgid "Don't show infos on event pages."
 msgstr ""
 
-#: g4rf-eventkrake.php:256
+#: g4rf-eventkrake.php:258
 msgid "Hide location meta"
 msgstr ""
 
-#: g4rf-eventkrake.php:267
+#: g4rf-eventkrake.php:269
 msgid "Don't show infos on location pages."
 msgstr ""
 
-#: g4rf-eventkrake.php:278
+#: g4rf-eventkrake.php:280
 msgid "Hide artist meta"
 msgstr ""
 
-#: g4rf-eventkrake.php:289
+#: g4rf-eventkrake.php:291
 msgid "Don't show infos on artist pages."
 msgstr ""
 
-#: g4rf-eventkrake.php:422
+#: g4rf-eventkrake.php:424
 msgid "Gives a minimal start date for the events. This parameter is checked against the start of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:428
+#: g4rf-eventkrake.php:430
 msgid "Gives a minimal end date for the events. This parameter is checked against the end of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:434
+#: g4rf-eventkrake.php:436
 msgid "Gives a maximal start date for the events. This parameter is checked against the start of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:440
+#: g4rf-eventkrake.php:442
 msgid "Gives a maximal end date for the events. This parameter is checked against the end of an event."
 msgstr ""
 
-#: g4rf-eventkrake.php:455
+#: g4rf-eventkrake.php:457
 msgid "The parameter earliestStart is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:466
+#: g4rf-eventkrake.php:468
 msgid "The parameter earliestEnd is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:477
+#: g4rf-eventkrake.php:479
 msgid "The parameter latestStart is invalid."
 msgstr ""
 
-#: g4rf-eventkrake.php:488
+#: g4rf-eventkrake.php:490
 msgid "The parameter latestEnd is invalid."
 msgstr ""
 
 #: metabox/artist.php:13
-#: metabox/event.php:115
+#: metabox/event.php:148
 #: metabox/location.php:126
 msgid "Categories"
 msgstr ""
@@ -371,19 +380,19 @@ msgid "Note categories here, separated by commas, e.g:"
 msgstr ""
 
 #: metabox/artist.php:31
-#: metabox/event.php:133
+#: metabox/event.php:166
 #: metabox/location.php:78
 msgid "Web links"
 msgstr ""
 
 #: metabox/artist.php:35
-#: metabox/event.php:137
+#: metabox/event.php:170
 #: metabox/location.php:82
 msgid "Provide web links to the website and social networks."
 msgstr ""
 
 #: metabox/artist.php:73
-#: metabox/event.php:172
+#: metabox/event.php:205
 #: metabox/location.php:121
 msgid "Add web link"
 msgstr ""
@@ -412,14 +421,18 @@ msgid "Participating artists"
 msgstr ""
 
 #: metabox/event.php:91
+msgid "Select the artists taking part in the event:"
+msgstr ""
+
+#: metabox/event.php:96
 msgid "Search"
 msgstr ""
 
-#: metabox/event.php:109
-msgid "Select the artists taking part in the event."
+#: metabox/event.php:112
+msgid "Sort artists here via drag and drop:"
 msgstr ""
 
-#: metabox/event.php:121
+#: metabox/event.php:154
 #: metabox/location.php:132
 msgid "Note categories separated by commas, e.g:"
 msgstr ""
@@ -484,6 +497,7 @@ msgstr ""
 msgid "Additional accessibility informations"
 msgstr ""
 
+#. translators: Placeholders are just html tags.
 #: metabox/location.php:183
 msgid ""
 "Accessibility is indicated with a traffic light system. Here,\n"
@@ -610,11 +624,11 @@ msgstr ""
 msgid "Show event seperator"
 msgstr ""
 
-#: blocks/build/events-list/index.js:762
-#: blocks/build/events-list/view.js:436
-#: blocks/src/events-list/list-events.js:290
-#: blocks/build/events-list/index.js:711
-#: blocks/build/events-list/view.js:431
+#: blocks/build/events-list/index.js:770
+#: blocks/build/events-list/view.js:444
+#: blocks/src/events-list/list-events.js:298
+#: blocks/build/events-list/index.js:719
+#: blocks/build/events-list/view.js:439
 msgid "No events at this time."
 msgstr ""
 

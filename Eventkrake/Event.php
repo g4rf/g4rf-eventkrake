@@ -842,16 +842,30 @@ add_filter('the_content', function($content)
         ?></div>
         
         <!-- links -->
-        <ul class="eventkrake-event-links">
-            <?php foreach($event->getLinks() as $link) { ?>
+        <div class="eventkrake-event-links"><?php
+            
+            $eventLinks = $event->getLinks();
+            
+            if(! empty($eventLinks)) { ?>
+        
+                <h3 class="eventkrake-event-links-headline"><?= 
+                    __('Further information', 'eventkrake')
+                ?></h3>
+            
+                <ul>
+                    <?php foreach($eventLinks as $link) { ?>
 
-                <li><a class="eventkrake-event-link"
-                   href="<?= $link->url ?>"><?=
-                        $link->name
-                ?></a></li>
+                        <li><a class="eventkrake-event-link"
+                           href="<?= $link->url ?>"><?=
+                                $link->name
+                        ?></a></li>
 
+                    <?php } ?>
+                </ul>
+            
             <?php } ?>
-        </ul>
+            
+        </div>
         
         <!-- artists -->
         <div class="eventkrake-event-artists"><?php 
@@ -862,6 +876,7 @@ add_filter('the_content', function($content)
         
                 <h3 class="eventkrake-event-artists-headline"><?= 
                     sprintf(
+                        /* translators: Placeholder is event title */
                         __('Participating artists at %s', 'eventkrake'), 
                         $event->getTitle()
                     ) 
