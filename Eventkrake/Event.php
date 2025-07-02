@@ -792,12 +792,15 @@ add_filter('the_content', function($content)
         <!-- times -->
         <div class="eventkrake-event-times"><?php
 
-            foreach($times as $time) { ?>
+            foreach($times as $time) { 
+                
+                // don't show if time has passed
+                if($time->getEnd() < (new \DateTimeImmutable())) continue; ?>
 
                 <div class="eventkrake-event-time
                             eventkrake-icon-before
                             eventkrake-icon-time">
-
+                    
                     <span class="eventkrake-event-start">
                         <span class="eventkrake-event-start-date"><?=
                             Eventkrake::formatDate($time->getStart())
