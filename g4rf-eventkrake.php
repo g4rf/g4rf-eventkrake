@@ -4,7 +4,7 @@
  * Plugin URI:      https://github.com/g4rf/g4rf-eventkrake
  * Description:     A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
  * Author:          Jan Kossick
- * Version:         6.0.0
+ * Version:         6.1.0
  * License:         GNU GENERAL PUBLIC LICENSE Version 3
  * Author URI:      https://jankossick.de
  * Min WP Version:  6.5
@@ -311,23 +311,19 @@ if (is_admin()) {
         // allow cors
         add_settings_field(
             'eventkrake-option-allow-cors', // unique id
-            __('Allow Cross Origin Request', 'eventkrake'), // title
+            __('Explicitly set header for Cross Origin Requests', 'eventkrake'), // title
             function() { // display the setting
                 // has to match the second parameter of register_setting
                 $options = get_option('eventkrake-settings');
-                ?><label>
+                ?><label style="color:#741212">
                     <input id="eventkrake-option-allow-cors"
                            name="eventkrake-settings[allow-cors]"
                            type="checkbox"<?php
                         if($options['allow-cors'] == true) {
                             ?> checked <?php
                         }
-                    ?>><?=__('Allow getting event data via REST for other domains.', 
-                        'eventkrake')
-                ?></label><p style="font-style: italic;"><?php
-                    __('Sets the header "Access-Control-Allow-Origin" to "*".',
-                        'eventkrake')
-                ?></p><?php
+                    ?>><?=__('If other websites are not able to fetch event data via the Block Editor or AJAX in general, acitvate this option. This set\'s the <i>Access-Control-Allow-Origin</i> header to "*". As this effects all REST API calls use it with caution and check your Wordpress site twice.', 'eventkrake')
+                ?></label><?php
             }, 
             'eventkrake', // same as do_settings_section
             'eventkrake-main' // same as add_settings_section
@@ -613,7 +609,7 @@ function eventkrake_register_routes() {
 }
 add_action('rest_api_init', 'eventkrake_register_routes');
 
-// add CORS for serving event data to other websites
+// add CORS for serving event data to other websites (only if there are problems)
 add_action( 'rest_api_init', function () 
 {
     add_action( 'rest_pre_serve_request', function () 

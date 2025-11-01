@@ -9,6 +9,7 @@ import * as Controls from './controls';
 export default function Edit({ attributes, setAttributes }) 
 {
     const {
+        restDomain,
         dateStart,
         dateEnd,
         showImage,
@@ -38,19 +39,42 @@ export default function Edit({ attributes, setAttributes })
         <div { ...useBlockProps() } ref={list} >
             
             <InspectorControls>
+                <PanelBody title={ __( 'Data source', 'eventkrake' ) }>
+                    {/* rest domain */}
+                    <TextControl
+                        label={ __('Domain', 'eventkrake') }
+                        value={ restDomain }
+                        onChange={ ( value ) => {
+                            setAttributes({
+                                restDomain: value
+                            });
+                            
+                            window.setTimeout(function() {
+                                List.load({
+                                    block: list.current,
+                                    isEditor: true
+                                }); 
+                            }, 1000);                            
+                        }}
+                    />
+                </PanelBody>
+                
                 <PanelBody title={ __( 'Date Range', 'eventkrake' ) }>
                     {/* date from */}
                     <TextControl
                         label={ __('Start date', 'eventkrake') }
                         value={ dateStart }
                         onChange={ ( value ) => {
-                            setAttributes( {
-                                dateStart: value,
-                            } );
-                            List.load({
-                                block: list.current,
-                                isEditor: true
-                            }); 
+                            setAttributes({
+                                dateStart: value
+                            });
+                            
+                            window.setTimeout(function() {
+                                List.load({
+                                    block: list.current,
+                                    isEditor: true
+                                }); 
+                            }, 1000);
                         }}
                     />
                     {/* date to */}
@@ -58,13 +82,16 @@ export default function Edit({ attributes, setAttributes })
                         label={ __('End date', 'eventkrake') }
                         value={ dateEnd }
                         onChange={ ( value ) => {
-                            setAttributes( {
-                                dateEnd: value,
-                            } );
-                            List.load({
-                                block: list.current,
-                                isEditor: true
-                            }); 
+                            setAttributes({
+                                dateEnd: value
+                            });
+                            
+                            window.setTimeout(function() {
+                                List.load({
+                                    block: list.current,
+                                    isEditor: true
+                                });
+                            }, 1000);
                         }}
                     />
                 </PanelBody>

@@ -239,14 +239,28 @@ function load({
   // show spinner
   $(".g4rf-eventkrake-spinner", list).show();
 
-  // add compatibility with WP Multilang
-  let language = "";
-  const bodyClasses = $("body").attr("class");
-  const languages = bodyClasses.match(/language-(?<language>[a-z]{2})/);
-  if (languages) {
-    language = "/" + languages.groups.language;
-  }
-  $.getJSON(language + "/wp-json/eventkrake/v3/events", {
+  // rest url
+  let restUrl = "wp-json/eventkrake/v3/events";
+  let restDomain = $(prefix + "-list", block).attr("data-rest-domain");
+  if (restDomain != "")
+    // external domain
+    {
+      if (!(restDomain.startsWith("http://") || restDomain.startsWith("https://"))) restDomain = "https://" + restDomain;
+      if (!restDomain.endsWith("/")) restDomain += "/";
+      restUrl = restDomain + restUrl;
+    } else
+    // rest endpoint of this wordpress
+    {
+      // add compatibility with WP Multilang
+      let language = "";
+      const bodyClasses = $("body").attr("class");
+      const languages = bodyClasses.match(/language-(?<language>[a-z]{2})/);
+      if (languages) {
+        language = "/" + languages.groups.language;
+      }
+      restUrl = language + "/" + restUrl;
+    }
+  $.getJSON(restUrl, {
     earliestEnd: start,
     latestStart: end
   }, function (data) {
@@ -428,6 +442,12 @@ function load({
     });
   }).always(function () {
     $(block).data("loading", false);
+  }).fail(function () {
+    // hide spinner
+    $(".g4rf-eventkrake-spinner", list).hide();
+
+    // show noevents message
+    $(".g4rf-eventkrake-noevents", list).show();
   });
 }
 
@@ -446,6 +466,7 @@ function html({
   attributes.template = template;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: prefix + "-list",
+    "data-rest-domain": attributes.restDomain,
     "data-start": attributes.dateStart,
     "data-end": attributes.dateEnd
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

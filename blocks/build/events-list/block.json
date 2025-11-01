@@ -8,6 +8,13 @@
   "example": {},
   "category": "design",
   "attributes": {
+    "restDomain": {
+      "type": "string",
+      "source": "attribute",
+      "selector": ".g4rf-eventkrake-events-list-list",
+      "attribute": "data-rest-domain",
+      "default": ""
+    },
     "dateStart": {
       "type": "string",
       "source": "attribute",
