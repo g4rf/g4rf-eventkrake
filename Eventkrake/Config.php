@@ -56,4 +56,9 @@ class Config {
         $options = get_option('eventkrake-settings');
         return (bool)$options['hide-artist-meta'];
     }
+    
+    public static function allowCors() {
+        $options = get_option('eventkrake-settings');
+        return (bool)$options['allow-cors'];
+    }
 }

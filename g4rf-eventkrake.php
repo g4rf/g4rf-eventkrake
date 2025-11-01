@@ -218,6 +218,13 @@ if (is_admin()) {
                     $settings['hide-artist-meta'] = true;
                 }
                 
+                // allow CORS for event data
+                if(empty($data['allow-cors'])) {
+                    $settings['allow-cors'] = false;
+                } else {
+                    $settings['allow-cors'] = true;
+                }
+                
                 return $settings;
             }
         );
@@ -296,6 +303,31 @@ if (is_admin()) {
                     ?>><?=__('Don\'t show infos on artist pages.', 
                         'eventkrake')
                 ?></label><?php
+            }, 
+            'eventkrake', // same as do_settings_section
+            'eventkrake-main' // same as add_settings_section
+        );
+            
+        // allow cors
+        add_settings_field(
+            'eventkrake-option-allow-cors', // unique id
+            __('Allow Cross Origin Request', 'eventkrake'), // title
+            function() { // display the setting
+                // has to match the second parameter of register_setting
+                $options = get_option('eventkrake-settings');
+                ?><label>
+                    <input id="eventkrake-option-allow-cors"
+                           name="eventkrake-settings[allow-cors]"
+                           type="checkbox"<?php
+                        if($options['allow-cors'] == true) {
+                            ?> checked <?php
+                        }
+                    ?>><?=__('Allow getting event data via REST for other domains.', 
+                        'eventkrake')
+                ?></label><p style="font-style: italic;"><?php
+                    __('Sets the header "Access-Control-Allow-Origin" to "*".',
+                        'eventkrake')
+                ?></p><?php
             }, 
             'eventkrake', // same as do_settings_section
             'eventkrake-main' // same as add_settings_section
@@ -580,3 +612,17 @@ function eventkrake_register_routes() {
     ]);
 }
 add_action('rest_api_init', 'eventkrake_register_routes');
+
+// add CORS for serving event data to other websites
+add_action( 'rest_api_init', function () 
+{
+    add_action( 'rest_pre_serve_request', function () 
+    {        
+        if(Config::allowCors())
+        {
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Methods: GET");
+            header("Access-Control-Allow-Headers: Content-Type");
+        }   
+    });
+});
