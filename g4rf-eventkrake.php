@@ -4,7 +4,7 @@
  * Plugin URI:      https://github.com/g4rf/g4rf-eventkrake
  * Description:     A wordpress plugin to manage events, locations and artists. It has an REST endpoint to use the data in external applications.
  * Author:          Jan Kossick
- * Version:         6.1.0
+ * Version:         6.1.1
  * License:         GNU GENERAL PUBLIC LICENSE Version 3
  * Author URI:      https://jankossick.de
  * Min WP Version:  6.5

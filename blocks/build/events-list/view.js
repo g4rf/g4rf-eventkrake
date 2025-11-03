@@ -332,7 +332,7 @@ function load({
         $(prefix + "-end-date", eventHtml).append(end.toLocaleDateString(undefined, dateOptions));
       }
       $(prefix + "-end-time", eventHtml).append(end.toLocaleTimeString(undefined, timeOptions));
-      //door
+      // door
       if (door != false) {
         $(prefix + "-door-label", eventHtml).append((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Doors:', 'eventkrake'));
         $(prefix + "-door-time", eventHtml).append(door.toLocaleTimeString(undefined, timeOptions));
@@ -342,7 +342,8 @@ function load({
       }
       // ics
       if (!isEditor) {
-        $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
+        console.log(eventData.icsUrl);
+        $(prefix + "-date-ics", eventHtml).attr("href", eventData.icsUrl);
       }
 
       // classes; show them only in frontend

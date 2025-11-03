@@ -143,7 +143,7 @@ export function load( { block, isEditor = false } )
             }
             $(prefix + "-end-time", eventHtml).append(
                     end.toLocaleTimeString(undefined, timeOptions));
-            //door
+            // door
             if(door != false) {
                 $(prefix + "-door-label", eventHtml).append(
                                         __('Doors:', 'eventkrake'));
@@ -154,8 +154,10 @@ export function load( { block, isEditor = false } )
                 $(prefix + "-door-time", eventHtml).hide();
             }
             // ics
-            if(!isEditor) {
-                $(prefix + "-ics", eventHtml).attr("href", eventData.icsUrl);
+            if(! isEditor) {
+                console.log(eventData.icsUrl);
+                $(prefix + "-date-ics", eventHtml)
+                        .attr("href", eventData.icsUrl);
             }
             
             // classes; show them only in frontend
